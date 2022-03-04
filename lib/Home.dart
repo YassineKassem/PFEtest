@@ -9,6 +9,7 @@ class Home extends StatelessWidget {
 
   final data = [
     CardPlanetData(
+      indice: true,
       title: "SATTAGNY",
       subtitle:
       "SATTAGNY est une application tunisienne développée par des jeunes étudiants ",
@@ -19,6 +20,7 @@ class Home extends StatelessWidget {
       background: LottieBuilder.asset("assets/animation/bg-1.json"),
     ),
     CardPlanetData(
+      indice: true,
       title: "SATTAGNY",
       subtitle: "SATTAGNY permet aux sociétés de créer leurs propres offres de stage afin de trouver les profils souhaités "
           "des étudiants par rapport à l'offre de stage ",
@@ -29,6 +31,7 @@ class Home extends StatelessWidget {
       background: LottieBuilder.asset("assets/animation/bg-2.json"),
     ),
     CardPlanetData(
+      indice: true,
       title: "SATTAGNY",
       subtitle: "SATTAGNY facilite aux etudiants dans le domaine informatique de trouver le meilleur offre de stage "
           "selon leurs besoins.",
@@ -37,20 +40,33 @@ class Home extends StatelessWidget {
       titleColor: Colors.yellow,
       subtitleColor: Colors.white,
       background: LottieBuilder.asset("assets/animation/bg-3.json"),
-
     ),
+
+    CardPlanetData(
+      indice: false,
+      title: "",
+      subtitle: "",
+      image: const AssetImage("assets/firstScreens/etudiant.png"),
+      backgroundColor: Colors.white,
+      titleColor: Colors.yellow,
+      subtitleColor: Colors.white,
+      background: LottieBuilder.asset("assets/animation/bg-1.json"),
+    ),
+
+
   ];
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ConcentricPageView(
-        colors: data.map((e) => e.backgroundColor).toList(),
-        itemCount: data.length,
-        itemBuilder: (int index, double value) {
-          return CardPlanet(data: data[index]);
-        },
-      ),
+        body: ConcentricPageView(
+          colors: data.map((e) => e.backgroundColor).toList(),
+          itemCount: data.length,
+          itemBuilder: (int index, double value) {
+            return CardPlanet(data: data[index]) ;
+          },
+        )
     );
   }
 }
