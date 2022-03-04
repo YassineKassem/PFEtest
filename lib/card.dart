@@ -8,8 +8,8 @@ class CardPlanetData {
   final Color titleColor;
   final Color subtitleColor;
   final Widget? background;
-  ImageProvider societe= AssetImage("assets/firstScreens/entr1.png");
-  ImageProvider etudiant= AssetImage("assets/firstScreens/etud1.png");
+  ImageProvider etudiant=AssetImage("assets/firstScreens/etud1.png");
+  ImageProvider societe=AssetImage("assets/firstScreens/entr1.png");
   final bool indice;
 
   CardPlanetData({
@@ -77,50 +77,32 @@ class CardPlanet extends StatelessWidget {
         if(data.indice==false)
           Stack(
             children: [
+
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 70, horizontal: 60),
+                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Stack(
-                      children: <Widget>[
                         Flexible(
-                          flex: 20,
+                          flex: 10,
                           child: Image(image: data.societe),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Société',style: TextStyle(
-                              fontSize: 18,fontWeight: FontWeight.bold,),
-                              textAlign: TextAlign.center,),
-                          ],
-                        ),
-
-                      ],
-                    ),
-                    Stack(
-                      children: <Widget>[
+                        Text("SOCIETE",style: TextStyle(
+                          fontSize: 20,color: Color.fromRGBO(72, 103, 199, 1.0),fontWeight: FontWeight.bold,
+                        ),),
+                    const Spacer(flex: 3),
                         Flexible(
                           flex: 10,
                           child: Image(image: data.etudiant),
                         ),
+                    Text('ETUDIANT',style: TextStyle(
+                      fontSize: 20,color: Color.fromRGBO(72, 103, 199, 1.0),fontWeight: FontWeight.bold,
+                    ),
+                      ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Etudiant',
-                          style: TextStyle(
-                            fontSize: 18,fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
-              ),
             ],
           )
       ],
