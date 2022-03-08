@@ -4,14 +4,15 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const User = require("./model/user");
+const etudiant = require("./model/etudiant");
+const societe = require("./model/societe");
 const auth = require("./middleware/auth");
 
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
 
-app.post("/register", async (req, res) => {
+app.post("/etudiant/register", async (req, res) => {
   try {
     // Get user input
     const { first_name, last_name, email, password } = req.body;
@@ -23,17 +24,17 @@ app.post("/register", async (req, res) => {
 
     // check if user already exist
     // Validate if user exist in our database
-    const oldUser = await User.findOne({ email });
+    const oldEtudiant = await etudiant.findOne({ email });
 
-    if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
+    if (oldEtudiant) {
+      return res.status(409).send("etudiant Already Exist. Please Login");
     }
 
     //Encrypt user password
     encryptedPassword = await bcrypt.hash(password, 10);
 
     // Create user in our database
-    const user = await User.create({
+    const etd = await etudiant.create({
       first_name,
       last_name,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
@@ -42,23 +43,23 @@ app.post("/register", async (req, res) => {
 
     // Create token
     const token = jwt.sign(
-      { user_id: user._id, email },
+      { etd_id: etd._id, email },
       process.env.TOKEN_KEY,
       {
         expiresIn: "2h",
       }
     );
     // save user token
-    user.token = token;
+    etd.token = token;
 
     // return new user
-    res.status(201).json(user);
+    res.status(201).json(etd);
   } catch (err) {
     console.log(err);
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/etudiant/login", async (req, res) => {
   try {
     // Get user input
     const { email, password } = req.body;
@@ -68,12 +69,12 @@ app.post("/login", async (req, res) => {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
-    const user = await User.findOne({ email });
+    const etd = await etudiant.findOne({ email });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (etd && (await bcrypt.compare(password, etd.password))) {
       // Create token
       const token = jwt.sign(
-        { user_id: user._id, email },
+        { etd_id: etd._id, email },
         process.env.TOKEN_KEY,
         {
           expiresIn: "2h",
@@ -81,10 +82,10 @@ app.post("/login", async (req, res) => {
       );
 
       // save user token
-      user.token = token;
+      etd.token = token;
 
       // user
-      res.status(200).json(user);
+      res.status(200).json(etd);
     }
     res.status(400).send("Invalid Credentials");
   } catch (err) {
@@ -92,8 +93,96 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/welcome", auth, (req, res) => {
-  res.status(200).send("Welcome 🙌 ");
+app.get("/etudiant/welcome", auth, (req, res) => {
+  res.status(200).send("Welcome student🙌 ");
+});
+
+
+//partie login et auth societe
+
+
+app.post("/societe/register", async (req, res) => {
+  try {
+    // Get user input
+    const { telephone, email, password } = req.body;
+
+    // Validate user input
+    if (!(email && password && telephone)) {
+      res.status(400).send("All input is required");
+    }
+
+    // check if user already exist
+    // Validate if user exist in our database
+    const oldSociete = await societe.findOne({ email });
+
+    if (oldSociete) {
+      return res.status(409).send("societe Already Exist. Please Login");
+    }
+
+    //Encrypt user password
+    encryptedPassword = await bcrypt.hash(password, 10);
+
+    // Create user in our database
+    const soc = await societe.create({
+      telephone,
+      email: email.toLowerCase(), // sanitize: convert email to lowercase
+      password: encryptedPassword,
+    });
+
+    // Create token
+    const token = jwt.sign(
+      { soc_id: soc._id, email },
+      process.env.TOKEN_KEY,
+      {
+        expiresIn: "2h",
+      }
+    );
+    // save user token
+    soc.token = token;
+
+    // return new user
+    res.status(201).json(soc);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post("/societe/login", async (req, res) => {
+  try {
+    // Get user input
+    const { email, password } = req.body;
+
+    // Validate user input
+    if (!(email && password)) {
+      res.status(400).send("All input is required");
+    }
+    // Validate if user exist in our database
+    const soc = await societe.findOne({ email });
+
+    if (soc && (await bcrypt.compare(password, soc.password))) {
+      // Create token
+      const token = jwt.sign(
+        { soc_id: soc._id, email },
+        process.env.TOKEN_KEY,
+        {
+          expiresIn: "2h",
+        }
+      );
+
+      // save user token
+      soc.token = token;
+
+      // user
+      res.status(200).json(soc);
+    }
+    res.status(400).send("Invalid Credentials");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get("/societe/welcome", auth, (req, res) => {
+  res.status(200).send("Welcome societe🙌 ");
 });
 
 // This should be the last route else any after it won't work
@@ -107,5 +196,6 @@ app.use("*", (req, res) => {
     },
   });
 });
+
 
 module.exports = app;
