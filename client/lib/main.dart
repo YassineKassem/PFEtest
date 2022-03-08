@@ -4,6 +4,7 @@ import 'package:pfe/signin.dart';
 import 'Home.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
+import 'AccueilSoc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,9 +22,11 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/': (context) => ColorLoader3(),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        '/login': (context) => MyLogin(),
+        '/login/societe': (context) => MyLogin(),
+        '/login/etudiant': (context) => MyLogin(),
         '/register':(context) => MyRegister(),
         '/AccueilEtd':(context) => AccueilEtd(),
+        '/AccueilSoc':(context) => AccueilSoc(),
       },
       debugShowCheckedModeBanner: false,
     );
