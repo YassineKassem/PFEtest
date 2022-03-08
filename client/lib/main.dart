@@ -3,6 +3,7 @@ import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
 import 'Home.dart';
 import 'loader.dart';
+import 'AccueilEtd.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/login': (context) => MyLogin(),
         '/register':(context) => MyRegister(),
+        '/AccueilEtd':(context) => AccueilEtd(),
       },
       debugShowCheckedModeBanner: false,
     );

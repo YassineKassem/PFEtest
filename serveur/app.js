@@ -15,10 +15,10 @@ app.use(express.json({ limit: "50mb" }));
 app.post("/etudiant/register", async (req, res) => {
   try {
     // Get user input
-    const { first_name, last_name, email, password } = req.body;
+    const {name, email, password } = req.body;
 
     // Validate user input
-    if (!(email && password && first_name && last_name)) {
+    if (!(email && password && name)) {
       res.status(400).send("All input is required");
     }
 
@@ -35,8 +35,7 @@ app.post("/etudiant/register", async (req, res) => {
 
     // Create user in our database
     const etd = await etudiant.create({
-      first_name,
-      last_name,
+      name,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password: encryptedPassword,
     });
