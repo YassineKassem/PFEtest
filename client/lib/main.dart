@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pfe/register.dart';
+import 'package:pfe/signin.dart';
 import 'Home.dart';
 import 'loader.dart';
 
@@ -12,16 +14,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/': (context) => ColorLoader3(),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        //'/second': (context) =>,
+        '/login': (context) => MyLogin(),
+        '/register':(context) => MyRegister(),
       },
       debugShowCheckedModeBanner: false,
     );
