@@ -78,47 +78,57 @@ class CardPlanet extends StatelessWidget {
         if(data.indice==false)
           Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              Container(
+             
+          
+                child: Row(
+                   
                   children: [
-                        GestureDetector(           
-                         onTap: (){
-                          Navigator.pushNamed(context, '/login');
-                           },
-                          child: Flexible(
-                            flex: 10,
-                            child: Image(image: data.societe),
+                             Expanded(
+                              child: InkWell(
+                              onTap: (){Navigator.pushNamed(context, '/login');},
+                              child: 
+                              Column(
+                               mainAxisAlignment: MainAxisAlignment.center, 
+                               children: [
+                                 Flexible(
+                                  flex: 10,
+                                  child: Image(image: data.societe,width: 200,height: 200,),
+                                ),
+                          Text("SOCIETE",style:
+                           TextStyle(
+                            fontSize: 20,
+                            color: Color.fromRGBO(72, 103, 199, 1.0),
+                            fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        Text("SOCIETE",style:
-                         TextStyle(
-                          fontSize: 20,
-                          color: Color.fromRGBO(72, 103, 199, 1.0),
-                          fontWeight: FontWeight.bold,
-                        ),
-                        ),
-                        
-                    const Spacer(flex: 3),
-                        GestureDetector(
-                          onTap: (){
-                          Navigator.pushNamed(context, '/login');
-                           },
+                          ),
+                               ],
+                              ),
+                              ),
+                            ),
 
-                          child: Flexible(
-                            flex: 10,
-                            child: Image(image: data.etudiant),
+                           Expanded(
+                            child: InkWell(
+                              onTap: (){Navigator.pushNamed(context, '/login');},
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    flex: 10,
+                                    child: Image(image: data.etudiant,width: 200,height: 200,),
+                                  ),
+                                  Text('ETUDIANT',style:
+                                  TextStyle(
+                                      fontSize: 20,
+                                      color: Color.fromRGBO(72, 103, 199, 1.0),
+                                      fontWeight: FontWeight.bold,
+                                ),
+                                ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                    Text('ETUDIANT',style:
-                     TextStyle(
-                      fontSize: 20,
-                      color: Color.fromRGBO(72, 103, 199, 1.0),
-                      fontWeight: FontWeight.bold,
-                    ),
-                      ),
+                       
                       ],
                     ),
                 ),
