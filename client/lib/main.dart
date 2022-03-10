@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/login/societe': (context) => MyLogin(),
         '/login/etudiant': (context) => MyLogin(),
-        '/register':(context) => MyRegister(),
+        '/register/etudiant':(context) => MyRegister(),
+        '/register/societe':(context) => MyRegister(),
         '/AccueilEtd':(context) => AccueilEtd(),
         '/AccueilSoc':(context) => AccueilSoc(),
       },

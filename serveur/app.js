@@ -19,7 +19,7 @@ app.post("/etudiant/register", async (req, res) => {
 
     // Validate user input
     if (!(email && password && name)) {
-      res.status(400).send("All input is required");
+      return res.status(400).send("All input is required");
     }
 
     // check if user already exist
@@ -52,7 +52,7 @@ app.post("/etudiant/register", async (req, res) => {
     etd.token = token;
 
     // return new user
-    res.status(201).json(etd);
+    return res.status(201).json(etd);
   } catch (err) {
     console.log(err);
   }
@@ -65,7 +65,7 @@ app.post("/etudiant/login", async (req, res) => {
 
     // Validate user input
     if (!(email && password)) {
-      res.status(400).send("All input is required");
+      return res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
     const etd = await etudiant.findOne({ email });
@@ -84,9 +84,9 @@ app.post("/etudiant/login", async (req, res) => {
       etd.token = token;
 
       // user
-      res.status(200).json(etd);
+      return res.status(200).json(etd);
     }
-    res.status(400).send("Invalid Credentials");
+    return res.status(400).send("Invalid Credentials");
   } catch (err) {
     console.log(err);
   }
@@ -103,11 +103,11 @@ app.get("/etudiant/welcome", auth, (req, res) => {
 app.post("/societe/register", async (req, res) => {
   try {
     // Get user input
-    const { telephone, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Validate user input
-    if (!(email && password && telephone)) {
-      res.status(400).send("All input is required");
+    if (!(email && password && name)) {
+      return res.status(400).send("All input is required");
     }
 
     // check if user already exist
@@ -123,7 +123,7 @@ app.post("/societe/register", async (req, res) => {
 
     // Create user in our database
     const soc = await societe.create({
-      telephone,
+      name,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password: encryptedPassword,
     });
@@ -140,7 +140,7 @@ app.post("/societe/register", async (req, res) => {
     soc.token = token;
 
     // return new user
-    res.status(201).json(soc);
+    return res.status(201).json(soc);
   } catch (err) {
     console.log(err);
   }
@@ -153,7 +153,7 @@ app.post("/societe/login", async (req, res) => {
 
     // Validate user input
     if (!(email && password)) {
-      res.status(400).send("All input is required");
+      return res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
     const soc = await societe.findOne({ email });
@@ -172,9 +172,9 @@ app.post("/societe/login", async (req, res) => {
       soc.token = token;
 
       // user
-      res.status(200).json(soc);
+      return res.status(200).json(soc);
     }
-    res.status(400).send("Invalid Credentials");
+    return res.status(400).send("Invalid Credentials");
   } catch (err) {
     console.log(err);
   }

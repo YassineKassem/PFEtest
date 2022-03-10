@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pfe/model/Etudiant.dart';
 import 'package:http/http.dart' as http;
@@ -12,36 +15,62 @@ class MyLogin extends StatefulWidget {
 
 class _MyLoginState extends State<MyLogin> {
   final _formKey = GlobalKey<FormState>();
-  Etudiant etd =Etudiant('', '');
-  Societe soc = Societe('', '');
-
+  Etudiant etd =new Etudiant('', '');
+  Societe soc = new Societe('','');
+  
   Future save(String user) async {
+    
     if(user=="etudiant")
     {
-    var res = await http.post(Uri.parse("http://192.168.1.4:5000/etudiant/login"),
+    final res = await http.post(Uri.parse("http://192.168.1.3:5000/etudiant/login"),
         headers: <String, String>{
-          'Context-Type': 'application/json;charSet=UTF-8'
+            'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: <String, String>{
+        body:jsonEncode(<String, String>{
+         
           'email': etd.email,
           'password': etd.password
-        });
-    print(res.body);
-    
-   Navigator.pushNamed(context, '/AccueilEtd');
+        })
+        );
+
+         print(etd.email);
+         print(etd.password);
+         print(res.body);
+         print(res.statusCode);
+
+         if(res.statusCode == 200)
+        {   
+            Navigator.pushNamed(context, '/AccueilEtd');
+        }
+        else if(res.statusCode == 400){
+          
+          return showAlertDialog(context,'Invalid Email/Password');
+        }
+
    }else if(user=="societe")
    {
-         var res = await http.post(Uri.parse("http://192.168.1.4:5000/societe/login"),
+         var res = await http.post(Uri.parse("http://192.168.1.3:5000/societe/login"),
         headers: <String, String>{
-          'Context-Type': 'application/json;charSet=UTF-8'
+      'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: <String, String>{
+        body: jsonEncode(<String, String>{
+         
           'email': soc.email,
           'password': soc.password
-        });
-    print(res.body);
-    
-   Navigator.pushNamed(context, '/AccueilSoc');
+        })
+         );
+        print(soc.email);
+        print(soc.password);
+        print(res.statusCode);
+
+         if(res.statusCode == 200)
+        {   
+            Navigator.pushNamed(context, '/AccueilSoc');
+        }
+        else if(res.statusCode == 400){
+           return showAlertDialog(context,'Invalid Email/Password');
+        }
+
    }
   }
   
@@ -51,13 +80,13 @@ class _MyLoginState extends State<MyLogin> {
 String getUser()
 {
   String? route=ModalRoute.of(context)?.settings.name;
-  print(route);
+  
   String user='';
   for(int i=7;i<route!.length;i++)
   {user+=route[i];}
   return user;
 }
-print(getUser());
+
 
     return Container(
       decoration: BoxDecoration(
@@ -90,9 +119,12 @@ print(getUser());
                         child: Column(
                           children: [
                             TextFormField(
-                              controller: TextEditingController(text: etd.email),
+                              controller: getUser()=='etudiant'? TextEditingController(text: etd.email): TextEditingController(text: soc.email),
                               onChanged: (value){
+                                if(getUser()=='etudiant')
                                 etd.email=value;
+                                else
+                                soc.email=value;
                               },
                               validator: (value){
                               if (value!.isEmpty) {
@@ -117,11 +149,13 @@ print(getUser());
                               height: 30,
                             ),
                             TextFormField(
-                              controller: TextEditingController(text: etd.password),
-                  
-                              onChanged: (value) {
-                              etd.password = value;
-                               },
+                              controller: getUser()=='etudiant'? TextEditingController(text: etd.password): TextEditingController(text: soc.password),
+                              onChanged: (value){
+                                if(getUser()=='etudiant')
+                                etd.password=value;
+                                else
+                                soc.password=value;
+                              },
                               validator: (value) {
                               if (value!.isEmpty) {
                                return 'Enter something';
@@ -154,17 +188,13 @@ print(getUser());
                                   backgroundColor: Color(0xff4c505b),
                                   child: IconButton(
                                       color: Colors.white,
-                                
                                         onPressed: () {
-                       
-                                          if (_formKey.currentState!.validate()) {
-                                             save(getUser());
-                                             print('ok');
-                                          } else {
+                                          if (_formKey.currentState!.validate()) 
+                                          {    save(getUser());
+                                          }
+                                          else 
                                           print("not ok");
-                                                }
-                                                },
-                                     
+                                          },
                                       icon: Icon(
                                         Icons.arrow_forward,
                                       )),
@@ -179,7 +209,7 @@ print(getUser());
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/register');
+                                    Navigator.pushNamed(context, '/register/${getUser()}');
                                   },
                                   child: Text(
                                     'Sign Up',
@@ -215,4 +245,30 @@ print(getUser());
         ),
       ),
     );
-  }}
+  }
+  }
+  showAlertDialog(BuildContext context, String text) {
+
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () { Navigator.of(context).pop(); },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Error"),
+    content: Text(text),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}

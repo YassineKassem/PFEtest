@@ -5,7 +5,7 @@ class Etudiant{
   String? name;
 
 
-  Etudiant(this.email,this.password);
+  Etudiant(this.email,this.password,[this.name]);
   
 
 }

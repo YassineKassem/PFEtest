@@ -2,10 +2,12 @@ class Societe{
 
   String email;
   String password;
-  String? telephone;
+  String? name;
 
 
-  Societe(this.email,this.password);
-  
+
+  Societe(this.email,this.password,[this.name]);
+
+
 
 }
