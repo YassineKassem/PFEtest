@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pfe/stage.dart';
-import 'package:pfe/stage_item.dart';
+import 'package:pfe/welcome_etudiant/stage.dart';
+import 'package:pfe/welcome_etudiant/stage_item.dart';
 
 class JobList extends StatelessWidget {
   final jobList= Job.generateJobs();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pfe/icon_text.dart';
-import 'package:pfe/stage.dart';
+import 'package:pfe/welcome_etudiant/icon_text.dart';
+import 'package:pfe/welcome_etudiant/stage.dart';
 
 class JobItem extends StatelessWidget {
   final Job job;
