@@ -13,74 +13,65 @@ class MyRegister extends StatefulWidget {
 
 class _MyRegisterState extends State<MyRegister> {
   final _formKey = GlobalKey<FormState>();
-  Etudiant etd =Etudiant('', '','');
-  Societe soc = Societe('', '','');
+  Etudiant etd = Etudiant('', '', '');
+  Societe soc = Societe('', '', '');
 
   Future save(String user) async {
-    if(user=="etudiant")
-    {
-    var res = await http.post(Uri.parse("http://192.168.1.3:5000/etudiant/register"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          "name":etd.name,
-          'email': etd.email,
-          'password': etd.password
-        })
-        );
-        print(res.statusCode);
-        if(res.statusCode == 201)
-        {
-            print(res.body);
-            Navigator.pushNamed(context, '/AccueilEtd');
-        }
-        else if(res.statusCode == 409){
-          return showAlertDialog(context,'Profil Already Exist. Please Login');
-        }
-        else{
-          return showAlertDialog(context,'All input is required');
-        }
-   }else if(user=="societe")
-   {
-         var res = await http.post(Uri.parse("http://192.168.1.3:5000/societe/register"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          "name":soc.name,
-          'email': soc.email,
-          'password': soc.password
-        })
-        );
-        if(res.statusCode == 201)
-        {
-            print(res.body);
-            Navigator.pushNamed(context, '/AccueilSoc');
-        }
-        else if(res.statusCode == 409){
-          return showAlertDialog(context,'Profil Already Exist. Please Login');
-          
-        }
-        else{
-          return showAlertDialog(context,'All input is required');
-        }
-   }
+    if (user == "etudiant") {
+      var res = await http.post(
+          Uri.parse("http://192.168.1.138:5000/etudiant/register"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            "name": etd.name,
+            'email': etd.email,
+            'password': etd.password
+          }));
+      print(res.statusCode);
+      if (res.statusCode == 201) {
+        print(res.body);
+        Navigator.pushNamed(context, '/AccueilEtd');
+      } else if (res.statusCode == 409) {
+        return showAlertDialog(context, 'Profil Already Exist. Please Login');
+      } else {
+        return showAlertDialog(context, 'All input is required');
+      }
+    } else if (user == "societe") {
+      var res = await http.post(
+          Uri.parse("http://192.168.1.138:5000/societe/register"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            "name": soc.name,
+            'email': soc.email,
+            'password': soc.password
+          }));
+      if (res.statusCode == 201) {
+        print(res.body);
+        Navigator.pushNamed(context, '/AccueilSoc');
+      } else if (res.statusCode == 409) {
+        return showAlertDialog(context, 'Profil Already Exist. Please Login');
+      } else {
+        return showAlertDialog(context, 'All input is required');
+      }
+    }
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    String getUser()
-{
-  String? route=ModalRoute.of(context)?.settings.name;
-  print(route);
-  String user='';
-  for(int i=10;i<route!.length;i++)
-  {user+=route[i];}
-  return user;
-}
-print(getUser());
+    String getUser() {
+      String? route = ModalRoute.of(context)?.settings.name;
+      print(route);
+      String user = '';
+      for (int i = 10; i < route!.length; i++) {
+        user += route[i];
+      }
+      return user;
+    }
+
+    print(getUser());
 
     return Container(
       decoration: BoxDecoration(
@@ -112,23 +103,25 @@ print(getUser());
                     Container(
                       margin: EdgeInsets.only(left: 35, right: 35),
                       child: Form(
-                        key:_formKey,
+                        key: _formKey,
                         child: Column(
                           children: [
                             TextFormField(
-                              controller: getUser()=='etudiant'? TextEditingController(text: etd.name): TextEditingController(text: soc.name),
-                              onChanged: (value){
-                                if(getUser()=='etudiant')
-                                etd.name=value;
+                              controller: getUser() == 'etudiant'
+                                  ? TextEditingController(text: etd.name)
+                                  : TextEditingController(text: soc.name),
+                              onChanged: (value) {
+                                if (getUser() == 'etudiant')
+                                  etd.name = value;
                                 else
-                                soc.name=value;
+                                  soc.name = value;
                               },
                               validator: (value) {
-                              if (value!.isEmpty) {
-                               return 'Enter something';
-                               }
-                              return null;
-                                    },
+                                if (value!.isEmpty) {
+                                  return 'Enter something';
+                                }
+                                return null;
+                              },
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -153,23 +146,26 @@ print(getUser());
                               height: 30,
                             ),
                             TextFormField(
-                              controller: getUser()=='etudiant'? TextEditingController(text: etd.email): TextEditingController(text: soc.email),
-                              onChanged: (value){
-                                if(getUser()=='etudiant')
-                                etd.email=value;
+                              controller: getUser() == 'etudiant'
+                                  ? TextEditingController(text: etd.email)
+                                  : TextEditingController(text: soc.email),
+                              onChanged: (value) {
+                                if (getUser() == 'etudiant')
+                                  etd.email = value;
                                 else
-                                soc.email=value;
+                                  soc.email = value;
                               },
-                              validator: (value){
-                              if (value!.isEmpty) {
+                              validator: (value) {
+                                if (value!.isEmpty) {
                                   return 'Enter something';
-                                } else if (RegExp( r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                 .hasMatch(value)) {
-                                 return null;
-                                 } else {
-                                   return 'Enter valid email';
-                               }
-                                },
+                                } else if (RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(value)) {
+                                  return null;
+                                } else {
+                                  return 'Enter valid email';
+                                }
+                              },
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -194,19 +190,21 @@ print(getUser());
                               height: 30,
                             ),
                             TextFormField(
-                              controller: getUser()=='etudiant'? TextEditingController(text: etd.password): TextEditingController(text: soc.password),
-                              onChanged: (value){
-                                if(getUser()=='etudiant')
-                                etd.password=value;
+                              controller: getUser() == 'etudiant'
+                                  ? TextEditingController(text: etd.password)
+                                  : TextEditingController(text: soc.password),
+                              onChanged: (value) {
+                                if (getUser() == 'etudiant')
+                                  etd.password = value;
                                 else
-                                soc.password=value;
+                                  soc.password = value;
                               },
                               validator: (value) {
-                              if (value!.isEmpty) {
-                               return 'Enter something';
-                               }
-                              return null;
-                                    },
+                                if (value!.isEmpty) {
+                                  return 'Enter something';
+                                }
+                                return null;
+                              },
                               style: TextStyle(color: Colors.white),
                               obscureText: true,
                               decoration: InputDecoration(
@@ -247,14 +245,12 @@ print(getUser());
                                   child: IconButton(
                                       color: Colors.white,
                                       onPressed: () {
-
-                                          if (_formKey.currentState!.validate()) {
-                                             save(getUser());
-                                             print('ok');
-                                          } else {
+                                        if (_formKey.currentState!.validate()) {
+                                          save(getUser());
+                                          print('ok');
+                                        } else {
                                           print("not ok");
-                                                }
-
+                                        }
                                       },
                                       icon: Icon(
                                         Icons.arrow_forward,
@@ -298,12 +294,14 @@ print(getUser());
     );
   }
 }
-showAlertDialog(BuildContext context,String text) {
 
+showAlertDialog(BuildContext context, String text) {
   // set up the button
   Widget okButton = TextButton(
     child: Text("OK"),
-    onPressed: () { Navigator.of(context).pop(); },
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
   );
 
   // set up the AlertDialog

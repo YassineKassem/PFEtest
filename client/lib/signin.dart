@@ -15,78 +15,60 @@ class MyLogin extends StatefulWidget {
 
 class _MyLoginState extends State<MyLogin> {
   final _formKey = GlobalKey<FormState>();
-  Etudiant etd =new Etudiant('', '');
-  Societe soc = new Societe('','');
-  
+  Etudiant etd = new Etudiant('', '');
+  Societe soc = new Societe('', '');
+
   Future save(String user) async {
-    
-    if(user=="etudiant")
-    {
-    final res = await http.post(Uri.parse("http://192.168.1.3:5000/etudiant/login"),
-        headers: <String, String>{
+    if (user == "etudiant") {
+      final res = await http.post(
+          Uri.parse("http://192.168.1.138:5000/etudiant/login"),
+          headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body:jsonEncode(<String, String>{
-         
-          'email': etd.email,
-          'password': etd.password
-        })
-        );
+          },
+          body: jsonEncode(
+              <String, String>{'email': etd.email, 'password': etd.password}));
 
-         print(etd.email);
-         print(etd.password);
-         print(res.body);
-         print(res.statusCode);
+      print(etd.email);
+      print(etd.password);
+      print(res.body);
+      print(res.statusCode);
 
-         if(res.statusCode == 200)
-        {   
-            Navigator.pushNamed(context, '/AccueilEtd');
-        }
-        else if(res.statusCode == 400){
-          
-          return showAlertDialog(context,'Invalid Email/Password');
-        }
+      if (res.statusCode == 200) {
+        Navigator.pushNamed(context, '/AccueilEtd');
+      } else if (res.statusCode == 400) {
+        return showAlertDialog(context, 'Invalid Email/Password');
+      }
+    } else if (user == "societe") {
+      var res = await http.post(
+          Uri.parse("http://192.168.1.138:5000/societe/login"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(
+              <String, String>{'email': soc.email, 'password': soc.password}));
+      print(soc.email);
+      print(soc.password);
+      print(res.statusCode);
 
-   }else if(user=="societe")
-   {
-         var res = await http.post(Uri.parse("http://192.168.1.3:5000/societe/login"),
-        headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-         
-          'email': soc.email,
-          'password': soc.password
-        })
-         );
-        print(soc.email);
-        print(soc.password);
-        print(res.statusCode);
-
-         if(res.statusCode == 200)
-        {   
-            Navigator.pushNamed(context, '/AccueilSoc');
-        }
-        else if(res.statusCode == 400){
-           return showAlertDialog(context,'Invalid Email/Password');
-        }
-
-   }
+      if (res.statusCode == 200) {
+        Navigator.pushNamed(context, '/AccueilSoc');
+      } else if (res.statusCode == 400) {
+        return showAlertDialog(context, 'Invalid Email/Password');
+      }
+    }
   }
-  
 
   @override
   Widget build(BuildContext context) {
-String getUser()
-{
-  String? route=ModalRoute.of(context)?.settings.name;
-  
-  String user='';
-  for(int i=7;i<route!.length;i++)
-  {user+=route[i];}
-  return user;
-}
+    String getUser() {
+      String? route = ModalRoute.of(context)?.settings.name;
 
+      String user = '';
+      for (int i = 7; i < route!.length; i++) {
+        user += route[i];
+      }
+      return user;
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -115,27 +97,30 @@ String getUser()
                     Container(
                       margin: EdgeInsets.only(left: 35, right: 35),
                       child: Form(
-                        key:_formKey,
+                        key: _formKey,
                         child: Column(
                           children: [
                             TextFormField(
-                              controller: getUser()=='etudiant'? TextEditingController(text: etd.email): TextEditingController(text: soc.email),
-                              onChanged: (value){
-                                if(getUser()=='etudiant')
-                                etd.email=value;
+                              controller: getUser() == 'etudiant'
+                                  ? TextEditingController(text: etd.email)
+                                  : TextEditingController(text: soc.email),
+                              onChanged: (value) {
+                                if (getUser() == 'etudiant')
+                                  etd.email = value;
                                 else
-                                soc.email=value;
+                                  soc.email = value;
                               },
-                              validator: (value){
-                              if (value!.isEmpty) {
+                              validator: (value) {
+                                if (value!.isEmpty) {
                                   return 'Enter something';
-                                } else if (RegExp( r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                 .hasMatch(value)) {
-                                 return null;
-                                 } else {
-                                   return 'Enter valid email';
-                               }
-                                },
+                                } else if (RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(value)) {
+                                  return null;
+                                } else {
+                                  return 'Enter valid email';
+                                }
+                              },
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   fillColor: Colors.grey.shade100,
@@ -149,19 +134,21 @@ String getUser()
                               height: 30,
                             ),
                             TextFormField(
-                              controller: getUser()=='etudiant'? TextEditingController(text: etd.password): TextEditingController(text: soc.password),
-                              onChanged: (value){
-                                if(getUser()=='etudiant')
-                                etd.password=value;
+                              controller: getUser() == 'etudiant'
+                                  ? TextEditingController(text: etd.password)
+                                  : TextEditingController(text: soc.password),
+                              onChanged: (value) {
+                                if (getUser() == 'etudiant')
+                                  etd.password = value;
                                 else
-                                soc.password=value;
+                                  soc.password = value;
                               },
                               validator: (value) {
-                              if (value!.isEmpty) {
-                               return 'Enter something';
-                               }
-                              return null;
-                                    },
+                                if (value!.isEmpty) {
+                                  return 'Enter something';
+                                }
+                                return null;
+                              },
                               style: TextStyle(),
                               obscureText: true,
                               decoration: InputDecoration(
@@ -181,20 +168,20 @@ String getUser()
                                 Text(
                                   'Sign in',
                                   style: TextStyle(
-                                      fontSize: 27, fontWeight: FontWeight.w700),
+                                      fontSize: 27,
+                                      fontWeight: FontWeight.w700),
                                 ),
                                 CircleAvatar(
                                   radius: 30,
                                   backgroundColor: Color(0xff4c505b),
                                   child: IconButton(
                                       color: Colors.white,
-                                        onPressed: () {
-                                          if (_formKey.currentState!.validate()) 
-                                          {    save(getUser());
-                                          }
-                                          else 
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          save(getUser());
+                                        } else
                                           print("not ok");
-                                          },
+                                      },
                                       icon: Icon(
                                         Icons.arrow_forward,
                                       )),
@@ -209,7 +196,8 @@ String getUser()
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/register/${getUser()}');
+                                    Navigator.pushNamed(
+                                        context, '/register/${getUser()}');
                                   },
                                   child: Text(
                                     'Sign Up',
@@ -246,13 +234,15 @@ String getUser()
       ),
     );
   }
-  }
-  showAlertDialog(BuildContext context, String text) {
+}
 
+showAlertDialog(BuildContext context, String text) {
   // set up the button
   Widget okButton = TextButton(
     child: Text("OK"),
-    onPressed: () { Navigator.of(context).pop(); },
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
   );
 
   // set up the AlertDialog
