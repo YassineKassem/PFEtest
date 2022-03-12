@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 class HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,26 +13,23 @@ class HomeAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('welcome Home',
-              style: TextStyle(
-                color: Colors.grey ,
-                 fontWeight: FontWeight.bold,
-                 ),
-                 ),
-              SizedBox(height: 10,),
-
-              Text('yassine kassem',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 28,
-
+              Column(
+                  children: [
+                    GestureDetector(
+                      onTap: (){Scaffold.of(context).openDrawer();},
+                      child: Container(                            
+                        alignment: Alignment.center,
+                        height: 42,
+                        width: 42,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                         ),
+                         child: SvgPicture.asset("assets/icons/menu.svg"),
+                      ),
+                    )
+                ],
               ),
-              )
-            ],
-          ),
           Row(
             children: [
               Container(

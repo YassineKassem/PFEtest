@@ -23,9 +23,9 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Color(0xFFFED408))),
       initialRoute: '/',
       routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
+       
         '/': (context) => ColorLoader3(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
+       // '/': (context) => AccueilEtd(),
         '/login/societe': (context) => MyLogin(),
         '/login/etudiant': (context) => MyLogin(),
         '/register/etudiant': (context) => MyRegister(),

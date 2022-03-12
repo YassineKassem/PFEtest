@@ -5,9 +5,7 @@ class SearchCard extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return Flexible(
-      flex: 20,
-      child: Container(
+      return Container(
         margin: EdgeInsets.all(25),
         padding: EdgeInsets.symmetric(
           horizontal: 25,
@@ -60,7 +58,11 @@ class SearchCard extends StatelessWidget{
     
           ],
         ) ,
-      ),
-    );
+      ); 
+ 
   }
 }
+
+
+
+
