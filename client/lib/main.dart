@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
@@ -5,13 +6,15 @@ import 'Home.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
 import 'AccueilSoc.dart';
+import 'suite_detail_etudiant/Cree_CV/createCV.dart';
+import 'suite_detail_societe/formSociete.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  
 
   // This widget is the root of your application.
   @override
@@ -32,6 +35,9 @@ class MyApp extends StatelessWidget {
         '/register/societe': (context) => MyRegister(),
         '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
+        '/createCV': (context) => createCV(),
+        '/formSociete': (context) => formSociete(),
+        
       },
       debugShowCheckedModeBanner: false,
     );
