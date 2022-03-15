@@ -14,8 +14,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -26,19 +24,16 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Color(0xFFFED408))),
       initialRoute: '/',
       routes: {
-       
-        //'/': (context) => ColorLoader3(),
-       // '/': (context) => AccueilEtd(),
-        //'/login/societe': (context) => MyLogin(),
-        //'/login/etudiant': (context) => MyLogin(),
-        //'/register/etudiant': (context) => MyRegister(),
-        //'/register/societe': (context) => MyRegister(),
-        //'/AccueilEtd': (context) => AccueilEtd(),
-        //'/AccueilSoc': (context) => AccueilSoc(),
-        //'/createCV': (context) => createCV(),
-        //'/formSociete': (context) => formSociete(),
-        '/': (context) => AccueilEtd(),
-        
+        '/': (context) => ColorLoader3(),
+        // '/': (context) => AccueilEtd(),
+        '/login/societe': (context) => MyLogin(),
+        '/login/etudiant': (context) => MyLogin(),
+        '/register/etudiant': (context) => MyRegister(),
+        '/register/societe': (context) => MyRegister(),
+        '/AccueilEtd': (context) => AccueilEtd(),
+        '/AccueilSoc': (context) => AccueilSoc(),
+        '/createCV': (context) => createCV(),
+        '/formSociete': (context) => formSociete(),
       },
       debugShowCheckedModeBanner: false,
     );
