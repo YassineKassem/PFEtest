@@ -3,9 +3,12 @@ require("./config/database").connect();
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const multer=require('multer')
 
 const etudiant = require("./model/etudiant");
 const societe = require("./model/societe");
+const CV = require("./model/CV");
+const image = require("./model/image");
 const auth = require("./middleware/auth");
 
 const app = express();
@@ -183,6 +186,107 @@ app.post("/societe/login", async (req, res) => {
 app.get("/societe/welcome", auth, (req, res) => {
   res.status(200).send("Welcome societe🙌 ");
 });
+
+//image
+
+app.use('/uploads', express.static(__dirname +'/uploads'));
+var storage = multer.diskStorage({
+   destination: function (req, file, cb) {
+     cb(null, 'uploads')
+   },
+   filename: function (req, file, cb) {
+     cb(null, new Date().toISOString()+file.originalname)
+   }
+ })
+  
+ var upload = multer({ storage: storage })
+ app.post('/upload', upload.single('myFile'), async(req, res, next) => {
+   const file = req.file
+   if (!file) {
+     const error = new Error('Please upload a file')
+     error.httpStatusCode = 400
+     return next("hey error")
+   }
+     
+     
+     const imagepost= new model({
+       image: file.path
+     })
+     const savedimage= await imagepost.save()
+     res.json(savedimage)
+   
+ })
+
+ app.get('/image', (req, res)=>{
+  const image =   image.find()
+  res.json(image)
+  
+ })
+
+
+// insert in collection CV
+app.post("/etudiant/CV/register", async (req, res) => {
+  try {
+    
+    const file = req.file 
+    if (!file) {
+      return res.status(400).json('Please upload a image');
+    } 
+
+    // Get cv input
+    const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville,Competance,Formation,Stage,CI,langue, } = req.body;
+
+    // Validate cv input
+    if (!(nom && email && Prenom && Numerotel && Adresse && Codepostale && Ville && 
+      Competance && Formation && Stage && CI && langue  )) {
+      return res.status(400).send("All input is required");
+    }
+    
+
+    // Create cv in our database
+    const cv = await CV.create({
+      nom,
+      Prenom,
+      email,
+      Numerotel,
+      Adresse,
+      Codepostale,
+      Ville,
+      Competance,
+      Formation,
+      Stage,
+      CI,
+      langue,
+     
+    });
+
+    // return new user
+    return res.status(201).json(cv);
+
+
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//get all
+app.get('/etudiant/CV',async (req,res) => {
+  const cvv = await CV.find();
+  res.json(cvv);
+});
+
+//get by id
+app.get('/etudiant/CV/:id', (req,res) => {
+  CV.findById(req.params.id, function (err, docs) {
+    if (err){
+        console.log(err);
+    }
+    else{
+      return res.status(201).json(docs);
+    }
+});
+});
+
 
 // This should be the last route else any after it won't work
 app.use("*", (req, res) => {

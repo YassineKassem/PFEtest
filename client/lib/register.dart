@@ -19,7 +19,7 @@ class _MyRegisterState extends State<MyRegister> {
   Future save(String user) async {
     if (user == "etudiant") {
       var res = await http.post(
-          Uri.parse("http://192.168.1.11:5000/etudiant/register"),
+          Uri.parse("http://192.168.1.3:5000/etudiant/register"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

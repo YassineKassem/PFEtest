@@ -1,14 +1,17 @@
+import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../Model/CVmodel.dart';
+import '../../model/CVmodel.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
-
+import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'display.dart';
+import 'dart:convert';
+
 
 class createCV extends StatefulWidget {
   @override
@@ -18,44 +21,50 @@ class createCV extends StatefulWidget {
 class _createCVState extends State<createCV> {
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
   CVmodel cvmodel = new CVmodel();
+  formation form =new formation();
+  stage stg =new stage();
+  langue lg =new langue();
+  competance comp =new competance();
+  Interet CI =new Interet();
+
   PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    cvmodel.nomCompetance = List<String>.empty(growable: true);
-    cvmodel.nomCompetance!.add("");
+    comp.nomCompetance = List<String>.empty(growable: true);
+    comp.nomCompetance!.add("");
 
-    cvmodel.centreInteret = List<String>.empty(growable: true);
-    cvmodel.centreInteret!.add("");
+    CI.centreInteret = List<String>.empty(growable: true);
+    CI.centreInteret!.add("");
 
-    cvmodel.nomFormation = List<String>.empty(growable: true);
-    cvmodel.nomFormation!.add("");
-    cvmodel.etablissementF = List<String>.empty(growable: true);
-    cvmodel.etablissementF!.add("");
-    cvmodel.villeF = List<String>.empty(growable: true);
-    cvmodel.villeF!.add("");
-    cvmodel.datedF = List<DateTime>.empty(growable: true);
-    cvmodel.datedF!.add(DateTime.now());
-    cvmodel.datefF = List<DateTime>.empty(growable: true);
-    cvmodel.datefF!.add(DateTime.now());
-    cvmodel.DescriptionF = List<String>.empty(growable: true);
-    cvmodel.DescriptionF!.add("");
+    form.nomFormation= List<String>.empty(growable: true) ;
+    form.nomFormation!.add("");
+    form.etablissementF = List<String>.empty(growable: true);
+    form.etablissementF!.add("");
+    form.villeF = List<String>.empty(growable: true);
+    form.villeF!.add("");
+    form.datedF = List<DateTime>.empty(growable: true);
+    form.datedF!.add(DateTime.now());
+    form.datefF = List<DateTime>.empty(growable: true);
+    form.datefF!.add(DateTime.now());
+    form.DescriptionF = List<String>.empty(growable: true);
+    form.DescriptionF!.add("");
 
-    cvmodel.nomLangue = List<String>.empty(growable: true);
-    cvmodel.nomLangue!.add("");
-    cvmodel.NiveauLangue = List<String>.empty(growable: true);
-    cvmodel.NiveauLangue!.add("");
+    lg.nomLangue = List<String>.empty(growable: true);
+    lg.nomLangue!.add("");
+    lg.NiveauLangue = List<String>.empty(growable: true);
+    lg.NiveauLangue!.add("");
 
-    cvmodel.nomSociete = List<String>.empty(growable: true);
-    cvmodel.nomSociete!.add("");
-    cvmodel.datedS = List<DateTime>.empty(growable: true);
-    cvmodel.datedS!.add(DateTime.now());
-    cvmodel.datefS = List<DateTime>.empty(growable: true);
-    cvmodel.datefS!.add(DateTime.now());
-    cvmodel.DescriptionS = List<String>.empty(growable: true);
-    cvmodel.DescriptionS!.add("");
+    stg.nomSociete = List<String>.empty(growable: true);
+    stg.nomSociete!.add("");
+    stg.datedS = List<DateTime>.empty(growable: true);
+    stg.datedS!.add(DateTime.now());
+    stg.datefS = List<DateTime>.empty(growable: true);
+    stg.datefS!.add(DateTime.now());
+    stg.DescriptionS = List<String>.empty(growable: true);
+    stg.DescriptionS!.add("");
   }
 
   int _currentStep = 0;
@@ -99,6 +108,96 @@ class _createCVState extends State<createCV> {
   final DatefinS = List.generate(100, (i) => TextEditingController());
   final DescriptionS = List.generate(100, (i) => TextEditingController());
 
+
+   getformation(){
+     List<formationList> f=[];
+      for (int i = 0; i < Formation.length; i++) {
+        if (Formation[i].text != '')
+          f.add(formationList(Formation[i].text,EtablissementF[i].text,VilleF[i].text,DatedebutF[i].text, DatefinF[i].text,DescriptionF[i].text));
+      }
+      return f;}
+
+    getstage(){
+     List<stageList> f=[];
+      for (int i = 0; i < nomSociete.length; i++) {
+        if (nomSociete[i].text != '')
+          f.add(stageList(nomSociete[i].text,DatedebutS[i].text,DatefinS[i].text,DescriptionS[i].text));
+      }
+      return f;}
+
+    getcompetance(){
+     List<competanceList> f=[];
+      for (int i = 0; i < competances.length; i++) {
+        if (competances[i].text != '')
+          f.add(competanceList(competances[i].text));
+      }
+      return f;}
+
+    getinteret(){
+     List<InteretList> f=[];
+      for (int i = 0; i < centreInteret.length; i++) {
+        if (centreInteret[i].text != '')
+          f.add(InteretList(centreInteret[i].text));
+      }
+      return f;}
+      
+    getlangue(){
+     List<langueList> f=[];
+      for (int i = 0; i < langues.length; i++) {
+       
+        if (langues[i].text != '') {
+          if (_currentSliderValue[i] == 10)
+            resultSlider = 'Débutant(e)';
+          else if (_currentSliderValue[i] == 20)
+            resultSlider = 'Intermédiaire';
+          else if (_currentSliderValue[i] == 30)
+            resultSlider = 'Bien';
+          else if (_currentSliderValue[i] == 40)
+            resultSlider = 'Très bien';
+          else if (_currentSliderValue[i] == 50)
+            resultSlider = 'Excellent';
+          else {
+            resultSlider = '';
+          }
+          f.add(langueList(langues[i].text,resultSlider));
+      }
+      return f;}}       
+
+
+    Future save() async {
+
+      var res = await http.post(
+          Uri.parse("http://192.168.1.3:5000/etudiant/CV/register"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            "nom": Nom.text,
+            'Prenom': Prenom.text,
+            'email': Adressemail.text,
+            "Numerotel": int.parse(Numerotel.text),
+            'Adresse': Adresse.text,
+            'Codepostale': Codepostale.text,
+            'Ville': Ville.text,
+            'Formation': getformation(),
+            'Competance': getcompetance(),
+            'Stage': getstage(),
+            'CI': getinteret(),
+            'langue': getlangue()
+
+            
+          }));
+
+          if (res.statusCode == 201) {
+            print('cv enregistrer');
+          }else{
+            print('cv non');
+          }
+    }
+
+
+    
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,12 +230,12 @@ class _createCVState extends State<createCV> {
                   setState(() {
                     _currentStep += 1;
                   });
-                } else if (isLastStep) {
+                }
+                 else if (isLastStep) {
                   if (globalkey.currentState!.validate()) {
-                    Navigator.pushNamed(context, '/AccueilEtd');
-                    //ScaffoldMessenger.of(context).showSnackBar(
-                    //const SnackBar(content: Text('Processing Data')),
-                    //);
+                   // Navigator.pushNamed(context, '/AccueilEtd');
+                     save();
+                     
                   } else {
                     setState(() {
                       isComplete = true;
@@ -240,7 +339,7 @@ class _createCVState extends State<createCV> {
                   );
                 },
                 separatorBuilder: (context, indexFormation) => Divider(),
-                itemCount: cvmodel.nomFormation!.length),
+                itemCount: form.nomFormation!.length),
           ],
         ),
       ),
@@ -265,7 +364,7 @@ class _createCVState extends State<createCV> {
                   );
                 },
                 separatorBuilder: (context, index) => Divider(),
-                itemCount: cvmodel.nomCompetance!.length),
+                itemCount: comp.nomCompetance!.length),
           ],
         ),
       ),
@@ -308,7 +407,7 @@ class _createCVState extends State<createCV> {
                   );
                 },
                 separatorBuilder: (context, indexS) => Divider(),
-                itemCount: cvmodel.nomSociete!.length),
+                itemCount: stg.nomSociete!.length),
           ],
         ),
       ),
@@ -333,7 +432,7 @@ class _createCVState extends State<createCV> {
                   );
                 },
                 separatorBuilder: (context, indexLangue) => Divider(),
-                itemCount: cvmodel.nomLangue!.length),
+                itemCount: lg.nomLangue!.length),
           ],
         ),
       ),
@@ -358,7 +457,7 @@ class _createCVState extends State<createCV> {
                   );
                 },
                 separatorBuilder: (context, indexci) => Divider(),
-                itemCount: cvmodel.centreInteret!.length),
+                itemCount: CI.centreInteret!.length),
           ],
         ),
       ),
@@ -546,7 +645,7 @@ class _createCVState extends State<createCV> {
           Flexible(
               child: BuildTextField('competance$index', competances[index])),
           Visibility(
-            visible: index == cvmodel.nomCompetance!.length - 1,
+            visible: index == comp.nomCompetance!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -588,7 +687,7 @@ class _createCVState extends State<createCV> {
               child: BuildTextField(
                   'centreInteret$indexci', centreInteret[indexci])),
           Visibility(
-            visible: indexci == cvmodel.centreInteret!.length - 1,
+            visible: indexci == CI.centreInteret!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -630,7 +729,7 @@ class _createCVState extends State<createCV> {
               child:
                   BuildTextField('Langue$indexLangue', langues[indexLangue])),
           Visibility(
-            visible: indexLangue == cvmodel.nomLangue!.length - 1,
+            visible: indexLangue == lg.nomLangue!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -706,7 +805,7 @@ class _createCVState extends State<createCV> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
-            visible: indexFormation == cvmodel.nomFormation!.length - 1,
+            visible: indexFormation == form.nomFormation!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -750,7 +849,7 @@ class _createCVState extends State<createCV> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
-            visible: indexS == cvmodel.nomSociete!.length - 1,
+            visible: indexS == stg.nomSociete!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -786,86 +885,86 @@ class _createCVState extends State<createCV> {
 
   void addCompetanceControl() {
     setState(() {
-      cvmodel.nomCompetance!.add("");
+      comp.nomCompetance!.add("");
     });
   }
 
   void removeCompetanceControl(index) {
     setState(() {
-      if (cvmodel.nomCompetance!.length > 1)
-        cvmodel.nomCompetance!.removeAt(index);
+      if (comp.nomCompetance!.length > 1)
+        comp.nomCompetance!.removeAt(index);
     });
   }
 
   void addcentreInteretControl() {
     setState(() {
-      cvmodel.centreInteret!.add("");
+      CI.centreInteret!.add("");
     });
   }
 
   void removecentreInteretControl(indexci) {
     setState(() {
-      if (cvmodel.centreInteret!.length > 1)
-        cvmodel.centreInteret!.removeAt(indexci);
+      if (CI.centreInteret!.length > 1)
+        CI.centreInteret!.removeAt(indexci);
     });
   }
 
   void addLangueControl() {
     setState(() {
-      cvmodel.nomLangue!.add("");
-      cvmodel.NiveauLangue!.add("");
+      lg.nomLangue!.add("");
+      lg.NiveauLangue!.add("");
     });
   }
 
   void removeLangueControl(indexLangue) {
     setState(() {
-      if (cvmodel.nomLangue!.length > 1) {
-        cvmodel.NiveauLangue!.removeAt(indexLangue);
-        cvmodel.nomLangue!.removeAt(indexLangue);
+      if (lg.nomLangue!.length > 1) {
+        lg.NiveauLangue!.removeAt(indexLangue);
+        lg.nomLangue!.removeAt(indexLangue);
       }
     });
   }
 
   void addFormationControl() {
     setState(() {
-      cvmodel.nomFormation!.add("");
-      cvmodel.etablissementF!.add("");
-      cvmodel.villeF!.add("");
-      cvmodel.datedF!.add(DateTime.now());
-      cvmodel.datefF!.add(DateTime.now());
-      cvmodel.DescriptionF!.add("");
+      form.nomFormation!.add("");
+      form.etablissementF!.add("");
+      form.villeF!.add("");
+      form.datedF!.add(DateTime.now());
+      form.datefF!.add(DateTime.now());
+      form.DescriptionF!.add("");
     });
   }
 
   void removeFormationControl(indexFormation) {
     setState(() {
-      if (cvmodel.nomFormation!.length > 1) {
-        cvmodel.nomFormation!.removeAt(indexFormation);
-        cvmodel.etablissementF!.removeAt(indexFormation);
-        cvmodel.villeF!.removeAt(indexFormation);
-        cvmodel.datedF!.removeAt(indexFormation);
-        cvmodel.datefF!.removeAt(indexFormation);
-        cvmodel.DescriptionF!.removeAt(indexFormation);
+      if (form.nomFormation!.length > 1) {
+        form.nomFormation!.removeAt(indexFormation);
+        form.etablissementF!.removeAt(indexFormation);
+        form.villeF!.removeAt(indexFormation);
+        form.datedF!.removeAt(indexFormation);
+        form.datefF!.removeAt(indexFormation);
+        form.DescriptionF!.removeAt(indexFormation);
       }
     });
   }
 
   void addStageControl() {
     setState(() {
-      cvmodel.nomSociete!.add("");
-      cvmodel.datedS!.add(DateTime.now());
-      cvmodel.datefS!.add(DateTime.now());
-      cvmodel.DescriptionS!.add("");
+      stg.nomSociete!.add("");
+      stg.datedS!.add(DateTime.now());
+      stg.datefS!.add(DateTime.now());
+      stg.DescriptionS!.add("");
     });
   }
 
   void removeStageControl(indexS) {
     setState(() {
-      if (cvmodel.nomSociete!.length > 1) {
-        cvmodel.nomSociete!.removeAt(indexS);
-        cvmodel.datedS!.removeAt(indexS);
-        cvmodel.datefS!.removeAt(indexS);
-        cvmodel.DescriptionS!.removeAt(indexS);
+      if (stg.nomSociete!.length > 1) {
+        stg.nomSociete!.removeAt(indexS);
+        stg.datedS!.removeAt(indexS);
+        stg.datefS!.removeAt(indexS);
+        stg.DescriptionS!.removeAt(indexS);
       }
     });
   }

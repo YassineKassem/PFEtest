@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
+import 'package:pfe/suite_detail_etudiant/image.dart';
 import 'Home.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
@@ -24,15 +25,17 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Color(0xFFFED408))),
       initialRoute: '/',
       routes: {
-        '/': (context) => ColorLoader3(),
+       // '/': (context) => ColorLoader3(),
         // '/': (context) => AccueilEtd(),
+         '/': (context) => ImageUpload(),
+        
         '/login/societe': (context) => MyLogin(),
         '/login/etudiant': (context) => MyLogin(),
         '/register/etudiant': (context) => MyRegister(),
         '/register/societe': (context) => MyRegister(),
         '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
-        '/createCV': (context) => createCV(),
+       // '/': (context) => createCV(),
         '/formSociete': (context) => formSociete(),
       },
       debugShowCheckedModeBanner: false,
