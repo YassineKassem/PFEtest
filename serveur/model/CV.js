@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const userSchemaEtudiantCV = new mongoose.Schema({
   nom: { type: String, default: null },
-  email: { type: String, default: null },
+  email: { type: String, required: true, unique: true },
   Prenom: { type: String, default: null },
   Numerotel: { type: Number, default: null },
   Adresse: { type: String, default: null },

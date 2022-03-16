@@ -4,16 +4,69 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer=require('multer')
-
+const router = express.Router();
 const etudiant = require("./model/etudiant");
 const societe = require("./model/societe");
 const CV = require("./model/CV");
-const image = require("./model/image");
 const auth = require("./middleware/auth");
-
+const path = require("path");
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
+
+
+const storage = multer.diskStorage({
+  destination : (req,file,cb) => {
+    cb(null, "./uploads");
+  },
+  filename: (req,file,cb) =>{
+    cb(null,req.params.id +".jbg");
+  }
+  });
+
+  const fileFilter = (req,file,cb)=>{
+    if(file.mimetype == "image/jpeg" || file.mimetype == "image/png" )
+    {  cb(null,true);}
+    else
+    {cb(null,false);  }
+
+    };
+  
+
+const upload = multer({
+storage:storage,
+limits:{
+  fileSize : 1024*1024*6,
+},
+fileFilter : fileFilter,
+});
+
+
+
+app.patch("/add/image/:id", upload.single("image"),async (req,res)=> {
+   await CV.findOneAndUpdate(
+    req.params.id,
+    {
+      $set:{
+        image: req.file.path,
+      },
+    },
+
+      {new: true},
+      (err, CV) => {
+        if (err) return res.status(500).send(err);
+        const response = {
+          message: "image added successfully updated",
+          data: CV,
+        };
+        return res.status(200).send(response);
+      }
+    
+   );
+});
+
+app.use("/uploads",express.static("uploads"));
+
 
 app.post("/etudiant/register", async (req, res) => {
   try {
@@ -189,39 +242,9 @@ app.get("/societe/welcome", auth, (req, res) => {
 
 //image
 
-app.use('/uploads', express.static(__dirname +'/uploads'));
-var storage = multer.diskStorage({
-   destination: function (req, file, cb) {
-     cb(null, 'uploads')
-   },
-   filename: function (req, file, cb) {
-     cb(null, new Date().toISOString()+file.originalname)
-   }
- })
-  
- var upload = multer({ storage: storage })
- app.post('/upload', upload.single('myFile'), async(req, res, next) => {
-   const file = req.file
-   if (!file) {
-     const error = new Error('Please upload a file')
-     error.httpStatusCode = 400
-     return next("hey error")
-   }
-     
-     
-     const imagepost= new model({
-       image: file.path
-     })
-     const savedimage= await imagepost.save()
-     res.json(savedimage)
-   
- })
 
- app.get('/image', (req, res)=>{
-  const image =   image.find()
-  res.json(image)
-  
- })
+
+
 
 
 // insert in collection CV

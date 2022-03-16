@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
-import 'package:pfe/suite_detail_etudiant/image.dart';
 import 'Home.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
@@ -26,8 +25,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
        // '/': (context) => ColorLoader3(),
-        // '/': (context) => AccueilEtd(),
-         '/': (context) => ImageUpload(),
+       //'/': (context) => AccueilEtd(),
+       '/': (context) => createCV(),
         
         '/login/societe': (context) => MyLogin(),
         '/login/etudiant': (context) => MyLogin(),
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
         '/register/societe': (context) => MyRegister(),
         '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
-       // '/': (context) => createCV(),
+        
         '/formSociete': (context) => formSociete(),
       },
       debugShowCheckedModeBanner: false,
