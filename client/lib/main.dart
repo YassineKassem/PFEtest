@@ -24,17 +24,17 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Color(0xFFFED408))),
       initialRoute: '/',
       routes: {
-       // '/': (context) => ColorLoader3(),
-       //'/': (context) => AccueilEtd(),
-       '/': (context) => createCV(),
-        
+        // '/': (context) => ColorLoader3(),
+        //'/': (context) => AccueilEtd(),
+        '/': (context) => createCV(),
+
         '/login/societe': (context) => MyLogin(),
         '/login/etudiant': (context) => MyLogin(),
         '/register/etudiant': (context) => MyRegister(),
         '/register/societe': (context) => MyRegister(),
         '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
-        
+
         '/formSociete': (context) => formSociete(),
       },
       debugShowCheckedModeBanner: false,
