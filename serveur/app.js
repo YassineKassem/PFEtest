@@ -68,6 +68,7 @@ app.patch("/add/image/:id", upload.single("image"),async (req,res)=> {
 app.use("/uploads",express.static("uploads"));
 
 
+
 app.post("/etudiant/register", async (req, res) => {
   try {
     // Get user input
@@ -240,52 +241,108 @@ app.get("/societe/welcome", auth, (req, res) => {
   res.status(200).send("Welcome societe🙌 ");
 });
 
-//image
 
-
-
-
-
-
-// insert in collection CV
-app.post("/etudiant/CV/register", async (req, res) => {
+// insert in collection etudiant his CV
+app.patch("/etudiant/CV/register/:id", async (req, res) => {
   try {
+
+        // Get cv input
+        const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville,Competance,Formation,Stage,CI,langue, } = req.body;
+
+        // Validate cv input
+        if (!(nom && email && Prenom && Numerotel && Adresse && Codepostale && Ville && 
+          Competance && Formation && Stage && CI && langue  )) {
+          return res.status(400).send("All input is required");
+        }
+        
     
-    const file = req.file 
-    if (!file) {
-      return res.status(400).json('Please upload a image');
-    } 
+        // Create cv in our database
+        const cv = await CV.create({
+          nom,
+          Prenom,
+          email,
+          Numerotel,
+          Adresse,
+          Codepostale,
+          Ville,
+          Competance,
+          Formation,
+          Stage,
+          CI,
+          langue,
+         
+        }); 
+        
+    await etudiant.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set:{
+          detailEtd : [
+            cv
+          ],
+        },
+      },
+  
+        {new: true},
+        (err, etudiant) => {
+          if (err) return res.status(500).send(err);
+          const response = {
+            message: "etudiant successfully updated",
+            data: etudiant,
+          };
+          return res.status(200).send(response);
+        }
+      
+     );
 
-    // Get cv input
-    const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville,Competance,Formation,Stage,CI,langue, } = req.body;
+  } catch (err) {
+    console.log(err);
+  }
+});
 
-    // Validate cv input
-    if (!(nom && email && Prenom && Numerotel && Adresse && Codepostale && Ville && 
-      Competance && Formation && Stage && CI && langue  )) {
-      return res.status(400).send("All input is required");
-    }
-    
+// insert in collection etudiant his part 1 of CV
+app.patch("/etudiant/CV/part1/register/:id", async (req, res) => {
+  try {
 
-    // Create cv in our database
-    const cv = await CV.create({
-      nom,
-      Prenom,
-      email,
-      Numerotel,
-      Adresse,
-      Codepostale,
-      Ville,
-      Competance,
-      Formation,
-      Stage,
-      CI,
-      langue,
-     
-    });
+        // Get cv input
+        const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville} = req.body;
 
-    // return new user
-    return res.status(201).json(cv);
-
+        // Validate cv input
+        if (!(nom && email && Prenom && Numerotel && Adresse && Codepostale && Ville)) {
+          return res.status(400).send("All input is required");
+        }
+        
+        // Create cv in our database
+        const cv = await CV.create({
+          nom,
+          Prenom,
+          email,
+          Numerotel,
+          Adresse,
+          Codepostale,
+          Ville
+        }); 
+        
+    await etudiant.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set:{
+          detailEtd : [
+            cv
+          ],
+        },
+      },
+        {new: true},
+        (err, etudiant) => {
+          if (err) return res.status(500).send(err);
+          const response = {
+            message: "etudiant successfully updated",
+            data: etudiant,
+          };
+          return res.status(200).send(response);
+        }
+      
+     );
 
   } catch (err) {
     console.log(err);
@@ -309,6 +366,31 @@ app.get('/etudiant/CV/:id', (req,res) => {
     }
 });
 });
+
+//get last inserted collection id from etudiant
+app.get("/lastId", (req,res) => {
+  etudiant.findOne({}, {}, { sort: {_id: -1 } }, function(err, post) {
+    return res.status(200).send(post.id);
+  });
+   
+});
+
+//get last collection from etudiant
+app.get("/lastCollection", (req,res) => {
+  etudiant.findOne({}, {}, { sort: {_id: -1 } }, function(err, post) {
+    return res.status(200).send(post);
+  });
+   
+});
+
+//get last inserted collection email from etudiant
+app.get("/lastEmail", (req,res) => {
+  etudiant.findOne({}, {}, { sort: {_id: -1 } }, function(err, post) {
+    return res.status(200).send(post.email);
+  });
+   
+});
+
 
 
 // This should be the last route else any after it won't work

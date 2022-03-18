@@ -19,7 +19,7 @@ class _MyRegisterState extends State<MyRegister> {
   Future save(String user) async {
     if (user == "etudiant") {
       var res = await http.post(
-          Uri.parse("http://192.168.1.3:5000/etudiant/register"),
+          Uri.parse("http://192.168.11.152:5000/etudiant/register"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -31,7 +31,7 @@ class _MyRegisterState extends State<MyRegister> {
       print(res.statusCode);
       if (res.statusCode == 201) {
         print(res.body);
-        Navigator.pushNamed(context, '/createCV');
+        Navigator.pushNamed(context, '/createCVPart1');
       } else if (res.statusCode == 409) {
         return showAlertDialog(context, 'Profil Already Exist. Please Login');
       } else {
@@ -39,7 +39,7 @@ class _MyRegisterState extends State<MyRegister> {
       }
     } else if (user == "societe") {
       var res = await http.post(
-          Uri.parse("http://192.168.1.11:5000/societe/register"),
+          Uri.parse("http://192.168.11.152:5000/societe/register"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

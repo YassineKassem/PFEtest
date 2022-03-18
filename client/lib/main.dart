@@ -2,11 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
+import 'package:pfe/welcome_etudiant/Profile/editPwd.dart';
 import 'Home.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
 import 'AccueilSoc.dart';
 import 'suite_detail_etudiant/Cree_CV/createCV.dart';
+import 'suite_detail_etudiant/Cree_CV/createCVPart1.dart';
 import 'suite_detail_societe/formSociete.dart';
 
 void main() {
@@ -24,10 +26,11 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Color(0xFFFED408))),
       initialRoute: '/',
       routes: {
-        // '/': (context) => ColorLoader3(),
+        '/': (context) => ColorLoader3(),
         //'/': (context) => AccueilEtd(),
-        '/': (context) => createCV(),
-
+        '/createCV': (context) => createCV(),
+        '/createCVPart1': (context) => createCVPart1(),
+        '/EditPwd': (context) => EditPwd(),
         '/login/societe': (context) => MyLogin(),
         '/login/etudiant': (context) => MyLogin(),
         '/register/etudiant': (context) => MyRegister(),

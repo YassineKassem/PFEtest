@@ -21,7 +21,7 @@ class _MyLoginState extends State<MyLogin> {
   Future save(String user) async {
     if (user == "etudiant") {
       final res = await http.post(
-          Uri.parse("http://192.168.1.11:5000/etudiant/login"),
+          Uri.parse("http://192.168.11.152:5000/etudiant/login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -40,7 +40,7 @@ class _MyLoginState extends State<MyLogin> {
       }
     } else if (user == "societe") {
       var res = await http.post(
-          Uri.parse("http://192.168.1.11:5000/societe/login"),
+          Uri.parse("http://192.168.11.152:5000/societe/login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

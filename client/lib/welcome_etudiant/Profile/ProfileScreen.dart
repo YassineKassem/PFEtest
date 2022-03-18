@@ -87,7 +87,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                         height: 10,
                       ),
                       RaisedButton(
-                        onPressed: () {},
+                        onPressed: () { Navigator.pushNamed(context, '/createCV'); },
                         color: Colors.grey,
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 15),
@@ -96,6 +96,25 @@ class _ProfileScreen extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         child: Text(
                           "   Modifier CV   ",
+                          style: TextStyle(
+                              fontSize: 14,
+                              letterSpacing: 2.2,
+                              color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      RaisedButton(
+                        onPressed: () { Navigator.pushNamed(context, '/EditPwd'); },
+                        color: Colors.grey,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Text(
+                          "Modifier Mot de passe",
                           style: TextStyle(
                               fontSize: 14,
                               letterSpacing: 2.2,

@@ -21,7 +21,7 @@ class _EditProfile extends State<EditProfile> {
             Icons.arrow_back,
             color: Colors.green,
           ),
-          onPressed: () {},
+          onPressed: () { Navigator.pop(context);},
         ),
       ),
       body: Container(
@@ -33,7 +33,7 @@ class _EditProfile extends State<EditProfile> {
           child: ListView(
             children: [
               Text(
-                "Edit Profile",
+                "Modifier Profile",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               SizedBox(
@@ -87,8 +87,6 @@ class _EditProfile extends State<EditProfile> {
               ),
               buildTextField("user Name", "", false),
               buildTextField("E-mail", "", false),
-              buildTextField("Password", "", true),
-              buildTextField("Confirm Password", "", true),
               SizedBox(
                 height: 35,
               ),
@@ -96,10 +94,10 @@ class _EditProfile extends State<EditProfile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlineButton(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    padding: EdgeInsets.symmetric(horizontal: 35),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {},
+                    onPressed: () { Navigator.pop(context);},
                     child: Text("Annuler",
                         style: TextStyle(
                             fontSize: 14,
@@ -109,7 +107,7 @@ class _EditProfile extends State<EditProfile> {
                   RaisedButton(
                     onPressed: () {},
                     color: Colors.grey,
-                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    padding: EdgeInsets.symmetric(horizontal: 35),
                     elevation: 2,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),

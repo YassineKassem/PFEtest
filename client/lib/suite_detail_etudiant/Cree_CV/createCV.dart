@@ -9,8 +9,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import '../networkHandler.dart';
 import 'display.dart';
 import 'dart:convert';
+
 
 
 class createCV extends StatefulWidget {
@@ -27,8 +29,7 @@ class _createCVState extends State<createCV> {
   competance comp =new competance();
   Interet CI =new Interet();
 
-  PickedFile? _imageFile;
-  final ImagePicker _picker = ImagePicker();
+
 
   @override
   void initState() {
@@ -108,6 +109,13 @@ class _createCVState extends State<createCV> {
   final DatefinS = List.generate(100, (i) => TextEditingController());
   final DescriptionS = List.generate(100, (i) => TextEditingController());
 
+  final networkHandler = NetworkHandler();
+  bool circular = false;
+    PickedFile? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+
+
+
 
    getformation(){
      List<formationList> f=[];
@@ -165,16 +173,21 @@ class _createCVState extends State<createCV> {
 
 
     Future save() async {
-
-      var res = await http.post(
-          Uri.parse("http://192.168.1.3:5000/etudiant/CV/register"),
+         final url1 = Uri.parse('http://192.168.11.152:5000/lastId');
+         final response1 = await http.get(url1);
+         final url2 = Uri.parse('http://192.168.11.152:5000/lastEmail');
+         final response2 = await http.get(url2);
+      if(response2.statusCode==200 && response1.statusCode==200 )   
+      {
+        var res = await http.patch(
+          Uri.parse("http://192.168.11.152:5000/etudiant/CV/register/${response1.body}"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(<String, dynamic>{
             "nom": Nom.text,
             'Prenom': Prenom.text,
-            'email': Adressemail.text,
+            'email': response2.body,
             "Numerotel": int.parse(Numerotel.text),
             'Adresse': Adresse.text,
             'Codepostale': Codepostale.text,
@@ -187,13 +200,29 @@ class _createCVState extends State<createCV> {
 
             
           }));
-
-          if (res.statusCode == 201) {
+          
+          if (res.statusCode == 200) {
             print('cv enregistrer');
+            
+           // if (_imageFile!.path != null) {
+             
+             // final url2 = Uri.parse('http://192.168.1.3:5000/lastId');
+             // final response2 = await http.get(url2);
+             // print(response2.body);
+              //final url = Uri.parse('http://192.168.1.3:5000/add/image/$id');
+              //final headers = {"Content-type": "application/json"};
+              //final json = '{"image": "${_imageFile!.path}"}';
+              //final response = await http.patch(url, headers: headers, body: json);
+              //print('Status code: ${response.statusCode}');         
+          //}
           }else{
             print('cv non');
           }
+      }else{
+         print('could not find last id');
+      }
     }
+
 
 
     
@@ -208,6 +237,13 @@ class _createCVState extends State<createCV> {
           style: TextStyle(color: Colors.red),
         ),
         backgroundColor: Colors.white,
+                leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.red,
+          ),
+          onPressed: () { Navigator.pop(context);},
+        ),
       ),
       body: Center(
         child: Theme(
@@ -232,6 +268,9 @@ class _createCVState extends State<createCV> {
                   });
                 }
                  else if (isLastStep) {
+                    setState(() {
+                    circular=true;
+                  });
                   if (globalkey.currentState!.validate()) {
                    // Navigator.pushNamed(context, '/AccueilEtd');
                      save();
@@ -291,7 +330,29 @@ class _createCVState extends State<createCV> {
             BuildTextField('Nom', Nom),
             BuildTextField('Prenom', Prenom),
             BuildTextField('Adresse e-mail', Adressemail),
-            BuildTextField('Numero de téléphone', Numerotel),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, right: 15, left: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Numero de téléphone'),
+          TextFormField(
+            controller: Numerotel,
+            decoration: InputDecoration(
+              fillColor: Colors.white10, filled: true,
+              border: OutlineInputBorder(),
+              isDense: true, // Added this
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'enter votre numéro de telephone';
+              }
+              return null;
+            },
+          ),
+        ],
+      ),
+    ),
             BuildTextField('Adresse', Adresse),
             BuildTextField('Code postale', Codepostale),
             BuildTextField('Ville', Ville),

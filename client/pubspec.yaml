@@ -46,6 +46,9 @@ dependencies:
   syncfusion_flutter_pdf: ^18.4.30-beta
   image_picker: ^0.6.7+4
   path: ^1.7.0
+  flutter_secure_storage: ^3.3.5
+  logger: ^0.9.4
+  flutter_dotenv: ^5.0.2
 
 
 
