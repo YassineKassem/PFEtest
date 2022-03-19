@@ -13,10 +13,13 @@ class CVmodel{
   String? Adresse ;
   String? Codepostale ;
   String? Ville ;
+  String? Profile ;
+  String? Realisation ;
 
 
   CVmodel({this.Interets,this.competances,this.formations,this.stages,this.langues,
-    this.Nom,this.Prenom,this.Adressemail,this.Numerotel,this.Adresse,this.Codepostale,this.Ville});
+    this.Nom,this.Prenom,this.Adressemail,this.Numerotel,this.Adresse,this.Codepostale
+    ,this.Ville,this.Profile,this.Realisation});
 
   factory CVmodel.fromJson(Map<String, dynamic> json) => CVmodel(
       

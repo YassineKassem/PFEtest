@@ -9,7 +9,8 @@ const userSchemaEtudiantCV = new mongoose.Schema({
   Adresse: { type: String, default: null },
   Codepostale: { type: String, default: null },
   Ville: { type: String, default: null },
-
+  Profile : {type: String, default: null  },
+  Realisation : {type: String, default: null },
   Competance :[{ nomCompetance:{ type: String, default: null } }],
   
   Formation :[  { nomFormation: { type: String, default: null },

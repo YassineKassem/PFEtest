@@ -12,6 +12,7 @@ import 'dart:io';
 import '../networkHandler.dart';
 import 'display.dart';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 
@@ -173,14 +174,14 @@ class _createCVState extends State<createCV> {
 
 
     Future save() async {
-         final url1 = Uri.parse('http://192.168.11.152:5000/lastId');
+         final url1 = Uri.parse('${dotenv.env['API_URL']}:5000/lastId');
          final response1 = await http.get(url1);
-         final url2 = Uri.parse('http://192.168.11.152:5000/lastEmail');
+         final url2 = Uri.parse('${dotenv.env['API_URL']}/lastEmail');
          final response2 = await http.get(url2);
       if(response2.statusCode==200 && response1.statusCode==200 )   
       {
         var res = await http.patch(
-          Uri.parse("http://192.168.11.152:5000/etudiant/CV/register/${response1.body}"),
+          Uri.parse("${dotenv.env['API_URL']}/etudiant/CV/register/${response1.body}"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -192,6 +193,8 @@ class _createCVState extends State<createCV> {
             'Adresse': Adresse.text,
             'Codepostale': Codepostale.text,
             'Ville': Ville.text,
+            'Profile':DescriptionP.text,
+            'Realisation':DescriptionRealisation.text,
             'Formation': getformation(),
             'Competance': getcompetance(),
             'Stage': getstage(),

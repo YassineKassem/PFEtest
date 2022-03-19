@@ -247,11 +247,11 @@ app.patch("/etudiant/CV/register/:id", async (req, res) => {
   try {
 
         // Get cv input
-        const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville,Competance,Formation,Stage,CI,langue, } = req.body;
+        const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville,Profile,Realisation,Competance,Formation,Stage,CI,langue, } = req.body;
 
         // Validate cv input
         if (!(nom && email && Prenom && Numerotel && Adresse && Codepostale && Ville && 
-          Competance && Formation && Stage && CI && langue  )) {
+          Competance && Formation && Stage && CI && langue && Profile && Realisation  )) {
           return res.status(400).send("All input is required");
         }
         
@@ -265,6 +265,8 @@ app.patch("/etudiant/CV/register/:id", async (req, res) => {
           Adresse,
           Codepostale,
           Ville,
+          Profile,
+          Realisation,
           Competance,
           Formation,
           Stage,
@@ -305,10 +307,10 @@ app.patch("/etudiant/CV/part1/register/:id", async (req, res) => {
   try {
 
         // Get cv input
-        const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville} = req.body;
+        const {nom, email,Prenom,Numerotel,Adresse,Codepostale,Ville,Profile} = req.body;
 
         // Validate cv input
-        if (!(nom && email && Prenom && Numerotel && Adresse && Codepostale && Ville)) {
+        if (!(nom && email && Prenom && Numerotel && Adresse && Codepostale && Ville && Profile)) {
           return res.status(400).send("All input is required");
         }
         
@@ -320,7 +322,8 @@ app.patch("/etudiant/CV/part1/register/:id", async (req, res) => {
           Numerotel,
           Adresse,
           Codepostale,
-          Ville
+          Ville,
+          Profile
         }); 
         
     await etudiant.findByIdAndUpdate(

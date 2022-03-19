@@ -3,6 +3,7 @@ import 'package:pfe/model/Etudiant.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe/model/Societe.dart';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyRegister extends StatefulWidget {
   const MyRegister({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _MyRegisterState extends State<MyRegister> {
   Future save(String user) async {
     if (user == "etudiant") {
       var res = await http.post(
-          Uri.parse("http://192.168.11.152:5000/etudiant/register"),
+          Uri.parse("${dotenv.env['API_URL']}/etudiant/register"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -39,7 +40,7 @@ class _MyRegisterState extends State<MyRegister> {
       }
     } else if (user == "societe") {
       var res = await http.post(
-          Uri.parse("http://192.168.11.152:5000/societe/register"),
+          Uri.parse("${dotenv.env['API_URL']}/societe/register"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

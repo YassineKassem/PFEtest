@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
 import 'package:pfe/welcome_etudiant/Profile/editPwd.dart';
-import 'Home.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
 import 'AccueilSoc.dart';
 import 'suite_detail_etudiant/Cree_CV/createCV.dart';
 import 'suite_detail_etudiant/Cree_CV/createCVPart1.dart';
 import 'suite_detail_societe/formSociete.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+
+void main() async{
+  await dotenv.load(fileName: "assets/.env");
   runApp(MyApp());
 }
 

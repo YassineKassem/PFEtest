@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:pfe/model/Etudiant.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +21,8 @@ class _MyLoginState extends State<MyLogin> {
   Future save(String user) async {
     if (user == "etudiant") {
       final res = await http.post(
-          Uri.parse("http://192.168.11.152:5000/etudiant/login"),
+        
+          Uri.parse("${dotenv.env['API_URL']}/etudiant/login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -40,7 +41,7 @@ class _MyLoginState extends State<MyLogin> {
       }
     } else if (user == "societe") {
       var res = await http.post(
-          Uri.parse("http://192.168.11.152:5000/societe/login"),
+          Uri.parse("${dotenv.env['API_URL']}/societe/login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
