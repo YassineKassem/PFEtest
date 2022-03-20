@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pfe/model/Etudiant.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe/model/Societe.dart';
+import 'model/CVmodel.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -20,26 +21,29 @@ class _MyLoginState extends State<MyLogin> {
 
   Future save(String user) async {
     if (user == "etudiant") {
+      
       final res = await http.post(
         
           Uri.parse("${dotenv.env['API_URL']}/etudiant/login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+            
           },
           body: jsonEncode(
-              <String, String>{'email': etd.email, 'password': etd.password}));
+              <String, dynamic>{'email': etd.email, 'password': etd.password}));
 
-      print(etd.email);
-      print(etd.password);
-      print(res.body);
-      print(res.statusCode);
-
+      
       if (res.statusCode == 200) {
+
+        CVmodel.fromJson(json.decode(res.body));
         Navigator.pushNamed(context, '/AccueilEtd');
+
       } else if (res.statusCode == 400) {
+
         return showAlertDialog(context, 'Invalid Email/Password');
       }
     } else if (user == "societe") {
+
       var res = await http.post(
           Uri.parse("${dotenv.env['API_URL']}/societe/login"),
           headers: <String, String>{
@@ -52,8 +56,10 @@ class _MyLoginState extends State<MyLogin> {
       print(res.statusCode);
 
       if (res.statusCode == 200) {
+
         Navigator.pushNamed(context, '/AccueilSoc');
       } else if (res.statusCode == 400) {
+
         return showAlertDialog(context, 'Invalid Email/Password');
       }
     }

@@ -1,4 +1,6 @@
-class CVmodel{
+import 'package:pfe/model/Etudiant.dart';
+
+class CVmodel extends Etudiant{
 
   List<competanceList>? competances;
   List<InteretList>? Interets;
@@ -15,11 +17,26 @@ class CVmodel{
   String? Ville ;
   String? Profile ;
   String? Realisation ;
+  String? token;
 
 
   CVmodel({this.Interets,this.competances,this.formations,this.stages,this.langues,
     this.Nom,this.Prenom,this.Adressemail,this.Numerotel,this.Adresse,this.Codepostale
-    ,this.Ville,this.Profile,this.Realisation});
+    ,this.Ville,this.Profile,this.Realisation,this.token}) : super('', '');
+
+
+
+  void addData (Map<String, dynamic> responseMap) {
+        this.Nom= responseMap['Nom'];
+        this.Prenom= responseMap['Prenom'];
+        this.Adressemail= responseMap['Adressemail'];
+        this.Numerotel=responseMap['Numerotel'];
+        this.Adresse= responseMap['Adresse'];
+        this.Codepostale=responseMap['Codepostale'];
+        this.Ville= responseMap['Ville'];
+        this.token= responseMap['token'];
+  }
+
 
   factory CVmodel.fromJson(Map<String, dynamic> json) => CVmodel(
       
@@ -29,7 +46,8 @@ class CVmodel{
         Numerotel:json['Numerotel'],
         Adresse: json['Adresse'],
         Codepostale: json['Codepostale'],
-        Ville: json['Ville']
+        Ville: json['Ville'],
+        token: json['token']
 
     );
 
@@ -41,6 +59,7 @@ class CVmodel{
         "Adresse": Adresse,
         "Codepostale": Codepostale,
         "Ville": Ville,
+        "token": token,
 
         "formations": List<dynamic>.from(formations!.map((x) => x.toJson())),
         "Interets": List<dynamic>.from(Interets!.map((x) => x.toJson())),

@@ -4,6 +4,8 @@ import 'package:pfe/welcome_etudiant/Favoris/favoris.dart';
 import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
 import 'package:pfe/welcome_etudiant/postulation/postulation.dart';
 
+import '../../model/CVmodel.dart';
+
 class NavigationDrower extends StatefulWidget {
   const NavigationDrower({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class NavigationDrower extends StatefulWidget {
 class _NavigationDrowerState extends State<NavigationDrower> {
   bool isSelected = false;
   int nb = -1;
+  late CVmodel userData;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -101,7 +104,7 @@ class _NavigationDrowerState extends State<NavigationDrower> {
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AccueilEtd(),
+          builder: (context) => AccueilEtd(this.userData),
         ));
         break;
       case 1:

@@ -1,14 +1,14 @@
 require("dotenv").config();
-require("./config/database").connect();
+require("../config/database").connect();
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer=require('multer')
 const router = express.Router();
-const etudiant = require("./model/etudiant");
-const societe = require("./model/societe");
-const CV = require("./model/CV");
-const auth = require("./middleware/auth");
+const etudiant = require("../model/etudiant");
+const societe = require("../model/societe");
+const CV = require("../model/CV");
+const auth = require("../middleware/auth");
 const path = require("path");
 const app = express();
 
@@ -141,7 +141,7 @@ app.post("/etudiant/login", async (req, res) => {
       etd.token = token;
 
       // user
-      return res.status(200).json(etd);
+      return res.status(200).json(etd.token);
     }
     return res.status(400).send("Invalid Credentials");
   } catch (err) {
@@ -150,8 +150,12 @@ app.post("/etudiant/login", async (req, res) => {
 });
 
 app.get("/etudiant/welcome", auth, (req, res) => {
+  
   res.status(200).send("Welcome student🙌 ");
+
+
 });
+
 
 
 //partie login et auth societe
@@ -370,6 +374,12 @@ app.get('/etudiant/CV/:id', (req,res) => {
 });
 });
 
+//get by token
+app.get('/etudiant',auth, (req,res) => {
+  res.json(etudiant.find())
+});
+
+
 //get last inserted collection id from etudiant
 app.get("/lastId", (req,res) => {
   etudiant.findOne({}, {}, { sort: {_id: -1 } }, function(err, post) {
@@ -386,12 +396,12 @@ app.get("/lastCollection", (req,res) => {
    
 });
 
+
 //get last inserted collection email from etudiant
 app.get("/lastEmail", (req,res) => {
   etudiant.findOne({}, {}, { sort: {_id: -1 } }, function(err, post) {
     return res.status(200).send(post.email);
   });
-   
 });
 
 

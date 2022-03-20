@@ -6,6 +6,7 @@ import 'package:pfe/welcome_etudiant/Profile/editPwd.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
 import 'AccueilSoc.dart';
+import 'model/CVmodel.dart';
 import 'suite_detail_etudiant/Cree_CV/createCV.dart';
 import 'suite_detail_etudiant/Cree_CV/createCVPart1.dart';
 import 'suite_detail_societe/formSociete.dart';
@@ -19,6 +20,7 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  CVmodel userData;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/login/etudiant': (context) => MyLogin(),
         '/register/etudiant': (context) => MyRegister(),
         '/register/societe': (context) => MyRegister(),
-        '/AccueilEtd': (context) => AccueilEtd(),
+        '/AccueilEtd': (context) => AccueilEtd(this.userData),
         '/AccueilSoc': (context) => AccueilSoc(),
 
         '/formSociete': (context) => formSociete(),
