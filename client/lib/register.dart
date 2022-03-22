@@ -5,6 +5,8 @@ import 'package:pfe/model/Societe.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'NetworkHandler.dart';
+
 class MyRegister extends StatefulWidget {
   const MyRegister({Key? key}) : super(key: key);
 
@@ -13,52 +15,13 @@ class MyRegister extends StatefulWidget {
 }
 
 class _MyRegisterState extends State<MyRegister> {
+  NetworkHandler networkHandler=NetworkHandler();
   final _formKey = GlobalKey<FormState>();
   Etudiant etd = Etudiant('', '', '');
   Societe soc = Societe('', '', '');
-
-  Future save(String user) async {
-    if (user == "etudiant") {
-      var res = await http.post(
-          Uri.parse("${dotenv.env['API_URL']}/etudiant/register"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, dynamic>{
-            "name": etd.name,
-            'email': etd.email,
-            'password': etd.password
-          }));
-      print(res.statusCode);
-      if (res.statusCode == 201) {
-        print(res.body);
-        Navigator.pushNamed(context, '/createCVPart1');
-      } else if (res.statusCode == 409) {
-        return showAlertDialog(context, 'Profil Already Exist. Please Login');
-      } else {
-        return showAlertDialog(context, 'All input is required');
-      }
-    } else if (user == "societe") {
-      var res = await http.post(
-          Uri.parse("${dotenv.env['API_URL']}/societe/register"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, dynamic>{
-            "name": soc.name,
-            'email': soc.email,
-            'password': soc.password
-          }));
-      if (res.statusCode == 201) {
-        print(res.body);
-        Navigator.pushNamed(context, '/formSociete');
-      } else if (res.statusCode == 409) {
-        return showAlertDialog(context, 'Profil Already Exist. Please Login');
-      } else {
-        return showAlertDialog(context, 'All input is required');
-      }
-    }
-  }
+  String errorText='';
+  bool validate=false;
+  bool circular=false;
 
   @override
   Widget build(BuildContext context) {
@@ -109,22 +72,18 @@ class _MyRegisterState extends State<MyRegister> {
                           children: [
                             TextFormField(
                               controller: getUser() == 'etudiant'
-                                  ? TextEditingController(text: etd.name)
-                                  : TextEditingController(text: soc.name),
+                                  ? TextEditingController(text: etd.username)
+                                  : TextEditingController(text: soc.username),
                               onChanged: (value) {
                                 if (getUser() == 'etudiant')
-                                  etd.name = value;
+                                  etd.username = value;
                                 else
-                                  soc.name = value;
+                                  soc.username = value;
                               },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Enter something';
-                                }
-                                return null;
-                              },
+
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
+                                  errorText: validate?null:errorText,
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(
@@ -137,7 +96,7 @@ class _MyRegisterState extends State<MyRegister> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Name",
+                                  hintText: "Username",
                                   hintStyle: TextStyle(color: Colors.white),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -240,18 +199,61 @@ class _MyRegisterState extends State<MyRegister> {
                                       fontSize: 27,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                CircleAvatar(
+                                circular? CircularProgressIndicator(
+                                ): CircleAvatar(
                                   radius: 30,
                                   backgroundColor: Color(0xff4c505b),
                                   child: IconButton(
                                       color: Colors.white,
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          save(getUser());
-                                          print('ok');
+                                      onPressed: () async{
+                                        setState(() {
+                                          circular=true;
+                                        });
+                                        
+                                        if(getUser()=='etudiant')
+                                        { await checkUserEtd();
+                                          if (_formKey.currentState!.validate() && validate) {
+                                          Map<String,dynamic>data={
+                                            "username":etd.username,
+                                            "password":etd.password,
+                                            "email":etd.email
+                                          };
+                                          print(data);
+                                          await networkHandler.post("/etudiant/register", data);
+                                          setState(() {
+                                            circular=false;
+                                          });
+                                          Navigator.pushNamed(context, '/createCVPart1');
                                         } else {
                                           print("not ok");
+                                          setState(() {
+                                            circular=false;
+                                          });
                                         }
+                                      }
+                                      else{
+                                          await checkUserSoc();
+                                          if (_formKey.currentState!.validate() && validate) {
+                                          Map<String,dynamic>data={
+                                            "username":soc.username,
+                                            "password":soc.password,
+                                            "email":soc.email
+                                          };
+                                          print(data);
+                                          await networkHandler.post("/societe/register", data);
+                                          setState(() {
+                                            circular=false;
+                                          });
+                                          Navigator.pushNamed(context, '/formSociete');
+                                        } else {
+                                          print("not ok");
+                                          setState(() {
+                                            circular=false;
+                                          });
+                                        }
+                                      }
+
+
                                       },
                                       icon: Icon(
                                         Icons.arrow_forward,
@@ -294,7 +296,61 @@ class _MyRegisterState extends State<MyRegister> {
       ),
     );
   }
+
+checkUserEtd() async {
+    if (etd.username.length == 0) {
+      setState(() {
+        // circular = false;
+        validate = false;
+        errorText = "Username Can't be empty";
+      });
+    } else {
+      var response = await networkHandler
+          .get("/etudiant/checkUsername/${etd.username}");
+      if (response['Status']) {
+        setState(() {
+          // circular = false;
+          validate = false;
+          errorText = "Username already taken";
+        });
+      } else {
+        setState(() {
+          // circular = false;
+          validate = true;
+        });
+      }
+    }
+  }
+
+
+  
+checkUserSoc() async {
+    if (soc.username.length == 0) {
+      setState(() {
+        // circular = false;
+        validate = false;
+        errorText = "Username Can't be empty";
+      });
+    } else {
+      var response = await networkHandler
+          .get("/societe/checkUsername/${soc.username}");
+      if (response['Status']) {
+        setState(() {
+          // circular = false;
+          validate = false;
+          errorText = "Username already taken";
+        });
+      } else {
+        setState(() {
+          // circular = false;
+          validate = true;
+        });
+      }
+    }
+  }
+
 }
+
 
 showAlertDialog(BuildContext context, String text) {
   // set up the button

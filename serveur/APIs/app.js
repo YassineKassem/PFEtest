@@ -141,7 +141,7 @@ app.post("/etudiant/login", async (req, res) => {
       etd.token = token;
 
       // user
-      return res.status(200).json(etd.token);
+      return res.status(200).json(etd);
     }
     return res.status(400).send("Invalid Credentials");
   } catch (err) {
@@ -363,16 +363,12 @@ app.get('/etudiant/CV',async (req,res) => {
 });
 
 //get by id
-app.get('/etudiant/CV/:id', (req,res) => {
-  CV.findById(req.params.id, function (err, docs) {
-    if (err){
-        console.log(err);
-    }
-    else{
-      return res.status(201).json(docs);
-    }
+app.get('/etudiant',auth, (req,res) => {
+  etudiant.findById(jwt.payload._id)
+    .then((user) => res.json(user))
+    .catch((err) => res.json(err));
 });
-});
+
 
 //get by token
 app.get('/etudiant',auth, (req,res) => {

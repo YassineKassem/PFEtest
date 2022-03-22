@@ -1,12 +1,12 @@
 class Etudiant{
 
-  String email;
+  String? email;
   String password;
-  String? name;
+  String username;
   
 
 
-  Etudiant(this.email,this.password,[this.name]);
+  Etudiant(this.username,this.password,[this.email]);
   
 
 }

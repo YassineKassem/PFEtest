@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/login/etudiant': (context) => MyLogin(),
         '/register/etudiant': (context) => MyRegister(),
         '/register/societe': (context) => MyRegister(),
-        '/AccueilEtd': (context) => AccueilEtd(this.userData),
+        '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
 
         '/formSociete': (context) => formSociete(),

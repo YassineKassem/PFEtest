@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../AccueilEtd.dart';
+import '../../NetworkHandler.dart';
 import '../../model/CVmodel.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
-import '../networkHandler.dart';
+
 import 'display.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -27,18 +29,21 @@ class _createCVPart1State extends State<createCVPart1> {
   int _currentStep = 0;
   String resultSlider = '';
   bool isComplete = false;
+  NetworkHandler networkHandler=NetworkHandler();
 
 
   final Nom = TextEditingController();
   final Prenom = TextEditingController();
+  final email = TextEditingController();
   final Adressemail = TextEditingController();
   final Numerotel = TextEditingController();
   final Adresse = TextEditingController();
   final Codepostale = TextEditingController();
   final Ville = TextEditingController();
   final DescriptionP = TextEditingController();
+  
 
-  final networkHandler = NetworkHandler();
+
   bool circular = false;
     PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -121,7 +126,7 @@ class _createCVPart1State extends State<createCVPart1> {
                 });
               },
               currentStep: _currentStep,
-              onStepContinue: () {
+              onStepContinue: ()async {
                 final isLastStep = _currentStep == _stepper().length - 1;
                 if (_currentStep != 1) {
                   setState(() {
@@ -133,14 +138,42 @@ class _createCVPart1State extends State<createCVPart1> {
                     circular=true;
                   });
                   if (globalkey.currentState!.validate()) {
-                     save();
-                     
-                  } else {
-                    setState(() {
-                      isComplete = true;
-                    });
-                  }
-                }
+                  Map<String, dynamic> data = {
+                                "nom": Nom.text,
+                                'Prenom': Prenom.text,
+                                'email': email.text,
+                                "Numerotel": int.parse(Numerotel.text),
+                                'Adresse': Adresse.text,
+                                'Codepostale': Codepostale.text,
+                                'Ville': Ville.text,
+                                'Profile':DescriptionP.text,
+                  };
+                  var response =
+                      await networkHandler.post("/cv/add", data);
+                  if (response.statusCode == 200 ||
+                      response.statusCode == 201) {
+                    if (_imageFile?.path != null) {
+                      var imageResponse = await networkHandler.patchImage(
+                          "/cv/add/image", _imageFile!.path);
+                      if (imageResponse.statusCode == 200) {
+                        setState(() {
+                          circular = false;
+                        });
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => AccueilEtd()),
+                            (route) => false);
+                      }
+                    } else {
+                      setState(() {
+                        isComplete = true;
+                        circular = false;
+                      });
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => AccueilEtd()),
+                          (route) => false);
+                          }
+                      }
+                      }}
               },
               onStepCancel: () {
                 if (_currentStep != 0) {

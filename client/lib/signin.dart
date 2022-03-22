@@ -2,68 +2,32 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logger/logger.dart';
 import 'package:pfe/model/Etudiant.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe/model/Societe.dart';
+import 'AccueilEtd.dart';
+import 'NetworkHandler.dart';
 import 'model/CVmodel.dart';
 
 class MyLogin extends StatefulWidget {
-  const MyLogin({Key? key}) : super(key: key);
+  
 
   @override
   _MyLoginState createState() => _MyLoginState();
 }
 
 class _MyLoginState extends State<MyLogin> {
+  NetworkHandler networkHandler=NetworkHandler();
   final _formKey = GlobalKey<FormState>();
   Etudiant etd = new Etudiant('', '');
   Societe soc = new Societe('', '');
+   String errorText='';
+  bool validate=false;
+  bool circular=false;
+  final storage = new FlutterSecureStorage();
 
-  Future save(String user) async {
-    if (user == "etudiant") {
-      
-      final res = await http.post(
-        
-          Uri.parse("${dotenv.env['API_URL']}/etudiant/login"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            
-          },
-          body: jsonEncode(
-              <String, dynamic>{'email': etd.email, 'password': etd.password}));
-
-      
-      if (res.statusCode == 200) {
-
-        CVmodel.fromJson(json.decode(res.body));
-        Navigator.pushNamed(context, '/AccueilEtd');
-
-      } else if (res.statusCode == 400) {
-
-        return showAlertDialog(context, 'Invalid Email/Password');
-      }
-    } else if (user == "societe") {
-
-      var res = await http.post(
-          Uri.parse("${dotenv.env['API_URL']}/societe/login"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(
-              <String, String>{'email': soc.email, 'password': soc.password}));
-      print(soc.email);
-      print(soc.password);
-      print(res.statusCode);
-
-      if (res.statusCode == 200) {
-
-        Navigator.pushNamed(context, '/AccueilSoc');
-      } else if (res.statusCode == 400) {
-
-        return showAlertDialog(context, 'Invalid Email/Password');
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +38,7 @@ class _MyLoginState extends State<MyLogin> {
       for (int i = 7; i < route!.length; i++) {
         user += route[i];
       }
+      print(user);
       return user;
     }
 
@@ -109,27 +74,18 @@ class _MyLoginState extends State<MyLogin> {
                           children: [
                             TextFormField(
                               controller: getUser() == 'etudiant'
-                                  ? TextEditingController(text: etd.email)
-                                  : TextEditingController(text: soc.email),
+                                  ? TextEditingController(text: etd.username)
+                                  : TextEditingController(text: soc.username),
                               onChanged: (value) {
                                 if (getUser() == 'etudiant')
-                                  etd.email = value;
+                                  etd.username = value;
                                 else
-                                  soc.email = value;
+                                  soc.username = value;
                               },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Enter something';
-                                } else if (RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(value)) {
-                                  return null;
-                                } else {
-                                  return 'Enter valid email';
-                                }
-                              },
+                             
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
+                                  errorText: validate?null:errorText,
                                   fillColor: Colors.grey.shade100,
                                   filled: true,
                                   hintText: "Email",
@@ -150,15 +106,11 @@ class _MyLoginState extends State<MyLogin> {
                                 else
                                   soc.password = value;
                               },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Enter something';
-                                }
-                                return null;
-                              },
+                              
                               style: TextStyle(),
                               obscureText: true,
                               decoration: InputDecoration(
+                                errorText: validate?null:errorText,
                                   fillColor: Colors.grey.shade100,
                                   filled: true,
                                   hintText: "Password",
@@ -178,17 +130,49 @@ class _MyLoginState extends State<MyLogin> {
                                       fontSize: 27,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                CircleAvatar(
+                                circular? CircularProgressIndicator(
+                                ):CircleAvatar(
                                   radius: 30,
                                   backgroundColor: Color(0xff4c505b),
                                   child: IconButton(
                                       color: Colors.white,
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          save(getUser());
-                                        } else
-                                          print("not ok");
-                                      },
+                                      onPressed: () async{
+                                        setState(() {
+                                          circular=true;
+                                        });
+                                       
+                    //Login Logic start here
+                    Map<String, String> data = {
+                      "username": etd.username,
+                      "password": etd.password,
+                    };
+                    var response =
+                        await networkHandler.post("/etudiant/login", data);
+
+                    if (response.statusCode == 200 ||
+                        response.statusCode == 201) {
+                      Map<String, dynamic> output = json.decode(response.body);
+                      print(output["token"]);
+                      await storage.write(key: "token", value: output["token"]);
+                      setState(() {
+                        validate = true;
+                        circular = false;
+                      });
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AccueilEtd(),
+                          ),
+                          (route) => false);
+                    } else {
+                      String output = json.decode(response.body);
+                      setState(() {
+                        validate = false;
+                        errorText = output;
+                        circular = false;
+                      });
+                    }
+                                        }, 
                                       icon: Icon(
                                         Icons.arrow_forward,
                                       )),
@@ -241,6 +225,7 @@ class _MyLoginState extends State<MyLogin> {
       ),
     );
   }
+
 }
 
 showAlertDialog(BuildContext context, String text) {
@@ -269,3 +254,4 @@ showAlertDialog(BuildContext context, String text) {
     },
   );
 }
+

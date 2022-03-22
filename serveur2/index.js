@@ -9,6 +9,7 @@ mongoose.connect(
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
+    useFindAndModify: false
   }
 );
 
@@ -17,7 +18,7 @@ connection.once("open", () => {
   console.log("MongoDb connected");
 });
 
-//middleware
+//middleware etudiant
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 const userRoute = require("./routes/etudiant");
@@ -26,6 +27,10 @@ const profileRoute = require("./routes/cv");
 app.use("/cv", profileRoute);
 const blogRoute = require("./routes/blogpost");
 app.use("/blogPost", blogRoute);
+
+//middleware societe
+const userRouteS = require("./routes/societe");
+app.use("/societe", userRouteS);
 
 data = {
   msg: "Welcome on DevStack Blog App development YouTube video series",

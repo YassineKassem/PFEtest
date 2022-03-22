@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
-import '../networkHandler.dart';
 import 'display.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -110,7 +109,7 @@ class _createCVState extends State<createCV> {
   final DatefinS = List.generate(100, (i) => TextEditingController());
   final DescriptionS = List.generate(100, (i) => TextEditingController());
 
-  final networkHandler = NetworkHandler();
+ 
   bool circular = false;
     PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
