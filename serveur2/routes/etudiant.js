@@ -16,6 +16,14 @@ router.route("/:username").get(middleware.checkToken, (req, res) => {
   });
 });
 
+router.route("/getData").get(middleware.checkToken, (req, res) => {
+  Etudiant.findOne({ username: req.decoded.username }, (err, result) => {
+    if (err) return res.json({ err: err });
+    if (result == null) return res.json({ data: [] });
+    else return res.json({ data: result });
+  });
+});
+
 router.route("/checkusername/:username").get((req, res) => {
   Etudiant.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
@@ -100,29 +108,18 @@ router.route("/delete/:username").delete((req, res) => {
   });
 });
 
-router.route("/updateEtudiant").patch(middleware.checkToken, async (req, res) => {
-  let profile = {};
-  await Etudiant.findOne({ password: req.decoded.password }, (err, result) => {
-    if (err) {
-      profile = {};
-    }
-    if (result != null) {
-      profile = result;
-    }
-  });
+router.route("/updateEtudiant/:username").patch(middleware.checkToken, async (req, res) => {
   Etudiant.findOneAndUpdate(
-    { password:req.decoded.password },
-    {
-      $set: {     
-    username: req.body.username ? req.body.username : profile.username,
-    email: req.body.email ? req.body.email :profile.email ,
-      },
-    },
-    { new: true },
+    { username: req.params.username },
+    { $set: { username: req.body.username,email: req.body.email }},
     (err, result) => {
-      if (err) return res.json({ err: err });
-      if (result == null) return res.json({ data: [] });
-      else return res.json({ data: result });
+      if (err) return res.status(500).json({ msg: err });
+      const msg = {
+        msg: "profile successfully updated",
+        username: req.body.username,
+        email: req.body.email
+      };
+      return res.json(msg);
     }
   );
 });

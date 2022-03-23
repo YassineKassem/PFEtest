@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pfe/model/Etudiant.dart';
 import 'package:pfe/search/widgets/search_app_bar.dart';
 import 'package:pfe/welcome_etudiant/Profile/editProfile.dart';
 
@@ -14,11 +15,13 @@ class _ProfileScreen extends State<ProfileScreen> {
   bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
+  Etudiant etd=Etudiant('', '','');
   @override
   void initState() {
     super.initState();
 
     fetchData();
+    
   }
 
   void fetchData() async {
@@ -27,7 +30,15 @@ class _ProfileScreen extends State<ProfileScreen> {
       profileModel = CVmodel.fromJson(response["data"]);
       circular = false;
     });
+    
+    var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
+     setState(() {
+      etd = Etudiant.fromJson(response2["data"]);
+    });
+    
   }
+
+  
 
 
 
@@ -61,7 +72,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                Center(child: Text("${profileModel.email}")),
+                Center(child: Text("${etd.email}")),
                 SizedBox(
                   height: 50,
                 ),

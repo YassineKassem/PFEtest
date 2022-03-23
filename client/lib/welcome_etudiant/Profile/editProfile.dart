@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../NetworkHandler.dart';
+import '../../model/CVmodel.dart';
+import '../../model/Etudiant.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -7,9 +13,37 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfile extends State<EditProfile> {
+  bool circular = true;
   PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
   bool showPassword = false;
+  NetworkHandler networkHandler = NetworkHandler();
+  CVmodel profileModel = CVmodel();
+  Etudiant etd=Etudiant('', '','');
+  TextEditingController usernameEdit=TextEditingController();
+  TextEditingController emailEdit=TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    fetchData();
+    
+  }
+
+  void fetchData() async {
+    var response = await networkHandler.get("/cv/getData");
+    setState(() {
+      profileModel = CVmodel.fromJson(response["data"]);
+      circular = false;
+    });
+    
+    var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
+     setState(() {
+      etd = Etudiant.fromJson(response2["data"]);
+    });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +58,9 @@ class _EditProfile extends State<EditProfile> {
           onPressed: () { Navigator.pop(context);},
         ),
       ),
-      body: Container(
+      body: circular
+          ? Center(child: CircularProgressIndicator())
+          : Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(
           onTap: () {
@@ -44,39 +80,7 @@ class _EditProfile extends State<EditProfile> {
                   children: [
                     Center(
                       child: Stack(children: [
-                        CircleAvatar(
-                          radius: 80,
-                          backgroundImage:
-                              AssetImage('assets/images/avatar.png'),
-                        ),
-                        Positioned(
-                          bottom: 20,
-                          right: 20,
-                          child: InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: ((builder) => bottomSheet()),
-                                );
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  color: Colors.grey,
-                                ),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
-                              )),
-                        )
+                        imageProfile(),
                       ]),
                     ),
                   ],
@@ -85,8 +89,8 @@ class _EditProfile extends State<EditProfile> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("user Name", "", false),
-              buildTextField("E-mail", "", false),
+              buildTextField("user Name","${etd.username}" , false,usernameEdit),
+              buildTextField("E-mail", "${etd.email}", false,emailEdit),
               SizedBox(
                 height: 35,
               ),
@@ -105,7 +109,31 @@ class _EditProfile extends State<EditProfile> {
                             color: Colors.black)),
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: ()async {
+
+                       if (_imageFile?.path != null) { 
+                      var imageResponse = await networkHandler.patchImage(
+                          "/cv/add/image", _imageFile!.path);
+                      if (imageResponse.statusCode == 200) {
+                        
+                        setState(() {
+                          circular = false;
+                        });}
+                        }
+                        Map<String, dynamic> data = {
+                                "username": usernameEdit.text,
+                                'email': emailEdit.text,
+                        };
+                        var responseEdit = await networkHandler.patch(
+                          "/etudiant/updateEtudiant/${profileModel.username}",data);
+                           if (responseEdit.statusCode == 200 ||
+                               responseEdit.statusCode == 201) {
+                                 print("ok");
+                               }
+
+
+
+                    },
                     color: Colors.grey,
                     padding: EdgeInsets.symmetric(horizontal: 35),
                     elevation: 2,
@@ -125,6 +153,33 @@ class _EditProfile extends State<EditProfile> {
           ),
         ),
       ),
+    );
+  }
+
+
+    Widget imageProfile() {
+    return Center(
+      child: Stack(children: [
+        CircleAvatar(
+          radius: 80,
+          backgroundImage: _imageFile == null
+              ? NetworkHandler().getImage("${profileModel.username}")
+              : FileImage(File(_imageFile!.path)) as ImageProvider,
+        ),
+        Positioned(
+          bottom: 20,
+          right: 20,
+          child: InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: ((builder) => bottomSheet()),
+              );
+            },
+            child: Icon(Icons.edit, color: Colors.black45, size: 28),
+          ),
+        )
+      ]),
     );
   }
 
@@ -177,10 +232,11 @@ class _EditProfile extends State<EditProfile> {
   }
 
   Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
+      String labelText, String placeholder, bool isPasswordTextField,TextEditingController control) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        controller: control,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
