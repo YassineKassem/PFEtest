@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import '../AccueilSoc.dart';
+import '../NetworkHandler.dart';
+
 class formSociete extends StatefulWidget {
   const formSociete({ Key? key }) : super(key: key);
 
@@ -23,9 +26,8 @@ class _formSocieteState extends State<formSociete> {
   final EmailR=TextEditingController();
   final CodePostal=TextEditingController();
   final tel=TextEditingController();
-
-
-
+  NetworkHandler networkHandler=NetworkHandler();
+  bool circular = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class _formSocieteState extends State<formSociete> {
                         _currentStep=newIndex;
                       });},
                     currentStep: _currentStep,
-                    onStepContinue: () {
+                    onStepContinue: ()async {
                       final isLastStep = _currentStep == _stepper().length -1;
                       if (_currentStep != 1) {
                         setState(() {
@@ -60,14 +62,40 @@ class _formSocieteState extends State<formSociete> {
                       }
                       else if(isLastStep){
                         if (globalkey.currentState!.validate()) {
-                          Navigator.pushNamed(context, '/AccueilSoc');
-                          //ScaffoldMessenger.of(context).showSnackBar(
-                            //const SnackBar(content: Text('Processing Data')),
-                          //);
-                        }else {
+                  Map<String, dynamic> data = {
+                                "nom": Nom.text,
+                                'SecteurActivite': SecteurActivite.text,
+                                "CodeFiscal": CodeFiscal.text,
+                                'Email': Email.text,
+                                'EmailR': EmailR.text,
+                                'CodePostal': CodePostal.text,
+                                'tel':int.parse(tel.text),
+                  };
+                  var response =
+                      await networkHandler.post("/profileSociete/add", data);
+                  if (response.statusCode == 200 ||
+                      response.statusCode == 201) {
+                    if (_imageFile?.path != null) {
+                      var imageResponse = await networkHandler.patchImage(
+                          "/profileSociete/add/image", _imageFile!.path);
+                      if (imageResponse.statusCode == 200) {
                         setState(() {
-                          isComplete = true;
+                          circular = false;
                         });
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => AccueilSoc()),
+                            (route) => false);
+                      }
+                    } else {
+                      setState(() {
+                        isComplete = true;
+                        circular = false;
+                      });
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => AccueilSoc()),
+                          (route) => false);
+                          }
+                      }
                       }}
                     },
                     onStepCancel: (){
@@ -212,6 +240,8 @@ class _formSocieteState extends State<formSociete> {
         ],
       ),
     );}
+
+
 
 
 }

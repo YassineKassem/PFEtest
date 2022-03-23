@@ -11,6 +11,7 @@ import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
+import '../../signin.dart';
 import 'display.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,16 +26,16 @@ class createCVPart1 extends StatefulWidget {
 class _createCVPart1State extends State<createCVPart1> {
 
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
-  CVmodel cvmodel = new CVmodel();
+  
   int _currentStep = 0;
   String resultSlider = '';
   bool isComplete = false;
   NetworkHandler networkHandler=NetworkHandler();
+  bool circular = false;
 
 
   final Nom = TextEditingController();
   final Prenom = TextEditingController();
-  final email = TextEditingController();
   final Adressemail = TextEditingController();
   final Numerotel = TextEditingController();
   final Adresse = TextEditingController();
@@ -44,61 +45,9 @@ class _createCVPart1State extends State<createCVPart1> {
   
 
 
-  bool circular = false;
+  
     PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
-
-
-    Future save() async {
-         final url1 = Uri.parse('${dotenv.env['API_URL']}/lastId');
-         final response1 = await http.get(url1);
-         final url2 = Uri.parse('${dotenv.env['API_URL']}/lastEmail');
-         final response2 = await http.get(url2);
-      if(response2.statusCode==200 && response1.statusCode==200 )   
-      {
-        var res = await http.patch(
-          Uri.parse("${dotenv.env['API_URL']}/etudiant/CV/part1/register/${response1.body}"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, dynamic>{
-            "nom": Nom.text,
-            'Prenom': Prenom.text,
-            'email': response2.body,
-            "Numerotel": int.parse(Numerotel.text),
-            'Adresse': Adresse.text,
-            'Codepostale': Codepostale.text,
-            'Ville': Ville.text,
-            'Profile':DescriptionP.text,
-
-           
-          }));
-          
-          if (res.statusCode == 200) {
-            print('part 1 cv enregistrer');
-            Navigator.pushNamed(context, '/AccueilEtd');
-           // if (_imageFile!.path != null) {
-             
-             // final url2 = Uri.parse('http://192.168.1.3:5000/lastId');
-             // final response2 = await http.get(url2);
-             // print(response2.body);
-              //final url = Uri.parse('http://192.168.1.3:5000/add/image/$id');
-              //final headers = {"Content-type": "application/json"};
-              //final json = '{"image": "${_imageFile!.path}"}';
-              //final response = await http.patch(url, headers: headers, body: json);
-              //print('Status code: ${response.statusCode}');         
-          //}
-          }else{
-            print('cv non');
-          }
-      }else{
-         print('could not find last id');
-      }
-    }
-
-
-
-    
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +90,7 @@ class _createCVPart1State extends State<createCVPart1> {
                   Map<String, dynamic> data = {
                                 "nom": Nom.text,
                                 'Prenom': Prenom.text,
-                                'email': email.text,
+                                'email': Adressemail.text,
                                 "Numerotel": int.parse(Numerotel.text),
                                 'Adresse': Adresse.text,
                                 'Codepostale': Codepostale.text,
@@ -187,7 +136,7 @@ class _createCVPart1State extends State<createCVPart1> {
             children: <Widget>[
               SizedBox(height: 70.0),
               Container(
-                color: Colors.yellow,
+                color: Colors.red,
                 child: TextButton(
                   onPressed: details.onStepContinue,
                   child: _currentStep != 1? const Text('Continuer',

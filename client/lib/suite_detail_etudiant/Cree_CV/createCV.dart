@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import '../../model/ListCV.dart';
 import 'display.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,10 +23,10 @@ class createCV extends StatefulWidget {
 
 class _createCVState extends State<createCV> {
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
-  CVmodel cvmodel = new CVmodel();
+ 
   formation form =new formation();
   stage stg =new stage();
-  langue lg =new langue();
+  langues lg =new langues();
   competance comp =new competance();
   Interet CI =new Interet();
 
@@ -101,7 +102,7 @@ class _createCVState extends State<createCV> {
 
   final competances = List.generate(100, (i) => TextEditingController());
 
-  final langues = List.generate(10, (i) => TextEditingController());
+  final langue = List.generate(10, (i) => TextEditingController());
   final centreInteret = List.generate(100, (i) => TextEditingController());
 
   final nomSociete = List.generate(100, (i) => TextEditingController());
@@ -113,121 +114,6 @@ class _createCVState extends State<createCV> {
   bool circular = false;
     PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
-
-
-
-
-   getformation(){
-     List<formationList> f=[];
-      for (int i = 0; i < Formation.length; i++) {
-        if (Formation[i].text != '')
-          f.add(formationList(Formation[i].text,EtablissementF[i].text,VilleF[i].text,DatedebutF[i].text, DatefinF[i].text,DescriptionF[i].text));
-      }
-      return f;}
-
-    getstage(){
-     List<stageList> f=[];
-      for (int i = 0; i < nomSociete.length; i++) {
-        if (nomSociete[i].text != '')
-          f.add(stageList(nomSociete[i].text,DatedebutS[i].text,DatefinS[i].text,DescriptionS[i].text));
-      }
-      return f;}
-
-    getcompetance(){
-     List<competanceList> f=[];
-      for (int i = 0; i < competances.length; i++) {
-        if (competances[i].text != '')
-          f.add(competanceList(competances[i].text));
-      }
-      return f;}
-
-    getinteret(){
-     List<InteretList> f=[];
-      for (int i = 0; i < centreInteret.length; i++) {
-        if (centreInteret[i].text != '')
-          f.add(InteretList(centreInteret[i].text));
-      }
-      return f;}
-      
-    getlangue(){
-     List<langueList> f=[];
-      for (int i = 0; i < langues.length; i++) {
-       
-        if (langues[i].text != '') {
-          if (_currentSliderValue[i] == 10)
-            resultSlider = 'Débutant(e)';
-          else if (_currentSliderValue[i] == 20)
-            resultSlider = 'Intermédiaire';
-          else if (_currentSliderValue[i] == 30)
-            resultSlider = 'Bien';
-          else if (_currentSliderValue[i] == 40)
-            resultSlider = 'Très bien';
-          else if (_currentSliderValue[i] == 50)
-            resultSlider = 'Excellent';
-          else {
-            resultSlider = '';
-          }
-          f.add(langueList(langues[i].text,resultSlider));
-      }
-      return f;}}       
-
-
-    Future save() async {
-         final url1 = Uri.parse('${dotenv.env['API_URL']}:5000/lastId');
-         final response1 = await http.get(url1);
-         final url2 = Uri.parse('${dotenv.env['API_URL']}/lastEmail');
-         final response2 = await http.get(url2);
-      if(response2.statusCode==200 && response1.statusCode==200 )   
-      {
-        var res = await http.patch(
-          Uri.parse("${dotenv.env['API_URL']}/etudiant/CV/register/${response1.body}"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, dynamic>{
-            "nom": Nom.text,
-            'Prenom': Prenom.text,
-            'email': response2.body,
-            "Numerotel": int.parse(Numerotel.text),
-            'Adresse': Adresse.text,
-            'Codepostale': Codepostale.text,
-            'Ville': Ville.text,
-            'Profile':DescriptionP.text,
-            'Realisation':DescriptionRealisation.text,
-            'Formation': getformation(),
-            'Competance': getcompetance(),
-            'Stage': getstage(),
-            'CI': getinteret(),
-            'langue': getlangue()
-
-            
-          }));
-          
-          if (res.statusCode == 200) {
-            print('cv enregistrer');
-            
-           // if (_imageFile!.path != null) {
-             
-             // final url2 = Uri.parse('http://192.168.1.3:5000/lastId');
-             // final response2 = await http.get(url2);
-             // print(response2.body);
-              //final url = Uri.parse('http://192.168.1.3:5000/add/image/$id');
-              //final headers = {"Content-type": "application/json"};
-              //final json = '{"image": "${_imageFile!.path}"}';
-              //final response = await http.patch(url, headers: headers, body: json);
-              //print('Status code: ${response.statusCode}');         
-          //}
-          }else{
-            print('cv non');
-          }
-      }else{
-         print('could not find last id');
-      }
-    }
-
-
-
-    
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +161,7 @@ class _createCVState extends State<createCV> {
                   });
                   if (globalkey.currentState!.validate()) {
                    // Navigator.pushNamed(context, '/AccueilEtd');
-                     save();
+                     
                      
                   } else {
                     setState(() {
@@ -475,7 +361,7 @@ class _createCVState extends State<createCV> {
         ),
       ),
       Step(
-        state: _currentStep > 6 && langues[indexLangue].text != ''
+        state: _currentStep > 6 && langue[indexLangue].text != ''
             ? StepState.complete
             : _currentStep > 6
                 ? StepState.error
@@ -790,7 +676,7 @@ class _createCVState extends State<createCV> {
         children: [
           Flexible(
               child:
-                  BuildTextField('Langue$indexLangue', langues[indexLangue])),
+                  BuildTextField('Langue$indexLangue', langue[indexLangue])),
           Visibility(
             visible: indexLangue == lg.nomLangue!.length - 1,
             child: SizedBox(
@@ -1194,7 +1080,7 @@ class _createCVState extends State<createCV> {
     final CompetanceSize =
         formationSize + CompetanceChamp.length + competancechamp2.length + 10;
     //langue
-    if (langues[0].text != '') {
+    if (langue[0].text != '') {
       drawLine(page, 120, pageSize.width - 50, CompetanceSize + 20);
       PdfTextElement(
               text: Languechamp.toUpperCase(),
@@ -1204,8 +1090,8 @@ class _createCVState extends State<createCV> {
               page: page,
               bounds: Rect.fromLTWH(120, CompetanceSize, pageSize.width - 230,
                   pageSize.height - 120));
-      for (int i = 0; i < langues.length; i++) {
-        if (langues[i].text != null) {
+      for (int i = 0; i < langue.length; i++) {
+        if (langue[i].text != null) {
           if (_currentSliderValue[i] == 10)
             resultSlider = 'Débutant(e)';
           else if (_currentSliderValue[i] == 20)
@@ -1219,8 +1105,8 @@ class _createCVState extends State<createCV> {
           else {
             resultSlider = '';
           }
-          if (langues[i].text != '')
-            Languechamp2 += '''${langues[i].text}-$resultSlider\n''';
+          if (langue[i].text != '')
+            Languechamp2 += '''${langue[i].text}-$resultSlider\n''';
         }
       }
       Languechamp2 += '\r\n\r\n';

@@ -31,6 +31,9 @@ app.use("/blogPost", blogRoute);
 //middleware societe
 const userRouteS = require("./routes/societe");
 app.use("/societe", userRouteS);
+const profileRouteS = require("./routes/profileSociete");
+app.use("/profileSociete", profileRouteS);
+
 
 data = {
   msg: "Welcome on DevStack Blog App development YouTube video series",

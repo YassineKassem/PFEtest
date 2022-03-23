@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pfe/model/Etudiant.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe/model/Societe.dart';
@@ -22,6 +23,7 @@ class _MyRegisterState extends State<MyRegister> {
   String errorText='';
   bool validate=false;
   bool circular=false;
+  final storage = new FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -218,8 +220,12 @@ class _MyRegisterState extends State<MyRegister> {
                                             "password":etd.password,
                                             "email":etd.email
                                           };
+                                        
                                           print(data);
-                                          await networkHandler.post("/etudiant/register", data);
+                                          var response = await networkHandler.post("/etudiant/register", data);
+                                          Map<String, dynamic> output = json.decode(response.body);
+                                          print(output["token"]);
+                                          await storage.write(key: "token", value: output["token"]);
                                           setState(() {
                                             circular=false;
                                           });
@@ -240,7 +246,10 @@ class _MyRegisterState extends State<MyRegister> {
                                             "email":soc.email
                                           };
                                           print(data);
-                                          await networkHandler.post("/societe/register", data);
+                                          var response = await networkHandler.post("/societe/register", data);
+                                           Map<String, dynamic> output = json.decode(response.body);
+                                          print(output["token"]);
+                                          await storage.write(key: "token", value: output["token"]);
                                           setState(() {
                                             circular=false;
                                           });

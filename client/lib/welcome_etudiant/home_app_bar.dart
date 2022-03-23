@@ -2,10 +2,41 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeAppBar extends StatelessWidget {
+import '../NetworkHandler.dart';
+import '../model/CVmodel.dart';
+
+
+class HomeAppBar extends StatefulWidget {
+  const HomeAppBar({ Key? key }) : super(key: key);
+
   @override
+  State<HomeAppBar> createState() => HomeAppBarState();
+}
+
+class HomeAppBarState extends State<HomeAppBar> {
+  bool circular = true;
+  NetworkHandler networkHandler = NetworkHandler();
+  CVmodel profileModel = CVmodel();
+  @override
+  void initState() {
+    super.initState();
+
+    fetchData();
+  }
+
+  void fetchData() async {
+    var response = await networkHandler.get("/cv/getData");
+    setState(() {
+      profileModel = CVmodel.fromJson(response["data"]);
+      circular = false;
+    });
+  }
+
+   @override
   Widget build(BuildContext context) {
-    return Container(
+    return circular
+          ? Center(child: CircularProgressIndicator())
+          :Container(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
         left: 25,
@@ -62,11 +93,9 @@ class HomeAppBar extends StatelessWidget {
               SizedBox(
                 width: 20,
               ),
-              ClipOval(
-                child: Image.asset(
-                  'assets/images/avatar.png',
-                  width: 40,
-                ),
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
               )
             ],
           )
@@ -75,3 +104,4 @@ class HomeAppBar extends StatelessWidget {
     );
   }
 }
+

@@ -53,6 +53,7 @@ router
   });
 
 router.route("/add").post(middleware.checkToken, (req, res) => {
+
   const profile = Cv({
     username: req.decoded.username,
     nom: req.body.nom,
@@ -67,31 +68,8 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
     Competence: req.body.Competence,
     Formation: req.body.Formation,
     Stage: req.body.Stage,
-    CI: req.body.CI,
+    Ci: req.body.Ci,
     langue: req.body.langue,
-  });
-  profile
-    .save()
-    .then(() => {
-      return res.json({ msg: "profile successfully stored" });
-    })
-    .catch((err) => {
-      return res.status(400).json({ err: err });
-    });
-});
-
-router.route("/postRegister").post(middleware.checkToken, (req, res) => {
-  const profile = Cv({
-    username: req.decoded.username,
-    nom: req.body.nom,
-    Prenom: req.body.Prenom,
-    email: req.body.email,
-    Numerotel: req.body.Numerotel,
-    Adresse: req.body.Adresse,
-    Codepostale: req.body.Codepostale,
-    Ville: req.body.Ville,
-    Profil: req.body.Profil,
-
   });
   profile
     .save()
@@ -150,7 +128,7 @@ router.route("/update").patch(middleware.checkToken, async (req, res) => {
     Competence: req.body.Competence ? req.body.Competence :profile.Competence,
     Formation: req.body.Formation ? req.body.Formation :profile.Formation,
     Stage: req.body.Stage ? req.body.Stage :profile.Stage,
-    CI: req.body.CI ? req.body.CI :profile.CI,
+    CI: req.body.Ci ? req.body.Ci :profile.Ci,
     langue: req.body.langue ? req.body.langue :profile.langue,
       },
     },

@@ -4,9 +4,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:pfe/AccueilSoc.dart';
 import 'package:pfe/model/Etudiant.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe/model/Societe.dart';
+import 'package:pfe/suite_detail_etudiant/Cree_CV/createCVPart1.dart';
 import 'AccueilEtd.dart';
 import 'NetworkHandler.dart';
 import 'model/CVmodel.dart';
@@ -141,7 +143,7 @@ class _MyLoginState extends State<MyLogin> {
                                           circular=true;
                                         });
                                        
-                    //Login Logic start here
+                   if(getUser()=='etudiant'){ //Login Logic start here
                     Map<String, String> data = {
                       "username": etd.username,
                       "password": etd.password,
@@ -171,6 +173,37 @@ class _MyLoginState extends State<MyLogin> {
                         errorText = output;
                         circular = false;
                       });
+                    }}else{
+                       Map<String, String> data = {
+                      "username": soc.username,
+                      "password": soc.password,
+                    };
+                    var response =
+                        await networkHandler.post("/societe/login", data);
+
+                    if (response.statusCode == 200 ||
+                        response.statusCode == 201) {
+                      Map<String, dynamic> output = json.decode(response.body);
+                      print(output["token"]);
+                      await storage.write(key: "token", value: output["token"]);
+                      setState(() {
+                        validate = true;
+                        circular = false;
+                      });
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AccueilSoc(),
+                          ),
+                          (route) => false);
+                    } else {
+                      String output = json.decode(response.body);
+                      setState(() {
+                        validate = false;
+                        errorText = output;
+                        circular = false;
+                      });
+                    }
                     }
                                         }, 
                                       icon: Icon(

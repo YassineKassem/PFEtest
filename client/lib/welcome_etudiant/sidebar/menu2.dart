@@ -4,6 +4,7 @@ import 'package:pfe/welcome_etudiant/Favoris/favoris.dart';
 import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
 import 'package:pfe/welcome_etudiant/postulation/postulation.dart';
 
+import '../../NetworkHandler.dart';
 import '../../model/CVmodel.dart';
 
 class NavigationDrower extends StatefulWidget {
@@ -17,6 +18,23 @@ class _NavigationDrowerState extends State<NavigationDrower> {
   bool isSelected = false;
   int nb = -1;
   late CVmodel userData;
+    bool circular = true;
+  NetworkHandler networkHandler = NetworkHandler();
+  CVmodel profileModel = CVmodel();
+  @override
+  void initState() {
+    super.initState();
+
+    fetchData();
+  }
+
+  void fetchData() async {
+    var response = await networkHandler.get("/cv/getData");
+    setState(() {
+      profileModel = CVmodel.fromJson(response["data"]);
+      circular = false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -139,12 +157,12 @@ class _NavigationDrowerState extends State<NavigationDrower> {
           Container(
             width: 50,
             height: 50,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xfff1f3f6),
-                image: DecorationImage(
-                    image: AssetImage('assets/images/avatar.png'),
-                    fit: BoxFit.contain)),
+            child: circular
+          ? Center(child: CircularProgressIndicator())
+          :CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
+                  ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -181,12 +199,12 @@ class _NavigationDrowerState extends State<NavigationDrower> {
           Container(
             width: 50,
             height: 50,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xfff1f3f6),
-                image: DecorationImage(
-                    image: AssetImage('assets/images/avatar.png'),
-                    fit: BoxFit.contain)),
+            child:circular
+          ? Center(child: CircularProgressIndicator())
+          :CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
+                  ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

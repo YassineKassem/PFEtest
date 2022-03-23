@@ -5,6 +5,7 @@ import 'package:pfe/welcome_etudiant/home_app_bar.dart';
 import 'package:pfe/welcome_etudiant/search_card.dart';
 import 'package:pfe/welcome_etudiant/stage_list.dart';
 import 'package:pfe/welcome_etudiant/tag_list.dart';
+
 import 'model/CVmodel.dart';
 import 'welcome_etudiant/sidebar/menu2.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,8 @@ class _AccueilEtdState extends State<AccueilEtd> {
   
   
   Map<String, String> headers = new Map();
-  
+
+
 
   @override
   Widget build(BuildContext context) {

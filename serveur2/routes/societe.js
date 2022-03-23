@@ -63,7 +63,8 @@ router.route("/register").post(async (req, res) => {
     .save()
     .then(() => {
       console.log("user registered");
-      res.status(200).json({ msg: "User Successfully Registered" });
+      let token = jwt.sign({ username: req.body.username }, config.key, {});
+      res.status(200).json({  token: token,msg: "User Successfully Registered" });
     })
     .catch((err) => {
       res.status(403).json({ msg: err });

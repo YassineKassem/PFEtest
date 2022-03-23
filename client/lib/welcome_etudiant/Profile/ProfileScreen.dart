@@ -2,17 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:pfe/search/widgets/search_app_bar.dart';
 import 'package:pfe/welcome_etudiant/Profile/editProfile.dart';
 
+import '../../NetworkHandler.dart';
+import '../../model/CVmodel.dart';
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreen createState() => _ProfileScreen();
 }
 
 class _ProfileScreen extends State<ProfileScreen> {
+  bool circular = true;
+  NetworkHandler networkHandler = NetworkHandler();
+  CVmodel profileModel = CVmodel();
+  @override
+  void initState() {
+    super.initState();
+
+    fetchData();
+  }
+
+  void fetchData() async {
+    var response = await networkHandler.get("/cv/getData");
+    setState(() {
+      profileModel = CVmodel.fromJson(response["data"]);
+      circular = false;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
+      body: circular
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         child: Stack(
           children: [
             
@@ -26,17 +51,17 @@ class _ProfileScreen extends State<ProfileScreen> {
                 Center(
                   child: CircleAvatar(
                     radius: 80,
-                    backgroundImage: AssetImage('assets/images/avatar.png'),
+                    backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
                   ),
                 ),
                 SizedBox(
                   height: 25,
                 ),
-                Center(child: Text("mohamed")),
+                Center(child: Text("${profileModel.username}")),
                 SizedBox(
                   height: 10,
                 ),
-                Center(child: Text("mohamed@gmail.com")),
+                Center(child: Text("${profileModel.email}")),
                 SizedBox(
                   height: 50,
                 ),

@@ -36,7 +36,7 @@ const Cv = Schema(
       datedS:{ type: Date, default: null }, datefS:{ type: Date, default: null },
       DescriptionS:{ type: String, default: null }  }],
   
-    CI :[{ nomCI: { type: String, default: null } }],
+    Ci :[{ nomCi: { type: String, default: null } }],
   
     langue :[{ nomLangue: { type: String, default: null }, NiveauLangue: { type: String, default: null } }],
   
