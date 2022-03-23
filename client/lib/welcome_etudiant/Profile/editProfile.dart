@@ -20,7 +20,6 @@ class _EditProfile extends State<EditProfile> {
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
   Etudiant etd=Etudiant('', '','');
-  TextEditingController usernameEdit=TextEditingController();
   TextEditingController emailEdit=TextEditingController();
   @override
   void initState() {
@@ -43,6 +42,7 @@ class _EditProfile extends State<EditProfile> {
     });
     
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,6 @@ class _EditProfile extends State<EditProfile> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("user Name","${etd.username}" , false,usernameEdit),
               buildTextField("E-mail", "${etd.email}", false,emailEdit),
               SizedBox(
                 height: 35,
@@ -119,10 +118,10 @@ class _EditProfile extends State<EditProfile> {
                         setState(() {
                           circular = false;
                         });}
+                        
                         }
                         Map<String, dynamic> data = {
-                                "username": usernameEdit.text,
-                                'email': emailEdit.text,
+                                'email': emailEdit.text==null?etd.email: emailEdit.text,
                         };
                         var responseEdit = await networkHandler.patch(
                           "/etudiant/updateEtudiant/${profileModel.username}",data);

@@ -63,6 +63,7 @@ router.route("/register").post(async (req, res) => {
   encryptedPassword = await bcrypt.hash(req.body.password, 10);
 
   const etd = new Etudiant({
+    
     username: req.body.username,
     password: encryptedPassword,
     email: req.body.email,
@@ -111,12 +112,11 @@ router.route("/delete/:username").delete((req, res) => {
 router.route("/updateEtudiant/:username").patch(middleware.checkToken, async (req, res) => {
   Etudiant.findOneAndUpdate(
     { username: req.params.username },
-    { $set: { username: req.body.username,email: req.body.email }},
+    { $set: { email: req.body.email }},
     (err, result) => {
       if (err) return res.status(500).json({ msg: err });
       const msg = {
         msg: "profile successfully updated",
-        username: req.body.username,
         email: req.body.email
       };
       return res.json(msg);

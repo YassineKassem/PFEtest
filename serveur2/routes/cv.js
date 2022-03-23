@@ -102,6 +102,7 @@ router.route("/getData").get(middleware.checkToken, (req, res) => {
   });
 });
 
+
 router.route("/update").patch(middleware.checkToken, async (req, res) => {
   let profile = {};
   await Cv.findOne({ username: req.decoded.username }, (err, result) => {
