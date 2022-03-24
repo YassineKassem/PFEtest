@@ -34,6 +34,7 @@ class _MyRegisterState extends State<MyRegister> {
       for (int i = 10; i < route!.length; i++) {
         user += route[i];
       }
+      
       return user;
     }
 
@@ -45,6 +46,7 @@ class _MyRegisterState extends State<MyRegister> {
             image: AssetImage('assets/images/register.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -59,10 +61,9 @@ class _MyRegisterState extends State<MyRegister> {
                 style: TextStyle(color: Colors.white, fontSize: 33),
               ),
             ),
-            SingleChildScrollView(
-              child: Container(
+            Container(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.28),
+                    top: MediaQuery.of(context).size.height * 0.20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -283,7 +284,7 @@ class _MyRegisterState extends State<MyRegister> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/login');
+                                    Navigator.pushNamed(context, '/login/${getUser()}');
                                   },
                                   child: Text(
                                     'Sign In',
@@ -304,7 +305,7 @@ class _MyRegisterState extends State<MyRegister> {
                   ],
                 ),
               ),
-            ),
+            
           ],
         ),
       ),

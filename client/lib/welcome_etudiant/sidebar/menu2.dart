@@ -247,7 +247,7 @@ class _NavigationDrowerState extends State<NavigationDrower> {
 
   Widget bloclogoutPortrait() {
     return Container(
-      padding: EdgeInsets.only(top: 300, left: 15),
+      padding: EdgeInsets.only(top: 290, left: 15),
       child: GestureDetector(
         onTap: logout,
         child: Row(
