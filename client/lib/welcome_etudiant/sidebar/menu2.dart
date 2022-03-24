@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pfe/AccueilEtd.dart';
+import 'package:pfe/loader.dart';
+import 'package:pfe/model/Etudiant.dart';
 import 'package:pfe/welcome_etudiant/Favoris/favoris.dart';
 import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
 import 'package:pfe/welcome_etudiant/postulation/postulation.dart';
@@ -15,25 +18,31 @@ class NavigationDrower extends StatefulWidget {
 }
 
 class _NavigationDrowerState extends State<NavigationDrower> {
+  final storage = FlutterSecureStorage();
   bool isSelected = false;
   int nb = -1;
   late CVmodel userData;
     bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
+  Etudiant etd=Etudiant('', '','');
   @override
   void initState() {
     super.initState();
 
     fetchData();
   }
-
   void fetchData() async {
     var response = await networkHandler.get("/cv/getData");
     setState(() {
       profileModel = CVmodel.fromJson(response["data"]);
       circular = false;
     });
+    
+    var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
+     setState(() {
+      etd = Etudiant.fromJson(response2["data"]);
+    }); 
   }
   @override
   Widget build(BuildContext context) {
@@ -169,11 +178,11 @@ class _NavigationDrowerState extends State<NavigationDrower> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Carol Johnson",
+                "${profileModel.username}",
                 style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
               ),
               Text(
-                "Seattle Washington",
+                "${etd.email}",
                 style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
@@ -211,11 +220,11 @@ class _NavigationDrowerState extends State<NavigationDrower> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Carol Johnson",
+                "${profileModel.username}",
                 style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
               ),
               Text(
-                "Seattle Washington",
+                "${etd.email}",
                 style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
@@ -231,17 +240,20 @@ class _NavigationDrowerState extends State<NavigationDrower> {
   Widget bloclogoutPortrait() {
     return Container(
       padding: EdgeInsets.only(top: 300, left: 15),
-      child: Row(
-        children: [
-          Icon(
-            Icons.power_settings_new,
-            size: 30,
-          ),
-          Text(
-            "Logout",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          )
-        ],
+      child: GestureDetector(
+        onTap: logout,
+        child: Row(
+          children: [
+            Icon(
+              Icons.power_settings_new,
+              size: 30,
+            ),
+            Text(
+              "Logout",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -249,18 +261,29 @@ class _NavigationDrowerState extends State<NavigationDrower> {
   Widget bloclogoutLandscape() {
     return Container(
       padding: EdgeInsets.all(20),
-      child: Row(
-        children: [
-          Icon(
-            Icons.power_settings_new,
-            size: 30,
-          ),
-          Text(
-            "Logout",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          )
-        ],
+      child: GestureDetector(
+        onTap: logout,
+        child: Row(
+          children: [
+            Icon(
+              Icons.power_settings_new,
+              size: 30,
+            ),
+            Text(
+              "Logout",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            )
+          ],
+        ),
       ),
     );
   }
+  void logout() async {
+    await storage.delete(key: "token");
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => ColorLoader3()),
+        (route) => false);
+  }
+
 }

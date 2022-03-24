@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../NetworkHandler.dart';
 import '../model/CVmodel.dart';
 
-
 class HomeAppBar extends StatefulWidget {
   const HomeAppBar({ Key? key }) : super(key: key);
-
   @override
   State<HomeAppBar> createState() => HomeAppBarState();
 }

@@ -34,8 +34,7 @@ class _ProfileScreen extends State<ProfileScreen> {
     var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
      setState(() {
       etd = Etudiant.fromJson(response2["data"]);
-    });
-    
+    }); 
   }
 
   
