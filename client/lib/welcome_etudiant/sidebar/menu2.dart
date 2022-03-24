@@ -156,13 +156,14 @@ class _NavigationDrowerState extends State<NavigationDrower> {
   Widget blocProfilePortrait() {
     return Container(
       height: 150,
-      width: MediaQuery.of(context).size.width * 0.6,
+      width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(bottomRight: Radius.circular(60)),
         color: Colors.white,
       ),
-      child: Center(
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      child: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Container(
             width: 50,
             height: 50,
@@ -173,22 +174,25 @@ class _NavigationDrowerState extends State<NavigationDrower> {
                     backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
                   ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${profileModel.username}",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
-              ),
-              Text(
-                "${etd.email}",
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey),
-              )
-            ],
+          Padding(
+            padding: EdgeInsets.only(left: 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${profileModel.username}",
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "${etd.email}",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey),
+                )
+              ],
+            ),
           )
         ]),
       ),
@@ -198,13 +202,14 @@ class _NavigationDrowerState extends State<NavigationDrower> {
   Widget blocProfileLandscape() {
     return Container(
       height: 150,
-      width: MediaQuery.of(context).size.width * 0.3,
+      width: MediaQuery.of(context).size.width * 0.38,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(bottomRight: Radius.circular(60)),
         color: Colors.white,
       ),
-      child: Center(
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      child: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Container(
             width: 50,
             height: 50,
@@ -215,22 +220,25 @@ class _NavigationDrowerState extends State<NavigationDrower> {
                     backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
                   ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${profileModel.username}",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
-              ),
-              Text(
-                "${etd.email}",
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey),
-              )
-            ],
+          Padding(
+            padding: EdgeInsets.only(left: 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${profileModel.username}",
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "${etd.email}",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey),
+                )
+              ],
+            ),
           )
         ]),
       ),
