@@ -93,7 +93,7 @@ class CardPlanet extends StatelessWidget {
                                children: [
                                  Flexible(
                                   flex: 10,
-                                  child: Image(image: data.societe,width: 200,height: 200,),
+                                  child: Image(image: data.societe,width: 150,height: 150,),
                                 ),
                           Text("SOCIETE",style:
                            TextStyle(
@@ -115,7 +115,7 @@ class CardPlanet extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     flex: 10,
-                                    child: Image(image: data.etudiant,width: 200,height: 200,),
+                                    child: Image(image: data.etudiant,width: 150,height: 150,),
                                   ),
                                   Text('ETUDIANT',style:
                                   TextStyle(
