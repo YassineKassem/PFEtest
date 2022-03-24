@@ -8,8 +8,8 @@ class CardPlanetData {
   final Color titleColor;
   final Color subtitleColor;
   final Widget? background;
-  ImageProvider etudiant=AssetImage("assets/firstScreens/etud1.png");
-  ImageProvider societe=AssetImage("assets/firstScreens/entr1.png");
+  ImageProvider etudiant = AssetImage("assets/firstScreens/etud1.png");
+  ImageProvider societe = AssetImage("assets/firstScreens/entr1.png");
   final bool indice;
 
   CardPlanetData({
@@ -21,7 +21,6 @@ class CardPlanetData {
     required this.subtitleColor,
     this.background,
     required this.indice,
-
   });
 }
 
@@ -38,7 +37,7 @@ class CardPlanet extends StatelessWidget {
     return Stack(
       children: [
         if (data.background != null) data.background!,
-        if(data.indice==true)
+        if (data.indice == true)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
             child: Column(
@@ -49,7 +48,6 @@ class CardPlanet extends StatelessWidget {
                   flex: 20,
                   child: Image(image: data.image),
                 ),
-                
                 const Spacer(flex: 1),
                 Text(
                   data.title.toUpperCase(),
@@ -75,63 +73,55 @@ class CardPlanet extends StatelessWidget {
               ],
             ),
           ),
-        if(data.indice==false)
+        if (data.indice == false)
           Stack(
             children: [
               Container(
-             
-          
                 child: Row(
-                   
                   children: [
-                             Expanded(
-                              child: InkWell(
-                              onTap: (){Navigator.pushNamed(context, '/login/societe');},
-                              child: 
-                              Column(
-                               mainAxisAlignment: MainAxisAlignment.center, 
-                               children: [
-                                 Flexible(
-                                  flex: 10,
-                                  child: Image(image: data.societe,width: 150,height: 150,),
-                                ),
-                          Text("SOCIETE",style:
-                           TextStyle(
-                            fontSize: 20,
-                            color: Color.fromRGBO(72, 103, 199, 1.0),
-                            fontWeight: FontWeight.bold,
-                          ),
-                          ),
-                               ],
-                              ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/login/societe');
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 10,
+                              child: Image(
+                                image: data.societe,
+                                width: 600,
+                                height: 600,
                               ),
                             ),
-
-                           Expanded(
-                            child: InkWell(
-                              onTap: (){Navigator.pushNamed(context, '/login/etudiant');},
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    flex: 10,
-                                    child: Image(image: data.etudiant,width: 150,height: 150,),
-                                  ),
-                                  Text('ETUDIANT',style:
-                                  TextStyle(
-                                      fontSize: 20,
-                                      color: Color.fromRGBO(72, 103, 199, 1.0),
-                                      fontWeight: FontWeight.bold,
-                                ),
-                                ),
-                                ],
-                              ),
-                            ),
-                          ),
-                       
-                      ],
+                          ],
+                        ),
+                      ),
                     ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/login/etudiant');
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 10,
+                              child: Image(
+                                image: data.etudiant,
+                                width: 600,
+                                height: 600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
             ],
           )
       ],
