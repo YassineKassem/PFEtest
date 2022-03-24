@@ -53,6 +53,7 @@ class NetworkHandler {
   }
 
   NetworkImage getImage(String imageName) {
+    
     String url = formater("/uploads//$imageName.jpg");
     return NetworkImage(url);
   }

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pfe/AccueilEtd.dart';
+import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
 
 import '../../NetworkHandler.dart';
 import '../../model/CVmodel.dart';
@@ -124,9 +126,7 @@ class _EditProfile extends State<EditProfile> {
                               }
                             }
                             Map<String, dynamic> data = {
-                              'email': emailEdit.text == null
-                                  ? etd.email
-                                  : emailEdit.text,
+                              'email': emailEdit.text,
                             };
                             var responseEdit = await networkHandler.patch(
                                 "/etudiant/updateEtudiant/${profileModel.username}",
@@ -134,6 +134,12 @@ class _EditProfile extends State<EditProfile> {
                             if (responseEdit.statusCode == 200 ||
                                 responseEdit.statusCode == 201) {
                               print("ok");
+                              //refreshpage
+                              Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => AccueilEtd()),
+                              (Route<dynamic> route) => false,
+                              );
                             }
                           },
                           color: Colors.grey,
@@ -232,12 +238,12 @@ class _EditProfile extends State<EditProfile> {
     );
   }
 
-  Widget buildTextField(String labelText, String placeholder,
+  Widget buildTextField(String valeur, String placeholder,
       bool isPasswordTextField, TextEditingController control) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextField(
-        controller: control,
+      child: TextFormField(
+        controller: control..text=placeholder,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
@@ -254,7 +260,6 @@ class _EditProfile extends State<EditProfile> {
                   )
                 : null,
             contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: placeholder,
             hintStyle: TextStyle(

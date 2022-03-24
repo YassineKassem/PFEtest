@@ -54,7 +54,7 @@ class _MyLoginState extends State<MyLogin> {
               Container(
                 padding: EdgeInsets.only(left: 35, top: 130),
                 child: Text(
-                  'Bienvenu\n${getUser()}',
+                  'Mot de passe_n oublié',
                   style: TextStyle(color: Colors.white, fontSize: 33),
                 ),
               ),

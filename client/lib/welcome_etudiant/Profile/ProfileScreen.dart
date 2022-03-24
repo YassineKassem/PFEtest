@@ -16,33 +16,31 @@ class _ProfileScreen extends State<ProfileScreen> {
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
   Etudiant etd=Etudiant('', '','');
+  
   @override
   void initState() {
-    super.initState();
-
     fetchData();
-    
+    super.initState();
   }
 
   void fetchData() async {
     var response = await networkHandler.get("/cv/getData");
     setState(() {
       profileModel = CVmodel.fromJson(response["data"]);
-      circular = false;
+      
     });
     
     var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
      setState(() {
       etd = Etudiant.fromJson(response2["data"]);
+      circular = false;
     }); 
   }
 
   
-
-
-
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: circular
@@ -61,7 +59,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                 Center(
                   child: CircleAvatar(
                     radius: 80,
-                    backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
+                    backgroundImage:NetworkHandler().getImage("${profileModel.username}"),
                   ),
                 ),
                 SizedBox(

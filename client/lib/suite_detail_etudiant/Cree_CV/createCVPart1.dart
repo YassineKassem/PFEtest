@@ -86,7 +86,7 @@ class _createCVPart1State extends State<createCVPart1> {
                     setState(() {
                     circular=true;
                   });
-                  if (globalkey.currentState!.validate()) {
+                  if (globalkey.currentState!.validate() && _imageFile?.path != null) {
                   Map<String, dynamic> data = {
                                 "nom": Nom.text,
                                 'Prenom': Prenom.text,
@@ -97,6 +97,7 @@ class _createCVPart1State extends State<createCVPart1> {
                                 'Ville': Ville.text,
                                 'Profile':DescriptionP.text,
                   };
+                  
                   var response =
                       await networkHandler.post("/cv/add", data);
                   if (response.statusCode == 200 ||
@@ -113,6 +114,7 @@ class _createCVPart1State extends State<createCVPart1> {
                             (route) => false);
                       }
                     } else {
+                      
                       setState(() {
                         isComplete = true;
                         circular = false;
@@ -122,7 +124,12 @@ class _createCVPart1State extends State<createCVPart1> {
                           (route) => false);
                           }
                       }
-                      }}
+                      
+                      }else{
+                        showAlertDialog(context,'Veuillez ajouter une image de profil');
+                      }
+                      
+                      }
               },
               onStepCancel: () {
                 if (_currentStep != 0) {
@@ -362,4 +369,31 @@ class _createCVPart1State extends State<createCVPart1> {
     );
   }
 
+}
+
+showAlertDialog(BuildContext context, String text) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Error"),
+    content: Text(text),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
