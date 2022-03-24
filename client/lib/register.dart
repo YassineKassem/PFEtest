@@ -82,10 +82,15 @@ class _MyRegisterState extends State<MyRegister> {
                                 else
                                   soc.username = value;
                               },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return errorText;
+                                }
+                                return null;
+                              },
 
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
-                                  errorText: validate?null:errorText,
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(

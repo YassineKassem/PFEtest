@@ -10,10 +10,10 @@ class Home extends StatelessWidget {
   final data = [
     CardPlanetData(
       indice: true,
-      title: "SATTAGNY",
+      title: "SATTAGENY",
       subtitle:
-      "SATTAGNY est une application tunisienne développée par des jeunes étudiants ",
-      image: const AssetImage("assets/firstScreens/logo sattagny.png"),
+      "SATTAGENY est une application tunisienne développée par deux jeunes étudiants ",
+      image: const AssetImage("assets/firstScreens/sattageny.png"),
       backgroundColor: Colors.white,
       titleColor: Colors.black,
       subtitleColor: const Color.fromRGBO(0, 10, 56, 1),
@@ -21,8 +21,8 @@ class Home extends StatelessWidget {
     ),
     CardPlanetData(
       indice: true,
-      title: "SATTAGNY",
-      subtitle: "SATTAGNY permet aux sociétés de créer leurs propres offres de stage afin de trouver les profils souhaités "
+      title: "SATTAGENY",
+      subtitle: "SATTAGENY permet aux sociétés de créer leurs propres offres de stage afin de trouver les profils souhaités "
           "des étudiants par rapport à l'offre de stage ",
       image: const AssetImage("assets/firstScreens/societe.png"),
       backgroundColor: const Color.fromRGBO(0, 10, 56, 1),
@@ -32,8 +32,8 @@ class Home extends StatelessWidget {
     ),
     CardPlanetData(
       indice: true,
-      title: "SATTAGNY",
-      subtitle: "SATTAGNY facilite aux etudiants dans le domaine informatique de trouver le meilleur offre de stage "
+      title: "SATTAGENY",
+      subtitle: "SATTAGENY facilite aux etudiants dans le domaine informatique de trouver le meilleur offre de stage "
           "selon leurs besoins.",
       image: const AssetImage("assets/firstScreens/etudiant.png"),
       backgroundColor: const Color.fromRGBO(71, 59, 117, 1),

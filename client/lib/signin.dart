@@ -13,22 +13,19 @@ import 'NetworkHandler.dart';
 import 'model/CVmodel.dart';
 
 class MyLogin extends StatefulWidget {
-  
-
   @override
   _MyLoginState createState() => _MyLoginState();
 }
 
 class _MyLoginState extends State<MyLogin> {
-  NetworkHandler networkHandler=NetworkHandler();
+  NetworkHandler networkHandler = NetworkHandler();
   final _formKey = GlobalKey<FormState>();
   Etudiant etd = new Etudiant('', '');
   Societe soc = new Societe('', '');
-   String errorText='';
-  bool validate=false;
-  bool circular=false;
+  String errorText = '';
+  bool validate = false;
+  bool circular = false;
   final storage = new FlutterSecureStorage();
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +80,14 @@ class _MyLoginState extends State<MyLogin> {
                                 else
                                   soc.username = value;
                               },
-                             
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return errorText;
+                                }
+                                return null;
+                              },
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  errorText: validate?null:errorText,
                                   fillColor: Colors.grey.shade100,
                                   filled: true,
                                   hintText: "Email",
@@ -107,11 +108,15 @@ class _MyLoginState extends State<MyLogin> {
                                 else
                                   soc.password = value;
                               },
-                              
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return errorText;
+                                }
+                                return null;
+                              },
                               style: TextStyle(),
                               obscureText: true,
                               decoration: InputDecoration(
-                                errorText: validate?null:errorText,
                                   fillColor: Colors.grey.shade100,
                                   filled: true,
                                   hintText: "Password",
@@ -131,84 +136,106 @@ class _MyLoginState extends State<MyLogin> {
                                       fontSize: 27,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                circular? CircularProgressIndicator(
-                                ):CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Color(0xff4c505b),
-                                  child: IconButton(
-                                      color: Colors.white,
-                                      onPressed: () async{
-                                        setState(() {
-                                          circular=true;
-                                        });
-                                       
-                   if(getUser()=='etudiant'){ //Login Logic start here
-                    Map<String, String> data = {
-                      "username": etd.username,
-                      "password": etd.password,
-                    };
-                    var response =
-                        await networkHandler.post("/etudiant/login", data);
+                                circular
+                                    ? CircularProgressIndicator()
+                                    : CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: Color(0xff4c505b),
+                                        child: IconButton(
+                                            color: Colors.white,
+                                            onPressed: () async {
+                                              setState(() {
+                                                circular = true;
+                                              });
 
-                    if (response.statusCode == 200 ||
-                        response.statusCode == 201) {
-                      Map<String, dynamic> output = json.decode(response.body);
-                      print(output["token"]);
-                      await storage.write(key: "token", value: output["token"]);
-                      setState(() {
-                        validate = true;
-                        circular = false;
-                      });
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AccueilEtd(),
-                          ),
-                          (route) => false);
-                    } else {
-                      String output = json.decode(response.body);
-                      setState(() {
-                        validate = false;
-                        errorText = output;
-                        circular = false;
-                      });
-                    }}else{
-                       Map<String, String> data = {
-                      "username": soc.username,
-                      "password": soc.password,
-                    };
-                    var response =
-                        await networkHandler.post("/societe/login", data);
+                                              if (getUser() == 'etudiant') {
+                                                //Login Logic start here
+                                                Map<String, String> data = {
+                                                  "username": etd.username,
+                                                  "password": etd.password,
+                                                };
+                                                var response =
+                                                    await networkHandler.post(
+                                                        "/etudiant/login",
+                                                        data);
 
-                    if (response.statusCode == 200 ||
-                        response.statusCode == 201) {
-                      Map<String, dynamic> output = json.decode(response.body);
-                      print(output["token"]);
-                      await storage.write(key: "token", value: output["token"]);
-                      setState(() {
-                        validate = true;
-                        circular = false;
-                      });
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AccueilSoc(),
-                          ),
-                          (route) => false);
-                    } else {
-                      String output = json.decode(response.body);
-                      setState(() {
-                        validate = false;
-                        errorText = output;
-                        circular = false;
-                      });
-                    }
-                    }
-                                        }, 
-                                      icon: Icon(
-                                        Icons.arrow_forward,
-                                      )),
-                                )
+                                                if (response.statusCode ==
+                                                        200 ||
+                                                    response.statusCode ==
+                                                        201) {
+                                                  Map<String, dynamic> output =
+                                                      json.decode(
+                                                          response.body);
+                                                  print(output["token"]);
+                                                  await storage.write(
+                                                      key: "token",
+                                                      value: output["token"]);
+                                                  setState(() {
+                                                    validate = true;
+                                                    circular = false;
+                                                  });
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            AccueilEtd(),
+                                                      ),
+                                                      (route) => false);
+                                                } else {
+                                                  String output = json
+                                                      .decode(response.body);
+                                                  setState(() {
+                                                    validate = false;
+                                                    errorText = output;
+                                                    circular = false;
+                                                  });
+                                                }
+                                              } else {
+                                                Map<String, String> data = {
+                                                  "username": soc.username,
+                                                  "password": soc.password,
+                                                };
+                                                var response =
+                                                    await networkHandler.post(
+                                                        "/societe/login", data);
+
+                                                if (response.statusCode ==
+                                                        200 ||
+                                                    response.statusCode ==
+                                                        201) {
+                                                  Map<String, dynamic> output =
+                                                      json.decode(
+                                                          response.body);
+                                                  print(output["token"]);
+                                                  await storage.write(
+                                                      key: "token",
+                                                      value: output["token"]);
+                                                  setState(() {
+                                                    validate = true;
+                                                    circular = false;
+                                                  });
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            AccueilSoc(),
+                                                      ),
+                                                      (route) => false);
+                                                } else {
+                                                  String output = json
+                                                      .decode(response.body);
+                                                  setState(() {
+                                                    validate = false;
+                                                    errorText = output;
+                                                    circular = false;
+                                                  });
+                                                }
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.arrow_forward,
+                                            )),
+                                      )
                               ],
                             ),
                             SizedBox(
@@ -257,7 +284,6 @@ class _MyLoginState extends State<MyLogin> {
       ),
     );
   }
-
 }
 
 showAlertDialog(BuildContext context, String text) {
@@ -286,4 +312,3 @@ showAlertDialog(BuildContext context, String text) {
     },
   );
 }
-
