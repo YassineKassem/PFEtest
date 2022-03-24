@@ -19,14 +19,13 @@ class _EditProfile extends State<EditProfile> {
   bool showPassword = false;
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
-  Etudiant etd=Etudiant('', '','');
-  TextEditingController emailEdit=TextEditingController();
+  Etudiant etd = Etudiant('', '', '');
+  TextEditingController emailEdit = TextEditingController();
   @override
   void initState() {
     super.initState();
 
     fetchData();
-    
   }
 
   void fetchData() async {
@@ -35,14 +34,13 @@ class _EditProfile extends State<EditProfile> {
       profileModel = CVmodel.fromJson(response["data"]);
       circular = false;
     });
-    
-    var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
-     setState(() {
+
+    var response2 =
+        await networkHandler.get("/etudiant/${profileModel.username}");
+    setState(() {
       etd = Etudiant.fromJson(response2["data"]);
     });
-    
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -55,108 +53,112 @@ class _EditProfile extends State<EditProfile> {
             Icons.arrow_back,
             color: Colors.green,
           ),
-          onPressed: () { Navigator.pop(context);},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: circular
           ? Center(child: CircularProgressIndicator())
           : Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: ListView(
-            children: [
-              Text(
-                "Modifier Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Center(
-                child: Stack(
+              padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: ListView(
                   children: [
-                    Center(
-                      child: Stack(children: [
-                        imageProfile(),
-                      ]),
+                    Text(
+                      "Modifier Profile",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: Stack(children: [
+                              imageProfile(),
+                            ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 35,
+                    ),
+                    buildTextField("E-mail", "${etd.email}", false, emailEdit),
+                    SizedBox(
+                      height: 35,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlineButton(
+                          padding: EdgeInsets.symmetric(horizontal: 35),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Annuler",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  letterSpacing: 2.2,
+                                  color: Colors.black)),
+                        ),
+                        RaisedButton(
+                          onPressed: () async {
+                            if (_imageFile?.path != null) {
+                              var imageResponse =
+                                  await networkHandler.patchImage(
+                                      "/cv/add/image", _imageFile!.path);
+                              if (imageResponse.statusCode == 200) {
+                                print('true');
+                                setState(() {
+                                  circular = false;
+                                });
+                              }
+                            }
+                            Map<String, dynamic> data = {
+                              'email': emailEdit.text == null
+                                  ? etd.email
+                                  : emailEdit.text,
+                            };
+                            var responseEdit = await networkHandler.patch(
+                                "/etudiant/updateEtudiant/${profileModel.username}",
+                                data);
+                            if (responseEdit.statusCode == 200 ||
+                                responseEdit.statusCode == 201) {
+                              print("ok");
+                            }
+                          },
+                          color: Colors.grey,
+                          padding: EdgeInsets.symmetric(horizontal: 35),
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Text(
+                            "Enregistrer",
+                            style: TextStyle(
+                                fontSize: 14,
+                                letterSpacing: 2.2,
+                                color: Colors.white),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
-              SizedBox(
-                height: 35,
-              ),
-              buildTextField("E-mail", "${etd.email}", false,emailEdit),
-              SizedBox(
-                height: 35,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlineButton(
-                    padding: EdgeInsets.symmetric(horizontal: 35),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPressed: () { Navigator.pop(context);},
-                    child: Text("Annuler",
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.black)),
-                  ),
-                  RaisedButton(
-                    onPressed: ()async {
-
-                       if (_imageFile?.path != null) { 
-                      var imageResponse = await networkHandler.patchImage(
-                          "/cv/add/image", _imageFile!.path);
-                      if (imageResponse.statusCode == 200) {
-                        print('true');
-                        setState(() {
-                          circular = false;
-                        });}
-                        
-                        }
-                        Map<String, dynamic> data = {
-                                'email': emailEdit.text==null?etd.email: emailEdit.text,
-                        };
-                        var responseEdit = await networkHandler.patch(
-                          "/etudiant/updateEtudiant/${profileModel.username}",data);
-                           if (responseEdit.statusCode == 200 ||
-                               responseEdit.statusCode == 201) {
-                                 print("ok");
-                               }
-
-
-
-                    },
-                    color: Colors.grey,
-                    padding: EdgeInsets.symmetric(horizontal: 35),
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      "Enregistrer",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.white),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
-
-    Widget imageProfile() {
+  Widget imageProfile() {
     return Center(
       child: Stack(children: [
         CircleAvatar(
@@ -230,8 +232,8 @@ class _EditProfile extends State<EditProfile> {
     );
   }
 
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField,TextEditingController control) {
+  Widget buildTextField(String labelText, String placeholder,
+      bool isPasswordTextField, TextEditingController control) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
