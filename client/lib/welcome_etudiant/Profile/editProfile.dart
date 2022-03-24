@@ -114,7 +114,7 @@ class _EditProfile extends State<EditProfile> {
                       var imageResponse = await networkHandler.patchImage(
                           "/cv/add/image", _imageFile!.path);
                       if (imageResponse.statusCode == 200) {
-                        
+                        print('true');
                         setState(() {
                           circular = false;
                         });}
