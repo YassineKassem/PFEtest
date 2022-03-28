@@ -25,14 +25,17 @@ const userRoute = require("./routes/etudiant");
 app.use("/etudiant", userRoute);
 const profileRoute = require("./routes/cv");
 app.use("/cv", profileRoute);
-const blogRoute = require("./routes/blogpost");
-app.use("/blogPost", blogRoute);
+
 
 //middleware societe
 const userRouteS = require("./routes/societe");
 app.use("/societe", userRouteS);
 const profileRouteS = require("./routes/profileSociete");
 app.use("/profileSociete", profileRouteS);
+
+//middleware offre de stage
+const offreStageRoute = require("./routes/offreStage");
+app.use("/offreStage", offreStageRoute);
 
 
 data = {

@@ -7,7 +7,7 @@ import 'loader.dart';
 import 'AccueilEtd.dart';
 import 'AccueilSoc.dart';
 import 'model/CVmodel.dart';
-import 'suite_detail_etudiant/Cree_CV/createCV.dart';
+import 'welcome_etudiant/Profile/editCV.dart';
 import 'suite_detail_etudiant/Cree_CV/createCVPart1.dart';
 import 'suite_detail_societe/formSociete.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -30,20 +30,19 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Color(0xFFFED408))),
       initialRoute: '/',
       routes: {
-        //'/': (context) => ColorLoader3(),
+        '/': (context) => ColorLoader3(),
         //'/': (context) => AccueilEtd(),
-        //'/createCV': (context) => createCV(),
-        //'/createCVPart1': (context) => createCVPart1(),
-        //'/EditPwd': (context) => EditPwd(),
-        //'/login/societe': (context) => MyLogin(),
+        '/createCV': (context) => createCV(),
+        '/createCVPart1': (context) => createCVPart1(),
+        '/EditPwd': (context) => EditPwd(),
+        '/login/societe': (context) => MyLogin(),
         '/login/etudiant': (context) => MyLogin(),
-        //'/register/etudiant': (context) => MyRegister(),
-        //'/register/societe': (context) => MyRegister(),
+        '/register/etudiant': (context) => MyRegister(),
+        '/register/societe': (context) => MyRegister(),
         '/AccueilEtd': (context) => AccueilEtd(),
-        //'/AccueilSoc': (context) => AccueilSoc(),
+        '/AccueilSoc': (context) => AccueilSoc(),
 
-        //'/formSociete': (context) => formSociete(),
-       
+        '/formSociete': (context) => formSociete(),
       },
       debugShowCheckedModeBanner: false,
     );
