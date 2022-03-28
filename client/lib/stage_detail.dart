@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
-import 'package:pfe/welcome_etudiant/stage.dart';
+
+
+import 'NetworkHandler.dart';
+import 'model/offreStageModel.dart';
+
 
 class JobDetail extends StatelessWidget {
-  final Job job;
-  JobDetail(this.job);
+  final Stage stage;
+
+  
+  JobDetail(this.stage);
 
   @override
   Widget build(BuildContext context) {
@@ -45,20 +51,23 @@ class JobDetail extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.grey.withOpacity(0.1),
                           ),
-                          child: Image.asset(job.logoUrl),
+                          child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage:NetworkHandler().getImage("${stage.username}"),
+                  ),
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
-                          job.company,
+                          stage.username as String,
                           style: TextStyle(
                             fontSize: 16,
                           ),
                         ),
                       ],
                     ),
-                    Row(
+                    /*Row(
                       children: [
                         Icon(
                           job.isMark
@@ -70,14 +79,14 @@ class JobDetail extends StatelessWidget {
                         ),
                         Icon(Icons.more_horiz_outlined),
                       ],
-                    )
+                    )*/
                   ],
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  job.title,
+                  stage.nomOffre as String,
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -89,8 +98,8 @@ class JobDetail extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconText(Icons.location_city_outlined, job.location),
-                    IconText(Icons.access_time_filled_outlined, job.time),
+                    IconText(Icons.location_city_outlined, stage.localisation as String),
+                    IconText(Icons.access_time_filled_outlined, stage.duree as String),
                   ],
                 ),
                 SizedBox(
@@ -105,7 +114,7 @@ class JobDetail extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                ...job.req
+                /*...job.req
                     .map((e) => Container(
                           margin: EdgeInsets.symmetric(vertical: 5),
                           child: Row(children: [
@@ -132,7 +141,7 @@ class JobDetail extends StatelessWidget {
                             ),
                           ]),
                         ))
-                    .toList(),
+                    .toList(),*/
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 25),
                   height: 45,

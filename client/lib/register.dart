@@ -78,16 +78,15 @@ class _MyRegisterState extends State<MyRegister> {
                                   ? TextEditingController(text: etd.username)
                                   : TextEditingController(text: soc.username),
                               onChanged: (value) {
+                                
                                 if (getUser() == 'etudiant')
                                   etd.username = value;
                                 else
                                   soc.username = value;
                               },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return errorText;
-                                }
-                                return null;
+                              validator: (value){            
+                                return errorText;
+                              
                               },
 
                               style: TextStyle(color: Colors.white),
@@ -125,13 +124,13 @@ class _MyRegisterState extends State<MyRegister> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Enter something';
+                                  return 'Champ Email ne doit pas etre vide';
                                 } else if (RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                     .hasMatch(value)) {
                                   return null;
                                 } else {
-                                  return 'Enter valid email';
+                                  return 'Entrer un email valide ';
                                 }
                               },
                               style: TextStyle(color: Colors.white),
@@ -169,7 +168,7 @@ class _MyRegisterState extends State<MyRegister> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Enter something';
+                                  return 'Vueillez saisir votre mot de passe';
                                 }
                                 return null;
                               },
@@ -317,7 +316,7 @@ checkUserEtd() async {
       setState(() {
         // circular = false;
         validate = false;
-        errorText = "Username Can't be empty";
+        errorText = "Champ Username ne doit pas etre vide";
       });
     } else {
       var response = await networkHandler
@@ -326,7 +325,7 @@ checkUserEtd() async {
         setState(() {
           // circular = false;
           validate = false;
-          errorText = "Username already taken";
+          errorText = "Username deja existe";
         });
       } else {
         setState(() {
@@ -337,15 +336,15 @@ checkUserEtd() async {
     }
   }
 
-
   
 checkUserSoc() async {
     if (soc.username.length == 0) {
       setState(() {
         // circular = false;
         validate = false;
-        errorText = "Username Can't be empty";
+        errorText = "Champ Username ne doit pas etre vide";
       });
+    
     } else {
       var response = await networkHandler
           .get("/societe/checkUsername/${soc.username}");
@@ -353,13 +352,15 @@ checkUserSoc() async {
         setState(() {
           // circular = false;
           validate = false;
-          errorText = "Username already taken";
+          errorText = "Username deja existe";
         });
+        
       } else {
         setState(() {
           // circular = false;
           validate = true;
         });
+        
       }
     }
   }

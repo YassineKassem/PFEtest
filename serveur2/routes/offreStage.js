@@ -41,7 +41,11 @@ router.route("/Add").post(middleware.checkToken, (req, res) => {
   const offre = offreStage({
     username: req.decoded.username,
     img:`uploads/${req.decoded.username}.jpg`,
-    offres:req.body.offres,
+    nomOffre: req.body.nomOffre, 
+    descriptionOffre: req.body.descriptionOffre, 
+    localisation: req.body.localisation, 
+    dateExpiration: req.body.dateExpiration,
+    duree: req.body.duree 
   });
   offre
     .save()

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
-import 'package:pfe/welcome_etudiant/stage.dart';
+
+import '../NetworkHandler.dart';
+import '../model/offreStageModel.dart';
+
 
 class JobItem extends StatelessWidget {
-  final Job job;
-  final bool showTime;
+  final Stage stage;
 
-  JobItem(this.job,{this.showTime=false});
+  
+  JobItem(this.stage);
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +36,13 @@ class JobItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey.withOpacity(0.1),
                     ),
-                    child: Image.asset(job.logoUrl),
+                    child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage:NetworkHandler().getImage("${stage.username}"),
+                  ),
                   ),
                   SizedBox(width: 10,),
-                  Text(job.company,
+                  Text(stage.username as String,
                   style:TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
@@ -46,12 +52,12 @@ class JobItem extends StatelessWidget {
                   )
                 ],
               ),
-              Icon(job.isMark ? Icons.bookmark : Icons.book_online_outlined,
-              color: job.isMark ? Theme.of(context).primaryColor : Colors.black,)
+              //Icon(job.isMark ? Icons.bookmark : Icons.book_online_outlined,
+              //color: job.isMark ? Theme.of(context).primaryColor : Colors.black,)
             ],
           ),
           SizedBox(height: 15,),
-          Text(job.title,
+          Text(stage.nomOffre as String,
           style: TextStyle(
             fontWeight: FontWeight.bold
           ),
@@ -60,8 +66,9 @@ class JobItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconText(Icons.location_on_outlined, job.location),
-              if(showTime) IconText(Icons.access_time_outlined, job.time,)
+              IconText(Icons.location_on_outlined, stage.localisation as String),
+              //IconText(Icons.access_time_outlined, offre.dateExpiration as String),
+              
 
             ],
           )

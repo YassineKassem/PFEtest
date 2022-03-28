@@ -54,7 +54,7 @@ class _MyLoginState extends State<MyLogin> {
               Container(
                 padding: EdgeInsets.only(left: 35, top: 130),
                 child: Text(
-                  'Bienvenu\n${getUser()}',
+                  'Bienvenue\n${getUser()}',
                   style: TextStyle(color: Colors.white, fontSize: 33),
                 ),
               ),
@@ -83,6 +83,8 @@ class _MyLoginState extends State<MyLogin> {
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return errorText="Username invalid";
+                                  }else{
+
                                   }
                                   return null;
                                 },
@@ -292,5 +294,7 @@ class _MyLoginState extends State<MyLogin> {
       ),
     );
   }
+
+  
 }
 
