@@ -129,7 +129,7 @@ router.route("/update").patch(middleware.checkToken, async (req, res) => {
     Competence: req.body.Competence ? req.body.Competence :profile.Competence,
     Formation: req.body.Formation ? req.body.Formation :profile.Formation,
     Stage: req.body.Stage ? req.body.Stage :profile.Stage,
-    CI: req.body.Ci ? req.body.Ci :profile.Ci,
+    Ci: req.body.Ci ? req.body.Ci :profile.Ci,
     langue: req.body.langue ? req.body.langue :profile.langue,
       },
     },

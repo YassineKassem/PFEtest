@@ -33,12 +33,14 @@ const Cv = Schema(
        }],
   
     Stage :[{ nomSociete: { type: String, default: null }, 
-      datedS:{ type: Date, default: null }, datefS:{ type: Date, default: null },
+      datedS:{ type: Date, default: null },
+      datefS:{ type: Date, default: null },
       DescriptionS:{ type: String, default: null }  }],
   
     Ci :[{ nomCi: { type: String, default: null } }],
   
-    langue :[{ nomLangue: { type: String, default: null }, NiveauLangue: { type: String, default: null } }],
+    langue :[{ nomLangue: { type: String, default: null },
+      NiveauLangue: { type: String, default: null } }],
   
     img:{type: String,default:""}
 

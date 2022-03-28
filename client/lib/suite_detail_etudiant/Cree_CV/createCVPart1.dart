@@ -95,7 +95,7 @@ class _createCVPart1State extends State<createCVPart1> {
                                 'Adresse': Adresse.text,
                                 'Codepostale': Codepostale.text,
                                 'Ville': Ville.text,
-                                'Profile':DescriptionP.text,
+                                'Profil':DescriptionP.text,
                   };
                   
                   var response =

@@ -8,10 +8,18 @@ part of 'CVmodel.dart';
 
 CVmodel _$CVmodelFromJson(Map<String, dynamic> json) => CVmodel(
       username: json['username'] as String?,
-      Competence: json['Competence'] as List<dynamic>?,
-      Formation: json['Formation'] as List<dynamic>?,
-      Stage: json['Stage'] as List<dynamic>?,
-      langue: json['langue'] as List<dynamic>?,
+      Competence: (json['Competence'] as List<dynamic>?)
+          ?.map((e) => CompetanceModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      Formations: (json['Formations'] as List<dynamic>?)
+          ?.map((e) => FormationModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      Stage: (json['Stage'] as List<dynamic>?)
+          ?.map((e) => StageModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      langue: (json['langue'] as List<dynamic>?)
+          ?.map((e) => LangueModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       nom: json['nom'] as String?,
       Prenom: json['Prenom'] as String?,
       email: json['email'] as String?,
@@ -19,14 +27,16 @@ CVmodel _$CVmodelFromJson(Map<String, dynamic> json) => CVmodel(
       Adresse: json['Adresse'] as String?,
       Codepostale: json['Codepostale'] as String?,
       Ville: json['Ville'] as String?,
-      Profile: json['Profile'] as String?,
+      Profil: json['Profil'] as String?,
       Realisation: json['Realisation'] as String?,
-      Ci: json['Ci'] as List<dynamic>?,
+      Ci: (json['Ci'] as List<dynamic>?)
+          ?.map((e) => CentreInteretModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$CVmodelToJson(CVmodel instance) => <String, dynamic>{
       'Competence': instance.Competence,
-      'Formation': instance.Formation,
+      'Formations': instance.Formations,
       'Stage': instance.Stage,
       'langue': instance.langue,
       'Ci': instance.Ci,
@@ -38,6 +48,6 @@ Map<String, dynamic> _$CVmodelToJson(CVmodel instance) => <String, dynamic>{
       'Adresse': instance.Adresse,
       'Codepostale': instance.Codepostale,
       'Ville': instance.Ville,
-      'Profile': instance.Profile,
+      'Profil': instance.Profil,
       'Realisation': instance.Realisation,
     };

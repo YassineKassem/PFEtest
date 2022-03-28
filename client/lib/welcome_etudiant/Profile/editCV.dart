@@ -2,18 +2,22 @@ import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pfe/model/competanceModel.dart';
 import '../../model/CVmodel.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
-import 'package:http/http.dart' as http;
 import 'dart:io';
 import '../../model/ListCV.dart';
-import 'display.dart';
+import '../../model/centreInteretModel.dart';
+import '../../model/formationModel.dart';
+import '../../model/langueModel.dart';
+import '../../model/stageModel.dart';
+import '../../suite_detail_etudiant/Cree_CV/display.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import '../../NetworkHandler.dart';
 
 
 class createCV extends StatefulWidget {
@@ -23,12 +27,18 @@ class createCV extends StatefulWidget {
 
 class _createCVState extends State<createCV> {
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
- 
+  NetworkHandler networkHandler= NetworkHandler();
   formation form =new formation();
   stage stg =new stage();
   langues lg =new langues();
   competance comp =new competance();
   Interet CI =new Interet();
+  CVmodel profileModel = CVmodel();
+  bool circular = true;
+  PickedFile? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+  CompetanceModel CompetanceM=CompetanceModel();
+  List<CompetanceModel> complist=[];
 
 
 
@@ -67,6 +77,15 @@ class _createCVState extends State<createCV> {
     stg.datefS!.add(DateTime.now());
     stg.DescriptionS = List<String>.empty(growable: true);
     stg.DescriptionS!.add("");
+    fetchData(); 
+  }
+
+  void fetchData() async {
+    var response = await networkHandler.get("/cv/getData");
+    setState(() {
+      profileModel= CVmodel.fromJson(response["data"]);
+      circular = false;
+    });
   }
 
   int _currentStep = 0;
@@ -110,10 +129,77 @@ class _createCVState extends State<createCV> {
   final DatefinS = List.generate(100, (i) => TextEditingController());
   final DescriptionS = List.generate(100, (i) => TextEditingController());
 
- 
-  bool circular = false;
-    PickedFile? _imageFile;
-  final ImagePicker _picker = ImagePicker();
+  
+  getstage(){
+     List<StageModel> f=[];
+     profileModel.Stage=f;
+      for (int i = 0; i < nomSociete.length; i++) {
+        if (nomSociete[i].text != '')
+          f.add(StageModel(nomSociete:nomSociete[i].text,datedS:DatedebutS[i].text ,datefS:DatefinS[i].text ,DescriptionS:DescriptionS[i].text));
+      }
+      return f;}
+
+  getformation(){
+    List<FormationModel> f=[];
+    profileModel.Formations=f;
+      for (int i = 0; i < Formation.length; i++) {
+        if (Formation[i].text != '')
+          {
+          f.add(FormationModel(nomFormation:Formation[i].text,etablissementF:EtablissementF[i].text,
+          villeF:VilleF[i].text,datedF:DatedebutF[i].text,
+          datefF: DatefinF[i].text ,DescriptionF:DescriptionF[i].text));
+          }
+      }
+      return f;}
+
+    getcompetances(){
+      List<CompetanceModel> f=[];
+      profileModel.Competence=f;
+      for (int i = 0; i < competances.length; i++) {
+        if (competances[i].text != '')
+          {
+          print("${competances[i].text}******comp$i");
+          f.add(CompetanceModel(nomCompetence:competances[i].text ));
+          }
+      }
+      return f;
+      }
+
+    getinteret(){
+    List<CentreInteretModel> f=[];
+    profileModel.Ci=f;
+    for (int i = 0; i < centreInteret.length; i++) {
+        if (centreInteret[i].text != '')
+          {
+          f.add(CentreInteretModel(nomCi:centreInteret[i].text));
+          }
+      }
+      return f;}
+      
+    getlangue(){
+     List<LangueModel> f=[];
+     profileModel.langue=f;
+      for (int i = 0; i < langue.length; i++) {
+       
+        if (langue[i].text != '') {
+          if (_currentSliderValue[i] == 10)
+            resultSlider = 'Débutant(e)';
+          else if (_currentSliderValue[i] == 20)
+            resultSlider = 'Intermédiaire';
+          else if (_currentSliderValue[i] == 30)
+            resultSlider = 'Bien';
+          else if (_currentSliderValue[i] == 40)
+            resultSlider = 'Très bien';
+          else if (_currentSliderValue[i] == 50)
+            resultSlider = 'Excellent';
+          else {
+            resultSlider = '';
+          }
+          f.add(LangueModel(nomLangue:langue[i].text,NiveauLangue:resultSlider));
+      }
+      return f;}}   
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +219,9 @@ class _createCVState extends State<createCV> {
           onPressed: () { Navigator.pop(context);},
         ),
       ),
-      body: Center(
+      body: circular
+          ? Center(child: CircularProgressIndicator())
+          : Center(
         child: Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(primary: Colors.red),
@@ -148,7 +236,7 @@ class _createCVState extends State<createCV> {
                 });
               },
               currentStep: _currentStep,
-              onStepContinue: () {
+              onStepContinue: ()async {
                 final isLastStep = _currentStep == _stepper().length - 1;
                 if (_currentStep != 7) {
                   setState(() {
@@ -161,10 +249,37 @@ class _createCVState extends State<createCV> {
                   });
                   if (globalkey.currentState!.validate()) {
                    // Navigator.pushNamed(context, '/AccueilEtd');
-                     
+                   Map<String, dynamic> data = {
+                                "nom": Nom.text,
+                                'Prenom': Prenom.text,
+                                'email': Adressemail.text,
+                                "Numerotel": int.parse(Numerotel.text),
+                                'Adresse': Adresse.text,
+                                'Codepostale': Codepostale.text,
+                                'Ville': Ville.text,
+                                'Profil':DescriptionP.text,
+                                'Realisation':DescriptionRealisation.text,
+                                'Formation': getformation(),
+                                'Competence': getcompetances(),
+                                'Stage': getstage(),
+                                'Ci': getinteret(),
+                                'langue': getlangue()
+                            };
+                    var responseEdit = await networkHandler.patch(
+                      "/cv/update",
+                      data);
+                      if (responseEdit.statusCode == 200 ||
+                      responseEdit.statusCode == 201) {
+                        print('updated succes');
+                      }
+                      setState(() {
+                        circular = false;
+                      });
                      
                   } else {
+                      print('no');
                     setState(() {
+                      circular=false;
                       isComplete = true;
                     });
                   }
@@ -215,9 +330,9 @@ class _createCVState extends State<createCV> {
             SizedBox(
               height: 20,
             ),
-            BuildTextField('Nom', Nom),
-            BuildTextField('Prenom', Prenom),
-            BuildTextField('Adresse e-mail', Adressemail),
+            BuildTextField('Nom', Nom,profileModel.nom ),
+            BuildTextField('Prenom', Prenom,profileModel.Prenom),
+            BuildTextField('Adresse e-mail', Adressemail,profileModel.email),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0, right: 15, left: 15),
       child: Column(
@@ -234,16 +349,17 @@ class _createCVState extends State<createCV> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'enter votre numéro de telephone';
-              }
+              }else if(isNumeric(value)==false)
+                return 'le numéro de telephone doit etre numeric';
               return null;
             },
           ),
         ],
       ),
     ),
-            BuildTextField('Adresse', Adresse),
-            BuildTextField('Code postale', Codepostale),
-            BuildTextField('Ville', Ville),
+            BuildTextField('Adresse', Adresse,profileModel.Adresse),
+            BuildTextField('Code postale', Codepostale,profileModel.Codepostale),
+            BuildTextField('Ville', Ville,profileModel.Ville),
           ],
         ),
       ),
@@ -257,7 +373,7 @@ class _createCVState extends State<createCV> {
         title: Text('Profil'),
         content: Column(
           children: [
-            BuildlargeTextField('Description', DescriptionP),
+            BuildlargeTextField('Description', DescriptionP,profileModel.Profil),
           ],
         ),
       ),
@@ -301,20 +417,8 @@ class _createCVState extends State<createCV> {
         isActive: _currentStep >= 3,
         title: Text('Competance'),
         content: Column(
-          children: [
-            ListView.separated(
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      competanceUI(index),
-                    ],
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: comp.nomCompetance!.length),
-          ],
+          
+          children:List.generate(2,(int m)=>  stepperComp(m*m),growable: true) ,
         ),
       ),
       Step(
@@ -327,7 +431,7 @@ class _createCVState extends State<createCV> {
         title: Text('Realisation'),
         content: Column(
           children: [
-            BuildlargeTextField('Description', DescriptionRealisation),
+            BuildlargeTextField('Description', DescriptionRealisation,profileModel.Realisation),
           ],
         ),
       ),
@@ -402,6 +506,7 @@ class _createCVState extends State<createCV> {
                   return Column(
                     children: [
                       centreInteretUI(indexci),
+                      
                     ],
                   );
                 },
@@ -488,7 +593,7 @@ class _createCVState extends State<createCV> {
     });
   }
 
-  Widget BuildTextField(String titre, TextEditingController c) {
+  Widget BuildTextField(String titre, TextEditingController c,String? value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0, right: 15, left: 15),
       child: Column(
@@ -496,7 +601,7 @@ class _createCVState extends State<createCV> {
         children: [
           Text(titre),
           TextFormField(
-            controller: c,
+            controller: c..text=value as String,
             decoration: InputDecoration(
               fillColor: Colors.white10, filled: true,
               border: OutlineInputBorder(),
@@ -514,7 +619,7 @@ class _createCVState extends State<createCV> {
     );
   }
 
-  Widget BuildlargeTextField(String titre, TextEditingController c) {
+  Widget BuildlargeTextField(String titre, TextEditingController c,String? value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0, right: 15, left: 15),
       child: Column(
@@ -522,7 +627,7 @@ class _createCVState extends State<createCV> {
         children: [
           Text(titre),
           TextFormField(
-            controller: c,
+            controller: c..text=value as String,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               isDense: true, // Added this
@@ -586,15 +691,23 @@ class _createCVState extends State<createCV> {
       ),
     );
   }
-
-  Widget competanceUI(index) {
-    return Column(children: [
+  stepperComp(m){
+      
+       ListView.separated(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemBuilder: (context, m) {
+                  return Column(
+                    children: 
+                      [
+                        Column(children: [
       Row(
         children: [
           Flexible(
-              child: BuildTextField('competance$index', competances[index])),
+              child:BuildTextField('competance$m', competances[m],profileModel.Competence![m].nomCompetence),
+                ),
           Visibility(
-            visible: index == comp.nomCompetance!.length - 1,
+            visible: m == profileModel.Competence!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -609,7 +722,7 @@ class _createCVState extends State<createCV> {
             ),
           ),
           Visibility(
-            visible: index > 0,
+            visible: m > 0,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -618,15 +731,24 @@ class _createCVState extends State<createCV> {
                   color: Colors.red,
                 ),
                 onPressed: () {
-                  removeCompetanceControl(index);
+                  removeCompetanceControl(m);
                 },
               ),
             ),
           ),
         ],
       ),
-    ]);
+    ]),
+                      ],                   
+                  );
+                },
+                separatorBuilder: (context, i) => Divider(),
+                itemCount: comp.nomCompetance!.length);
+                
+     
+    
   }
+
 
   Widget centreInteretUI(indexci) {
     return Column(children: [
@@ -634,7 +756,7 @@ class _createCVState extends State<createCV> {
         children: [
           Flexible(
               child: BuildTextField(
-                  'centreInteret$indexci', centreInteret[indexci])),
+                  'centreInteret$indexci', centreInteret[indexci],null)),
           Visibility(
             visible: indexci == CI.centreInteret!.length - 1,
             child: SizedBox(
@@ -676,7 +798,7 @@ class _createCVState extends State<createCV> {
         children: [
           Flexible(
               child:
-                  BuildTextField('Langue$indexLangue', langue[indexLangue])),
+                  BuildTextField('Langue$indexLangue', langue[indexLangue],null)),
           Visibility(
             visible: indexLangue == lg.nomLangue!.length - 1,
             child: SizedBox(
@@ -744,12 +866,12 @@ class _createCVState extends State<createCV> {
 
   Widget formationUI(indexFormation) {
     return Column(children: [
-      BuildTextField('Formation$indexFormation', Formation[indexFormation]),
-      BuildTextField('Etablissement', EtablissementF[indexFormation]),
-      BuildTextField('Ville', VilleF[indexFormation]),
+      BuildTextField('Formation$indexFormation', Formation[indexFormation],null),
+      BuildTextField('Etablissement', EtablissementF[indexFormation],null),
+      BuildTextField('Ville', VilleF[indexFormation],null),
       BuildDateTextField('Date debut', DatedebutF[indexFormation]),
       BuildDateTextField('Date fin', DatefinF[indexFormation]),
-      BuildlargeTextField('Description', DescriptionF[indexFormation]),
+      BuildlargeTextField('Description', DescriptionF[indexFormation],null),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -790,10 +912,10 @@ class _createCVState extends State<createCV> {
 
   Widget stageUI(indexS) {
     return Column(children: [
-      BuildTextField('Nom Société$indexS', nomSociete[indexS]),
+      BuildTextField('Nom Société$indexS', nomSociete[indexS],null),
       BuildDateTextField('Date debut', DatedebutS[indexS]),
       BuildDateTextField('Date fin', DatefinS[indexS]),
-      BuildlargeTextField('Description', DescriptionS[indexS]),
+      BuildlargeTextField('Description', DescriptionS[indexS],null),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -917,6 +1039,15 @@ class _createCVState extends State<createCV> {
       }
     });
   }
+bool isNumeric(String str) {
+  try{
+    var value = double.parse(str);
+  } on FormatException {
+    return false;
+  } finally {
+    return true;
+  }
+}
 
   // creation cv
 
