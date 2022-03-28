@@ -7,6 +7,7 @@ import '../../NetworkHandler.dart';
 
 import '../../model/SuperModelOffreStage.dart';
 import '../../model/offreStageModel.dart';
+import '../../stage_detail.dart';
 
 
 
@@ -45,9 +46,17 @@ import '../../model/offreStageModel.dart';
       margin: EdgeInsets.only(top: 25),
       child: ListView.separated(
           padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
-          itemBuilder: (context, index) => JobItem(
-                data[index]               
-              ),
+                    itemBuilder: (context, index) => GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) => JobDetail(data[index]));
+              },
+              child: JobItem(                
+                data[index],
+            )),
           separatorBuilder: (_, index) => SizedBox(
                 height: 20,
               ),

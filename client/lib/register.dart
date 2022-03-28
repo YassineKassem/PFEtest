@@ -127,6 +127,7 @@ class _MyRegisterState extends State<MyRegister> {
                                   return 'Champ Email ne doit pas etre vide';
                                 } else if (RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+
                                     .hasMatch(value)) {
                                   return null;
                                 } else {
