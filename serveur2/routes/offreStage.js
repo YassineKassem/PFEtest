@@ -4,39 +4,6 @@ const offreStage = require("../models/offreStage.model")
 const middleware = require("../middleware");
 const multer = require("multer");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, req.params.id + ".jpg");
-  },
-});
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 6,
-  },
-});
-
-/*router
-  .route("/add/coverImage/:id")
-  .patch(middleware.checkToken, upload.single("img"), (req, res) => {
-    offreStage.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: {
-          coverImage: req.file.path,
-        },
-      },
-      { new: true },
-      (err, result) => {
-        if (err) return res.json(err);
-        return res.json(result);
-      }
-    );
-    });*/
 router.route("/Add").post(middleware.checkToken, (req, res) => {
   const offre = offreStage({
     username: req.decoded.username,
@@ -45,7 +12,8 @@ router.route("/Add").post(middleware.checkToken, (req, res) => {
     descriptionOffre: req.body.descriptionOffre, 
     localisation: req.body.localisation, 
     dateExpiration: req.body.dateExpiration,
-    duree: req.body.duree 
+    duree: req.body.duree ,
+    motClee: req.body.motClee,
   });
   offre
     .save()
@@ -70,6 +38,68 @@ router.route("/getAllOffre").get((req, res) => {
     return res.json({ data: result });
   });
 });
+
+router.route('/api/query').get((req, res) => {
+  offreStage.find((err, result) => {
+    if (err) return res.json(err);
+
+  console.log(result) ; 
+  const descriptionOffre = req.query.descriptionOffre.toLowerCase()
+  
+  const products_result = Object.values(result).filter(result => result.descriptionOffre.toLowerCase().includes(descriptionOffre))
+
+  if (products_result.length < 1) {
+      return res.status(200).send('No products matched your search')
+  }
+  res.json(products_result)
+});
+});
+
+
+router.route("/search").get((req, res, next) => {
+  var q=req.query.descriptionOffre;
+
+  offreStage.find(
+    {
+      descriptionOffre:{
+        $regex: /ali/i
+      }
+    },
+    {
+      _id:0,
+      __v:0
+    },
+    function(err,data){
+      res.json(data);
+
+    }
+  ).limit(2)
+});
+
+
+router.route("/search1").get(async(req, res) => {
+  const result = offreStage.aggregate(
+    [
+      {
+        "$search":{
+          "text":{
+            "query":"ali ecole",
+            
+            "path":"descriptionOffre"
+          }
+        }
+      }
+    ]
+  )
+  for await (const doc of result) {
+    res.json(doc)
+}
+  
+});
+
+
+
+
 
 router.route("/delete/:id").delete(middleware.checkToken, (req, res) => {
   offreStage.findOneAndDelete(

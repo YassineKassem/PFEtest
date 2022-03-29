@@ -8,7 +8,8 @@ const offreStage = Schema({
   descriptionOffre:{ type: String, default: null } ,
   localisation:{ type: String, default: null } ,
   dateExpiration:{ type: Date, default: null } ,
-  duree:{ type: String, default: null} 
+  duree:{ type: String, default: null},
+  motClee:[{ cle:{ type: String, default: null } }],
   
 });
 

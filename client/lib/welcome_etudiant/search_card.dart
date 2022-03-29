@@ -16,7 +16,7 @@ class SearchCard extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           image: DecorationImage(
-              image: AssetImage('assets/images/search_bg.png'),
+              image: AssetImage('assets/images/register.png'),
               fit: BoxFit.cover)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
