@@ -15,6 +15,9 @@ Stage _$StageFromJson(Map<String, dynamic> json) => Stage(
           ? null
           : DateTime.parse(json['dateExpiration'] as String),
       duree: json['duree'] as String?,
+      motClee: (json['motClee'] as List<dynamic>?)
+          ?.map((e) => MotCle.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$StageToJson(Stage instance) => <String, dynamic>{
@@ -24,4 +27,5 @@ Map<String, dynamic> _$StageToJson(Stage instance) => <String, dynamic>{
       'localisation': instance.localisation,
       'dateExpiration': instance.dateExpiration?.toIso8601String(),
       'duree': instance.duree,
+      'motClee': instance.motClee,
     };

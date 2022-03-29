@@ -33,8 +33,8 @@ class SearchPage extends StatelessWidget {
             children: [
               //HomeAppBar(),
               SearchAppBar(),
-              SearchInput(),
-              SearchOption(),
+              //SearchInput(),
+              //SearchOption(),
               Expanded(
                 child: SearchList(),
               )

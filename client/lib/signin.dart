@@ -26,6 +26,8 @@ class _MyLoginState extends State<MyLogin> {
   bool validate = false;
   bool circular = false;
   final storage = new FlutterSecureStorage();
+  bool resultCheckUserEtd = false;
+  bool resultCheckUserSoc = false;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,7 @@ class _MyLoginState extends State<MyLogin> {
                                   if (value!.isEmpty) {
                                     return errorText="Username invalid";
                                   }else{
-
+                                    
                                   }
                                   return null;
                                 },
@@ -113,6 +115,8 @@ class _MyLoginState extends State<MyLogin> {
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return errorText="Password invalid";
+                                  }else{
+                                   
                                   }
                                   return null;
                                 },
@@ -148,9 +152,9 @@ class _MyLoginState extends State<MyLogin> {
                                               onPressed: () async {
                                                 setState(() {
                                                   circular = true;
-                                                  validate=true;
+                                                  
                                                 });
-                                                if (_formKey.currentState!.validate() && validate) {   
+                                                if (_formKey.currentState!.validate()) {   
                                                 if (getUser() == 'etudiant') {
                                                   //Login Logic start here
                                                   Map<String, String> data = {
@@ -295,6 +299,40 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 
+checkUserEtd() async {
+    
+      var response = await networkHandler
+          .get("/etudiant/checkUsername/${etd.username}");
+      if (response['Status']) {
+        setState(() {
+          resultCheckUserEtd= true;
+        });
+        
+      } else {
+       setState(() {
+          resultCheckUserEtd= false;
+        });
+      }
+    
+  }
+
+  
+checkUserSoc() async {
+    
+      var response = await networkHandler
+          .get("/societe/checkUsername/${soc.username}");
+      if (response['Status']) {
+        setState(() {
+          resultCheckUserSoc= true;
+        });
+      } else {
+        setState(() {
+          resultCheckUserSoc= false;
+        });
+
+      }
+    
+  }
   
 }
 

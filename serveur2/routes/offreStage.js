@@ -35,6 +35,7 @@ router.route("/getOwnBlog").get(middleware.checkToken, (req, res) => {
 router.route("/getAllOffre").get((req, res) => {
   offreStage.find((err, result) => {
     if (err) return res.json(err);
+    
     return res.json({ data: result });
   });
 });
@@ -77,26 +78,51 @@ router.route("/search").get((req, res, next) => {
 });
 
 
-router.route("/search1").get(async(req, res) => {
+router.route("/search1/:cle").get(async(req, res) => {
+  const motCle = req.params.cle
+
   const result = offreStage.aggregate(
     [
       {
         "$search":{
-          "text":{
-            "query":"ali ecole",
-            
-            "path":"descriptionOffre"
-          }
+          "index":"chercher",
+          "text":{            
+            "query":motCle,           
+            "path":"motClee.cle"
+          }        
         }
       }
     ]
   )
+  var list =[]
   for await (const doc of result) {
-    res.json(doc)
-}
+    list.push(doc)
+  }
+  if (list.length > 0)
+    return res.status(200).json({ data: list });
+  else
+    return res.status(201).json({ data: [] }) 
   
 });
 
+
+
+
+
+router.route("/search2").get(async(req, res) => {
+
+  const result = offreStage.find( { $text: { $search: "ecole", $language: "fr" } } )
+
+  var list =[]
+  for await (const doc of result) {
+    list.push(doc)
+  }
+  if (list.length > 0)
+    return res.json(list)
+  else
+    return res.json("liste vide") 
+  
+});
 
 
 
