@@ -125,8 +125,6 @@ router.route("/search2").get(async(req, res) => {
 });
 
 
-
-
 router.route("/delete/:id").delete(middleware.checkToken, (req, res) => {
   offreStage.findOneAndDelete(
     {

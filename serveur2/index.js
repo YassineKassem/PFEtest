@@ -37,6 +37,11 @@ app.use("/profileSociete", profileRouteS);
 const offreStageRoute = require("./routes/offreStage");
 app.use("/offreStage", offreStageRoute);
 
+//middleware favorie
+const favorisRoute = require("./routes/favoris");
+app.use("/favoris", favorisRoute);
+
+
 
 data = {
   msg: "Welcome on DevStack Blog App development YouTube video series",
