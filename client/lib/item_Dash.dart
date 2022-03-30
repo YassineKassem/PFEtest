@@ -21,7 +21,7 @@ class _item_DashState extends State<item_Dash> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/backg.jpg'),
+                image: AssetImage('assets/images/bg.jpg'),
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.5),
                   BlendMode.hardLight,
@@ -46,7 +46,7 @@ class _item_DashState extends State<item_Dash> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/backg.jpg'),
+                image: AssetImage('assets/images/bg.jpg'),
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.5),
                   BlendMode.hardLight,

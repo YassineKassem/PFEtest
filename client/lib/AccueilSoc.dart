@@ -22,7 +22,7 @@ class AccueilSoc extends StatelessWidget {
                 BodyDashboard(),
                 item_Dash(),
                 Taglist(),
-                JobList(),
+                //JobList(),
               ],
             ),
           ],
