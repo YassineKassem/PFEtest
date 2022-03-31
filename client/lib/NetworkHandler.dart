@@ -28,7 +28,7 @@ class NetworkHandler {
   }
 
 
-    Future<http.Response> post(String url, Map<String, dynamic> body) async {
+  Future<http.Response> post(String url, Map<String, dynamic> body) async {
     String token = await storage.read(key: "token");
     url = formater(url);
     log.d(body);
@@ -39,7 +39,7 @@ class NetworkHandler {
     return response;
   }
 
-    Future<http.StreamedResponse> patchImage(String url, String filepath) async {
+  Future<http.StreamedResponse> patchImage(String url, String filepath) async {
     url = formater(url);
     String token = await storage.read(key: "token");
     var request = http.MultipartRequest('PATCH', Uri.parse(url));
@@ -58,7 +58,7 @@ class NetworkHandler {
     return NetworkImage(url);
   }
 
-    Future<http.Response> patch(String url, Map<String, dynamic> body) async {
+  Future<http.Response> patch(String url, Map<String, dynamic> body) async {
     String token = await storage.read(key: "token");
     url = formater(url);
     log.d(body);
@@ -72,6 +72,21 @@ class NetworkHandler {
     );
     return response;
   }
+
+  Future delete(String url) async {
+    String token = await storage.read(key: "token");
+    url = formater(url);
+    var response = await http.delete(
+      url,
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+   
+    );
+    return response;
+  }
+
 
   String formater(String url) {
     return baseurl + url;

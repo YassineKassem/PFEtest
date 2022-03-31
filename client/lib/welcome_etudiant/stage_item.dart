@@ -8,8 +8,6 @@ import '../model/SuperModelOffreStage.dart';
 import '../model/offreStageModel.dart';
 
 
-
-
 class JobItem extends StatefulWidget {
   final Stage stage;
   JobItem(this.stage);
@@ -40,7 +38,11 @@ class _JobItemState extends State<JobItem> {
     var response = await networkHandler.patch("/favoris/AddFavaoris/$username/$nomOffre",data);
      print(response.statusCode);
      if (response.statusCode == 200 || response.statusCode == 201) {
-        print('updated succes');}
+        print('updated succes');
+        setState(() {
+              colorFav=true;
+           });
+      }
   }
   
   void fetchDataOffreList() async {
@@ -50,10 +52,21 @@ class _JobItemState extends State<JobItem> {
       data = superModelOffre.data!;
       IconFavorie();
     });
-    
   }
 
-   IconFavorie(){
+  void deleteOffre(String username, String nomOffre) async {
+    var response = await networkHandler.delete("/favoris/removeFromFavoris/$username/$nomOffre");
+     print(response.statusCode);
+     if (response.statusCode == 200 || response.statusCode == 201) {
+      {    print('delete succes');}
+           setState(() {
+              colorFav=false;
+           });
+      }
+  }
+
+
+  IconFavorie(){
     for( int i=0; i<data.length;i++)
     {
       if(data[i].username==widget.stage.username && data[i].nomOffre==widget.stage.nomOffre)
@@ -61,11 +74,8 @@ class _JobItemState extends State<JobItem> {
         setState(() {
           colorFav=true;
         });
-        
       }
     }
-    
-
   }
 
 
@@ -116,7 +126,13 @@ class _JobItemState extends State<JobItem> {
                       username=widget.stage.username as String;
                       nomOffre=widget.stage.nomOffre as String;
                   });
+                  if(!colorFav)
+                  {
                   fetchData(username,nomOffre);
+                  }else{
+                    deleteOffre(username,nomOffre);
+                  }
+
                 },
                  child: Icon(
                  Icons.favorite,
@@ -138,8 +154,6 @@ class _JobItemState extends State<JobItem> {
             children: [
               IconText(Icons.location_on_outlined, widget.stage.localisation as String),
               //IconText(Icons.access_time_outlined, offre.dateExpiration as String),
-              
-
             ],
           )
 
