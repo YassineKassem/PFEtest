@@ -15,6 +15,15 @@ router.route("/:username").get(middleware.checkToken, (req, res) => {
     });
   });
 });
+router.route("listFavoris/:username").get(middleware.checkToken, (req, res) => {
+  Etudiant.findOne({ username: req.params.username }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result,
+      username: req.params.username,
+    });
+  });
+});
 
 router.route("/getData").get(middleware.checkToken, (req, res) => {
   Etudiant.findOne({ username: req.decoded.username }, (err, result) => {

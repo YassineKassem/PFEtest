@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:pfe/model/Etudiant.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
 
 import '../NetworkHandler.dart';
+import '../model/CVmodel.dart';
 import '../model/offreStageModel.dart';
 
 
-class JobItem extends StatelessWidget {
-  final Stage stage;
 
-  
+
+class JobItem extends StatefulWidget {
+  final Stage stage;
   JobItem(this.stage);
 
+  @override
+  State<JobItem> createState() => _JobItemState();
+}
+
+class _JobItemState extends State<JobItem> {
+
+  
+  NetworkHandler networkHandler= NetworkHandler();
+  Etudiant profileModel = Etudiant("","","",[]);
+  String username='';
+  String nomOffre='';
+
+  void fetchData(String username, String nomOffre) async {
+    Map<String, dynamic> data = {};
+    var response = await networkHandler.patch("/favoris/AddFavaoris/$username/$nomOffre",data);
+     print(response.statusCode);
+     if (response.statusCode == 200 || response.statusCode == 201) {
+        print('updated succes');}
+  }
+
+  
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,11 +62,11 @@ class JobItem extends StatelessWidget {
                     ),
                     child: CircleAvatar(
                     radius: 20,
-                    backgroundImage:NetworkHandler().getImage("${stage.username}"),
+                    backgroundImage:NetworkHandler().getImage("${widget.stage.username}"),
                   ),
                   ),
                   SizedBox(width: 10,),
-                  Text(stage.username as String,
+                  Text(widget.stage.username as String,
                   style:TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
@@ -52,12 +76,24 @@ class JobItem extends StatelessWidget {
                   )
                 ],
               ),
-              //Icon(job.isMark ? Icons.bookmark : Icons.book_online_outlined,
-              //color: job.isMark ? Theme.of(context).primaryColor : Colors.black,)
+               GestureDetector(
+                onTap: (){
+                  setState(() {
+                      username=widget.stage.username as String;
+                      nomOffre=widget.stage.nomOffre as String;
+                  });
+                  fetchData(username,nomOffre);
+                },
+                 child: Icon(
+                 Icons.favorite,
+                 color: Colors.pink,
+                 size: 24.0,
+                    ),
+               ),
             ],
           ),
           SizedBox(height: 15,),
-          Text(stage.nomOffre as String,
+          Text(widget.stage.nomOffre as String,
           style: TextStyle(
             fontWeight: FontWeight.bold
           ),
@@ -66,7 +102,7 @@ class JobItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconText(Icons.location_on_outlined, stage.localisation as String),
+              IconText(Icons.location_on_outlined, widget.stage.localisation as String),
               //IconText(Icons.access_time_outlined, offre.dateExpiration as String),
               
 

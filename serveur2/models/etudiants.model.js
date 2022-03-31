@@ -18,6 +18,10 @@ const Etudiant = Schema({
     required: true,
     unique: true,
   },
+  favorisList :{
+    type: Schema.Types.Array,
+    ref: 'offreStage'
+},
 });
 
 module.exports = mongoose.model("Etudiant", Etudiant);

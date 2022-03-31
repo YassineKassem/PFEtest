@@ -1,40 +1,56 @@
 const express = require("express");
-const Favoris = require("../models/favoris.model");
+const Etudiant = require("../models/etudiants.model");
 const offreStage = require("../models/offreStage.model")
 let middleware = require("../middleware");
 const router = express.Router();
 
 
-router.route("/Add/:username/:nomOffre").post(middleware.checkToken, (req, res) => {
-    offreStage.find({username:req.params.username,nomOffre:req.params.nomOffre}, (err, result) => {
-        if (err) return res.json(err);
-       
-    const fav = Favoris({
-      username: req.decoded.username,
-      favorisList: result,
+router.route("/AddFavaoris/:username/:nomOffre").patch(middleware.checkToken, async (req, res) => {
+  dataUpdate=[]
+  Etudiant.find({username:"uu"}, (err, rlt) => {
+    if (err) return res.json(err);  
+
+  for (doc of rlt) {
+    dataUpdate.push(doc)
+  }
+  offreStage.find({username:req.params.username,nomOffre:req.params.nomOffre}, (err, result) => {
+    if (err) return res.json(err);  
+  for (const doc of result) {
+    dataUpdate.push(doc)
+  }
+  Etudiant.findOneAndUpdate(
+    { username: req.decoded.username },
+    {
+      $set: {     
+        favorisList: dataUpdate
+      },
+    },
+    { new: true },
+    (err, result) => {
+      if (err) return res.json({ err: err });
+      if (result == null) return res.json({ data: [] });
+      else return res.json({ data: result });
+    }
+  );
+});
+
+});
+
+});
+
+router.route("/list/:username").get(middleware.checkToken, (req, res) => {
+  Etudiant.findOne({ username: req.params.username }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result.favorisList,
+      username: req.params.username,
     });
-    fav
-      .save()
-      .then((result) => {
-        res.json({ data: result });
-      })
-      .catch((err) => {
-        console.log(err), res.json({ err: err });
-      });
   });
 });
 
-router.route("/getAllFavoris").get((req, res) => {
-    Favoris.find((err, result) => {
-      if (err) return res.json(err);
-      
-      return res.json({ data: result });
-    });
-  });
-
-
   router.route("/removeFromFavoris/:username/:nomOffre").delete(middleware.checkToken, (req, res) => {
-    Favoris.findOneAndDelete(
+    
+    Etudiant.findOneAndDelete(
             {
       $and: [{ username: req.decoded.username }, { username:req.params.username,nomOffre:req.params.nomOffre }],
           },

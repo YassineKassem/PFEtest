@@ -4,7 +4,15 @@ import 'package:pfe/search/widgets/search_input.dart';
 import 'package:pfe/search/widgets/search_list.dart';
 import 'package:pfe/search/widgets/search_option.dart';
 
-class Favoris extends StatelessWidget {
+class Favoris extends StatefulWidget {
+  const Favoris({ Key? key }) : super(key: key);
+
+  @override
+  State<Favoris> createState() => _FavorisState();
+}
+
+
+class _FavorisState extends State<Favoris> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
