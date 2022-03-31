@@ -21,7 +21,7 @@ class _EditProfile extends State<EditProfile> {
   bool showPassword = false;
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
-  Etudiant etd = Etudiant('', '', '');
+  Etudiant etd = Etudiant();
   TextEditingController emailEdit = TextEditingController();
   @override
   void initState() {

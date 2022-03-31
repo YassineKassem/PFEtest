@@ -4,6 +4,7 @@ import 'package:pfe/welcome_etudiant/icon_text.dart';
 
 import '../NetworkHandler.dart';
 import '../model/CVmodel.dart';
+import '../model/SuperModelOffreStage.dart';
 import '../model/offreStageModel.dart';
 
 
@@ -21,9 +22,18 @@ class _JobItemState extends State<JobItem> {
 
   
   NetworkHandler networkHandler= NetworkHandler();
-  Etudiant profileModel = Etudiant("","","",[]);
+  Etudiant profileModel = Etudiant();
   String username='';
   String nomOffre='';
+  Etudiant etd =Etudiant();
+  bool colorFav =false;
+  SuperModelOffreStage superModelOffre =SuperModelOffreStage();
+  List<Stage> data=[]; 
+  @override
+    void initState() {
+      fetchDataOffreList();
+      
+    }
 
   void fetchData(String username, String nomOffre) async {
     Map<String, dynamic> data = {};
@@ -32,9 +42,33 @@ class _JobItemState extends State<JobItem> {
      if (response.statusCode == 200 || response.statusCode == 201) {
         print('updated succes');}
   }
+  
+  void fetchDataOffreList() async {
+    var response = await networkHandler.get("/favoris/list");
+     superModelOffre= SuperModelOffreStage.fromJson(response);
+    setState(() {
+      data = superModelOffre.data!;
+      IconFavorie();
+    });
+    
+  }
 
-  
-  
+   IconFavorie(){
+    for( int i=0; i<data.length;i++)
+    {
+      if(data[i].username==widget.stage.username && data[i].nomOffre==widget.stage.nomOffre)
+      {
+        setState(() {
+          colorFav=true;
+        });
+        
+      }
+    }
+    
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,7 +120,7 @@ class _JobItemState extends State<JobItem> {
                 },
                  child: Icon(
                  Icons.favorite,
-                 color: Colors.pink,
+                 color: colorFav?Colors.pink: Colors.black,
                  size: 24.0,
                     ),
                ),

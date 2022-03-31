@@ -7,16 +7,24 @@ const router = express.Router();
 
 router.route("/AddFavaoris/:username/:nomOffre").patch(middleware.checkToken, async (req, res) => {
   dataUpdate=[]
-  Etudiant.find({username:"uu"}, (err, rlt) => {
+  Etudiant.find({username:req.decoded.username}, (err, rlt) => {
     if (err) return res.json(err);  
-
-  for (doc of rlt) {
-    dataUpdate.push(doc)
+  
+  for (var key in rlt) {
+    for(var i in rlt[key].favorisList ){
+      dataUpdate.push(rlt[key].favorisList[i])
+    }
   }
   offreStage.find({username:req.params.username,nomOffre:req.params.nomOffre}, (err, result) => {
-    if (err) return res.json(err);  
+    if (err) return res.json(err); 
+  
   for (const doc of result) {
-    dataUpdate.push(doc)
+    if(dataUpdate.some(e => e.nomOffre === req.params.nomOffre))
+    {
+      console.log("existe deja")
+    }
+    else
+      dataUpdate.push(doc)
   }
   Etudiant.findOneAndUpdate(
     { username: req.decoded.username },
@@ -38,8 +46,8 @@ router.route("/AddFavaoris/:username/:nomOffre").patch(middleware.checkToken, as
 
 });
 
-router.route("/list/:username").get(middleware.checkToken, (req, res) => {
-  Etudiant.findOne({ username: req.params.username }, (err, result) => {
+router.route("/list").get(middleware.checkToken, (req, res) => {
+  Etudiant.findOne({ username: req.decoded.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
     return res.json({
       data: result.favorisList,

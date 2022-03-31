@@ -18,7 +18,7 @@ class MyRegister extends StatefulWidget {
 class _MyRegisterState extends State<MyRegister> {
   NetworkHandler networkHandler=NetworkHandler();
   final _formKey = GlobalKey<FormState>();
-  Etudiant etd = Etudiant('', '', '');
+  Etudiant etd = Etudiant(username: '', password: '', email: '');
   Societe soc = Societe('', '', '');
   String errorText='';
   bool validate=false;
@@ -84,11 +84,6 @@ class _MyRegisterState extends State<MyRegister> {
                                 else
                                   soc.username = value;
                               },
-                              validator: (value){            
-                                return errorText;
-                              
-                              },
-
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -313,7 +308,7 @@ class _MyRegisterState extends State<MyRegister> {
   }
 
 checkUserEtd() async {
-    if (etd.username.length == 0) {
+    if (etd.username?.length == 0) {
       setState(() {
         // circular = false;
         validate = false;

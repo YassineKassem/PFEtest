@@ -7,10 +7,10 @@ part of 'Etudiant.dart';
 // **************************************************************************
 
 Etudiant _$EtudiantFromJson(Map<String, dynamic> json) => Etudiant(
-      json['username'] as String,
-      json['password'] as String,
-      json['email'] as String?,
-      (json['dataFavoris'] as List<dynamic>?)
+      username: json['username'] as String?,
+      password: json['password'] as String?,
+      email: json['email'] as String?,
+      dataFavoris: (json['dataFavoris'] as List<dynamic>?)
           ?.map((e) => Stage.fromJson(e as Map<String, dynamic>))
           .toList(),
     );

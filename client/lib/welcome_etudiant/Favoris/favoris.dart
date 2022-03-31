@@ -4,6 +4,8 @@ import 'package:pfe/search/widgets/search_input.dart';
 import 'package:pfe/search/widgets/search_list.dart';
 import 'package:pfe/search/widgets/search_option.dart';
 
+import 'FavorisList.dart';
+
 class Favoris extends StatefulWidget {
   const Favoris({ Key? key }) : super(key: key);
 
@@ -38,7 +40,7 @@ class _FavorisState extends State<Favoris> {
             children: [
               SearchAppBar(),
               Expanded(
-                child: SearchList(),
+                child: FavorisList(),
               )
             ],
           )

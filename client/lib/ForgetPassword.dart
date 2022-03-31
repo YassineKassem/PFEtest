@@ -20,7 +20,7 @@ class MyLogin extends StatefulWidget {
 class _MyLoginState extends State<MyLogin> {
   NetworkHandler networkHandler = NetworkHandler();
   final _formKey = GlobalKey<FormState>();
-  Etudiant etd = new Etudiant('', '');
+  Etudiant etd = new Etudiant(username: '',password:'');
   Societe soc = new Societe('', '');
   String errorText = '';
   bool validate = false;
@@ -152,8 +152,8 @@ class _MyLoginState extends State<MyLogin> {
                                                 if (getUser() == 'etudiant') {
                                                   //Login Logic start here
                                                   Map<String, String> data = {
-                                                    "username": etd.username,
-                                                    "password": etd.password,
+                                                    "username": etd.username as String,
+                                                    "password": etd.password as String,
                                                   };
                                                   var response =
                                                       await networkHandler.post(

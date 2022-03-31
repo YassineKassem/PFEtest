@@ -53,7 +53,8 @@ import '../../stage_detail.dart';
     });
   }
 
- 
+
+
   @override
   Widget build(BuildContext context) {
     return Column(

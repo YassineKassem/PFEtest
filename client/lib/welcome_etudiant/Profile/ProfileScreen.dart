@@ -15,7 +15,7 @@ class _ProfileScreen extends State<ProfileScreen> {
   bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
-  Etudiant etd=Etudiant('', '','');
+  Etudiant etd=Etudiant();
   
   @override
   void initState() {

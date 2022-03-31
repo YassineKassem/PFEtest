@@ -25,7 +25,7 @@ class _NavigationDrowerState extends State<NavigationDrower> {
     bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
-  Etudiant etd=Etudiant('', '','');
+  Etudiant etd=Etudiant();
   @override
   void initState() {
     super.initState();
