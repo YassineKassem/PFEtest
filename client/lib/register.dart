@@ -16,13 +16,13 @@ class MyRegister extends StatefulWidget {
 }
 
 class _MyRegisterState extends State<MyRegister> {
-  NetworkHandler networkHandler=NetworkHandler();
+  NetworkHandler networkHandler = NetworkHandler();
   final _formKey = GlobalKey<FormState>();
   Etudiant etd = Etudiant(username: '', password: '', email: '');
   Societe soc = Societe('', '', '');
-  String errorText='';
-  bool validate=false;
-  bool circular=false;
+  String errorText = '';
+  bool validate = false;
+  bool circular = false;
   final storage = new FlutterSecureStorage();
 
   @override
@@ -34,7 +34,7 @@ class _MyRegisterState extends State<MyRegister> {
       for (int i = 10; i < route!.length; i++) {
         user += route[i];
       }
-      
+
       return user;
     }
 
@@ -46,22 +46,23 @@ class _MyRegisterState extends State<MyRegister> {
             image: AssetImage('assets/images/register.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        body: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 35, top: 30),
-              child: Text(
-                'Créer\nvotre compte',
-                style: TextStyle(color: Colors.white, fontSize: 33),
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 35, top: 30),
+                child: Text(
+                  'Créer\nvotre compte',
+                  style: TextStyle(color: Colors.white, fontSize: 33),
+                ),
               ),
-            ),
-            Container(
+              Container(
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.20),
                 child: Column(
@@ -78,11 +79,17 @@ class _MyRegisterState extends State<MyRegister> {
                                   ? TextEditingController(text: etd.username)
                                   : TextEditingController(text: soc.username),
                               onChanged: (value) {
-                                
                                 if (getUser() == 'etudiant')
                                   etd.username = value;
                                 else
                                   soc.username = value;
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Vueillez saisir votre username';
+                                } else {
+                                  return errorText;
+                                }
                               },
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
@@ -122,7 +129,6 @@ class _MyRegisterState extends State<MyRegister> {
                                   return 'Champ Email ne doit pas etre vide';
                                 } else if (RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-
                                     .hasMatch(value)) {
                                   return null;
                                 } else {
@@ -202,73 +208,91 @@ class _MyRegisterState extends State<MyRegister> {
                                       fontSize: 27,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                circular? CircularProgressIndicator(
-                                ): CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Color(0xff4c505b),
-                                  child: IconButton(
-                                      color: Colors.white,
-                                      onPressed: () async{
-                                        setState(() {
-                                          circular=true;
-                                        });
-                                        
-                                        if(getUser()=='etudiant')
-                                        { await checkUserEtd();
-                                          if (_formKey.currentState!.validate() && validate) {
-                                          Map<String,dynamic>data={
-                                            "username":etd.username,
-                                            "password":etd.password,
-                                            "email":etd.email
-                                          };
-                                        
-                                          print(data);
-                                          var response = await networkHandler.post("/etudiant/register", data);
-                                          Map<String, dynamic> output = json.decode(response.body);
-                                          print(output["token"]);
-                                          await storage.write(key: "token", value: output["token"]);
-                                          setState(() {
-                                            circular=false;
-                                          });
-                                          Navigator.pushNamed(context, '/createCVPart1');
-                                        } else {
-                                          print("not ok");
-                                          setState(() {
-                                            circular=false;
-                                          });
-                                        }
-                                      }
-                                      else{
-                                          await checkUserSoc();
-                                          if (_formKey.currentState!.validate() && validate) {
-                                          Map<String,dynamic>data={
-                                            "username":soc.username,
-                                            "password":soc.password,
-                                            "email":soc.email
-                                          };
-                                          print(data);
-                                          var response = await networkHandler.post("/societe/register", data);
-                                           Map<String, dynamic> output = json.decode(response.body);
-                                          print(output["token"]);
-                                          await storage.write(key: "token", value: output["token"]);
-                                          setState(() {
-                                            circular=false;
-                                          });
-                                          Navigator.pushNamed(context, '/formSociete');
-                                        } else {
-                                          print("not ok");
-                                          setState(() {
-                                            circular=false;
-                                          });
-                                        }
-                                      }
+                                circular
+                                    ? CircularProgressIndicator()
+                                    : CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: Color(0xff4c505b),
+                                        child: IconButton(
+                                            color: Colors.white,
+                                            onPressed: () async {
+                                              setState(() {
+                                                circular = true;
+                                              });
 
+                                              if (getUser() == 'etudiant') {
+                                                await checkUserEtd();
+                                                if (_formKey.currentState!
+                                                        .validate() &&
+                                                    validate) {
+                                                  Map<String, dynamic> data = {
+                                                    "username": etd.username,
+                                                    "password": etd.password,
+                                                    "email": etd.email
+                                                  };
 
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_forward,
-                                      )),
-                                )
+                                                  print(data);
+                                                  var response =
+                                                      await networkHandler.post(
+                                                          "/etudiant/register",
+                                                          data);
+                                                  Map<String, dynamic> output =
+                                                      json.decode(
+                                                          response.body);
+                                                  print(output["token"]);
+                                                  await storage.write(
+                                                      key: "token",
+                                                      value: output["token"]);
+                                                  setState(() {
+                                                    circular = false;
+                                                  });
+                                                  Navigator.pushNamed(context,
+                                                      '/createCVPart1');
+                                                } else {
+                                                  print("not ok");
+                                                  setState(() {
+                                                    circular = false;
+                                                  });
+                                                }
+                                              } else {
+                                                await checkUserSoc();
+                                                if (_formKey.currentState!
+                                                        .validate() &&
+                                                    validate) {
+                                                  Map<String, dynamic> data = {
+                                                    "username": soc.username,
+                                                    "password": soc.password,
+                                                    "email": soc.email
+                                                  };
+                                                  print(data);
+                                                  var response =
+                                                      await networkHandler.post(
+                                                          "/societe/register",
+                                                          data);
+                                                  Map<String, dynamic> output =
+                                                      json.decode(
+                                                          response.body);
+                                                  print(output["token"]);
+                                                  await storage.write(
+                                                      key: "token",
+                                                      value: output["token"]);
+                                                  setState(() {
+                                                    circular = false;
+                                                  });
+                                                  Navigator.pushNamed(
+                                                      context, '/formSociete');
+                                                } else {
+                                                  print("not ok");
+                                                  setState(() {
+                                                    circular = false;
+                                                  });
+                                                }
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.arrow_forward,
+                                            )),
+                                      )
                               ],
                             ),
                             SizedBox(
@@ -279,7 +303,8 @@ class _MyRegisterState extends State<MyRegister> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/login/${getUser()}');
+                                    Navigator.pushNamed(
+                                        context, '/login/${getUser()}');
                                   },
                                   child: Text(
                                     'Sign In',
@@ -300,14 +325,14 @@ class _MyRegisterState extends State<MyRegister> {
                   ],
                 ),
               ),
-            
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-checkUserEtd() async {
+  checkUserEtd() async {
     if (etd.username?.length == 0) {
       setState(() {
         // circular = false;
@@ -315,8 +340,8 @@ checkUserEtd() async {
         errorText = "Champ Username ne doit pas etre vide";
       });
     } else {
-      var response = await networkHandler
-          .get("/etudiant/checkUsername/${etd.username}");
+      var response =
+          await networkHandler.get("/etudiant/checkUsername/${etd.username}");
       if (response['Status']) {
         setState(() {
           // circular = false;
@@ -332,37 +357,31 @@ checkUserEtd() async {
     }
   }
 
-  
-checkUserSoc() async {
+  checkUserSoc() async {
     if (soc.username.length == 0) {
       setState(() {
         // circular = false;
         validate = false;
         errorText = "Champ Username ne doit pas etre vide";
       });
-    
     } else {
-      var response = await networkHandler
-          .get("/societe/checkUsername/${soc.username}");
+      var response =
+          await networkHandler.get("/societe/checkUsername/${soc.username}");
       if (response['Status']) {
         setState(() {
           // circular = false;
           validate = false;
           errorText = "Username deja existe";
         });
-        
       } else {
         setState(() {
           // circular = false;
           validate = true;
         });
-        
       }
     }
   }
-
 }
-
 
 showAlertDialog(BuildContext context, String text) {
   // set up the button

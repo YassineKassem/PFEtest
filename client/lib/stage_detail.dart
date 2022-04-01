@@ -106,7 +106,7 @@ class JobDetail extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  'requirements',
+                  stage.descriptionOffre as String,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
