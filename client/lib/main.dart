@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
         '/register/societe': (context) => MyRegister(),
         '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
-
         '/formSociete': (context) => formSociete(),
       },
       debugShowCheckedModeBanner: false,

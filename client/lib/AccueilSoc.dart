@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'welcome_societe/appBar.dart';
 //import 'package:pfe/welcome_etudiant/sidebar/menu2.dart';
 import 'package:pfe/welcome_societe/Dashboard.dart';
 
@@ -14,8 +15,8 @@ class AccueilSoc extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                AppBarS(),
                 Dashboard(),
-               
               ],
             ),
           ],
