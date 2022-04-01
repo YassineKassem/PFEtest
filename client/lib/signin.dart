@@ -26,8 +26,6 @@ class _MyLoginState extends State<MyLogin> {
   bool validate = false;
   bool circular = false;
   final storage = new FlutterSecureStorage();
-  bool resultCheckUserEtd = false;
-  bool resultCheckUserSoc = false;
   bool validate2=true;
 
   @override
@@ -143,7 +141,7 @@ class _MyLoginState extends State<MyLogin> {
                                                   setState(() {
                                                     circular = true; 
                                                   });
-
+                                                  
                                                   if (getUser() == 'etudiant') {
                                                     
                                                     //Login Logic start here
@@ -227,6 +225,7 @@ class _MyLoginState extends State<MyLogin> {
                                                           .decode(response.body);
                                                       setState(() {
                                                         validate = false;
+                                                        validate2=false;
                                                         errorText = output;
                                                         circular = false;
                                                       });
@@ -290,56 +289,5 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 
-  checkUserEtd() async {
-    if (etd.username?.length == 0) {
-      setState(() {
-        circular = false;
-        validate = false;
-        errorText = "Champ Username ne doit pas etre vide";
-      });
-    } else {
-      var response =
-          await networkHandler.get("/etudiant/checkUsername/${etd.username}");
-      if (response['Status']) {
-        setState(() {
-          circular = false;
-          validate = true;         
-        });
-      } else {
-        setState(() {
-          circular = false;
-          validate = false;
-          validate2=false;
-          errorText = "Username n'existe pas";
-        });
-      }
-    }
-  }
-
-  checkUserSoc() async {
-    if (soc.username.length == 0) {
-      setState(() {
-        circular = false;
-        validate = false;
-        errorText = "Champ Username ne doit pas etre vide";
-      });
-    } else {
-      var response =
-          await networkHandler.get("/societe/checkUsername/${soc.username}");
-      if (response['Status']) {
-        setState(() {
-          circular = false;
-          validate = false;
-          errorText = "Username deja existe";
-        });
-      } else {
-        setState(() {
-          circular = false;
-          validate = true;
-          
-        });
-      }
-    }
-  }
 }
 

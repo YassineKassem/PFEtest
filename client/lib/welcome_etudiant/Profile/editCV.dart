@@ -417,8 +417,9 @@ class _createCVState extends State<createCV> {
         isActive: _currentStep >= 3,
         title: Text('Competance'),
         content: Column(
-          
-          children:List.generate(2,(int m)=>  stepperComp(m*m),growable: true) ,
+                    children: [
+            BuildlargeTextField('Competance', DescriptionRealisation,""),
+          ],          
         ),
       ),
       Step(
@@ -431,7 +432,7 @@ class _createCVState extends State<createCV> {
         title: Text('Realisation'),
         content: Column(
           children: [
-            BuildlargeTextField('Description', DescriptionRealisation,profileModel.Realisation),
+            BuildlargeTextField('Description', DescriptionRealisation,""),
           ],
         ),
       ),

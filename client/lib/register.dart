@@ -339,6 +339,7 @@ class _MyRegisterState extends State<MyRegister> {
       setState(() {
         circular = false;
         validate = false;
+        validate2 =false;
         errorText = "Champ Username ne doit pas etre vide";
       });
     } else {
@@ -365,6 +366,7 @@ class _MyRegisterState extends State<MyRegister> {
       setState(() {
         circular = false;
         validate = false;
+        validate2 =false;
         errorText = "Champ Username ne doit pas etre vide";
       });
     } else {

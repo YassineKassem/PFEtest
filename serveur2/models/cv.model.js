@@ -18,7 +18,7 @@ const Cv = Schema(
     Codepostale: { type: String, default: null },
     Ville: { type: String, default: null },
     Profil: {type: String, default: null },
-    Realisation: {type: String, default: null },
+    Realisation: {type: String, default: "" },
   
     Competence :[{ nomCompetence:{ type: String, default: null } }],
     
