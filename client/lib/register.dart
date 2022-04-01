@@ -21,7 +21,8 @@ class _MyRegisterState extends State<MyRegister> {
   Etudiant etd = Etudiant(username: '', password: '', email: '');
   Societe soc = Societe('', '', '');
   String errorText = '';
-  bool validate = false;
+  bool validate=false;
+  bool validate2=true;
   bool circular = false;
   final storage = new FlutterSecureStorage();
 
@@ -78,21 +79,17 @@ class _MyRegisterState extends State<MyRegister> {
                               controller: getUser() == 'etudiant'
                                   ? TextEditingController(text: etd.username)
                                   : TextEditingController(text: soc.username),
+                                
                               onChanged: (value) {
                                 if (getUser() == 'etudiant')
                                   etd.username = value;
                                 else
                                   soc.username = value;
                               },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Vueillez saisir votre username';
-                                } else {
-                                  return errorText;
-                                }
-                              },
+                              
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
+                                  errorText: validate || validate2 ? null : errorText,
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(
@@ -119,6 +116,7 @@ class _MyRegisterState extends State<MyRegister> {
                                   ? TextEditingController(text: etd.email)
                                   : TextEditingController(text: soc.email),
                               onChanged: (value) {
+                                print(value);
                                 if (getUser() == 'etudiant')
                                   etd.email = value;
                                 else
@@ -163,6 +161,7 @@ class _MyRegisterState extends State<MyRegister> {
                                   ? TextEditingController(text: etd.password)
                                   : TextEditingController(text: soc.password),
                               onChanged: (value) {
+                                print(value);
                                 if (getUser() == 'etudiant')
                                   etd.password = value;
                                 else
@@ -222,6 +221,7 @@ class _MyRegisterState extends State<MyRegister> {
 
                                               if (getUser() == 'etudiant') {
                                                 await checkUserEtd();
+                                                
                                                 if (_formKey.currentState!
                                                         .validate() &&
                                                     validate) {
@@ -255,7 +255,9 @@ class _MyRegisterState extends State<MyRegister> {
                                                   });
                                                 }
                                               } else {
+                                                
                                                 await checkUserSoc();
+                                                      
                                                 if (_formKey.currentState!
                                                         .validate() &&
                                                     validate) {
@@ -335,7 +337,7 @@ class _MyRegisterState extends State<MyRegister> {
   checkUserEtd() async {
     if (etd.username?.length == 0) {
       setState(() {
-        // circular = false;
+        circular = false;
         validate = false;
         errorText = "Champ Username ne doit pas etre vide";
       });
@@ -344,13 +346,14 @@ class _MyRegisterState extends State<MyRegister> {
           await networkHandler.get("/etudiant/checkUsername/${etd.username}");
       if (response['Status']) {
         setState(() {
-          // circular = false;
+          circular = false;
           validate = false;
+          validate2 =false;
           errorText = "Username deja existe";
         });
       } else {
         setState(() {
-          // circular = false;
+          circular = false;
           validate = true;
         });
       }
@@ -360,7 +363,7 @@ class _MyRegisterState extends State<MyRegister> {
   checkUserSoc() async {
     if (soc.username.length == 0) {
       setState(() {
-        // circular = false;
+        circular = false;
         validate = false;
         errorText = "Champ Username ne doit pas etre vide";
       });
@@ -369,14 +372,16 @@ class _MyRegisterState extends State<MyRegister> {
           await networkHandler.get("/societe/checkUsername/${soc.username}");
       if (response['Status']) {
         setState(() {
-          // circular = false;
+          circular = false;
           validate = false;
+          validate2 =false;
           errorText = "Username deja existe";
         });
       } else {
         setState(() {
-          // circular = false;
+          circular = false;
           validate = true;
+          
         });
       }
     }

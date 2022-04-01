@@ -28,6 +28,7 @@ class _MyLoginState extends State<MyLogin> {
   final storage = new FlutterSecureStorage();
   bool resultCheckUserEtd = false;
   bool resultCheckUserSoc = false;
+  bool validate2=true;
 
   @override
   Widget build(BuildContext context) {
@@ -83,16 +84,10 @@ class _MyLoginState extends State<MyLogin> {
                                     else
                                       soc.username = value;
                                   },
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return errorText="Username invalid";
-                                    }else{
-                                      
-                                    }
-                                    return null;
-                                  },
+                                  
                                   style: TextStyle(color: Colors.black),
                                   decoration: InputDecoration(
+                                      errorText: validate || validate2 ? null : errorText,
                                       fillColor: Colors.grey.shade100,
                                       filled: true,
                                       hintText: "Username",
@@ -113,17 +108,11 @@ class _MyLoginState extends State<MyLogin> {
                                     else
                                       soc.password = value;
                                   },
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return errorText="Password invalid";
-                                    }else{
-                                     
-                                    }
-                                    return null;
-                                  },
+                                
                                   style: TextStyle(),
                                   obscureText: true,
                                   decoration: InputDecoration(
+                                      errorText: validate || validate2 ? null : errorText,
                                       fillColor: Colors.grey.shade100,
                                       filled: true,
                                       hintText: "Password",
@@ -152,11 +141,11 @@ class _MyLoginState extends State<MyLogin> {
                                                 color: Colors.white,
                                                 onPressed: () async {
                                                   setState(() {
-                                                    circular = true;
-                                                    
+                                                    circular = true; 
                                                   });
-                                                  if (_formKey.currentState!.validate()) {   
+
                                                   if (getUser() == 'etudiant') {
+                                                    
                                                     //Login Logic start here
                                                     Map<String, String> data = {
                                                       "username": etd.username as String,
@@ -193,12 +182,16 @@ class _MyLoginState extends State<MyLogin> {
                                                       String output = json
                                                           .decode(response.body);
                                                       setState(() {
+                                                        validate2=false;
                                                         validate = false;
                                                         errorText = output;
                                                         circular = false;
                                                       });
                                                     }
+                                                  
+                                                  
                                                   } else {
+                                                    
                                                     Map<String, String> data = {
                                                       "username": soc.username,
                                                       "password": soc.password,
@@ -238,13 +231,9 @@ class _MyLoginState extends State<MyLogin> {
                                                         circular = false;
                                                       });
                                                     }
+                                                  
                                                   }
-                                                  }else {
-                                              print("not ok");
-                                              setState(() {
-                                                circular=false;
-                                              });
-                                            }
+                                                  
                                                 },
                                                 icon: Icon(
                                                   Icons.arrow_forward,
@@ -301,40 +290,56 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 
-checkUserEtd() async {
-    
-      var response = await networkHandler
-          .get("/etudiant/checkUsername/${etd.username}");
+  checkUserEtd() async {
+    if (etd.username?.length == 0) {
+      setState(() {
+        circular = false;
+        validate = false;
+        errorText = "Champ Username ne doit pas etre vide";
+      });
+    } else {
+      var response =
+          await networkHandler.get("/etudiant/checkUsername/${etd.username}");
       if (response['Status']) {
         setState(() {
-          resultCheckUserEtd= true;
-        });
-        
-      } else {
-       setState(() {
-          resultCheckUserEtd= false;
-        });
-      }
-    
-  }
-
-  
-checkUserSoc() async {
-    
-      var response = await networkHandler
-          .get("/societe/checkUsername/${soc.username}");
-      if (response['Status']) {
-        setState(() {
-          resultCheckUserSoc= true;
+          circular = false;
+          validate = true;         
         });
       } else {
         setState(() {
-          resultCheckUserSoc= false;
+          circular = false;
+          validate = false;
+          validate2=false;
+          errorText = "Username n'existe pas";
         });
-
       }
-    
+    }
   }
-  
+
+  checkUserSoc() async {
+    if (soc.username.length == 0) {
+      setState(() {
+        circular = false;
+        validate = false;
+        errorText = "Champ Username ne doit pas etre vide";
+      });
+    } else {
+      var response =
+          await networkHandler.get("/societe/checkUsername/${soc.username}");
+      if (response['Status']) {
+        setState(() {
+          circular = false;
+          validate = false;
+          errorText = "Username deja existe";
+        });
+      } else {
+        setState(() {
+          circular = false;
+          validate = true;
+          
+        });
+      }
+    }
+  }
 }
 

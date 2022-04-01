@@ -1,0 +1,4 @@
+MONGO_URI="mongodb+srv://Sattagny:sattagny@cluster0.908ax.mongodb.net/Sattagny?authSource=admin&replicaSet=atlas-11ljgp-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true"
+TOKEN_KEY=security
+API_PORT=5000
+API_URL=http://192.168.1.4:5000
