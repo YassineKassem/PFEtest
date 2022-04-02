@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pfe/welcome_etudiant/Postuler/hero_dialog_route.dart';
+import 'package:pfe/welcome_etudiant/Postuler/styles.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
-
 
 import 'NetworkHandler.dart';
 import 'model/offreStageModel.dart';
 
-
 class JobDetail extends StatelessWidget {
   final Stage stage;
 
-  
   JobDetail(this.stage);
 
   @override
@@ -23,7 +22,7 @@ class JobDetail extends StatelessWidget {
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           )),
-      height: 550,
+      height: 600,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -52,9 +51,10 @@ class JobDetail extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.1),
                           ),
                           child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage:NetworkHandler().getImage("${stage.username}"),
-                  ),
+                            radius: 20,
+                            backgroundImage:
+                                NetworkHandler().getImage("${stage.username}"),
+                          ),
                         ),
                         SizedBox(
                           width: 10,
@@ -98,8 +98,10 @@ class JobDetail extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconText(Icons.location_city_outlined, stage.localisation as String),
-                    IconText(Icons.access_time_filled_outlined, stage.duree as String),
+                    IconText(Icons.location_city_outlined,
+                        stage.localisation as String),
+                    IconText(Icons.access_time_filled_outlined,
+                        stage.duree as String),
                   ],
                 ),
                 SizedBox(
@@ -147,18 +149,89 @@ class JobDetail extends StatelessWidget {
                   height: 45,
                   width: double.maxFinite,
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          primary: Theme.of(context).primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )),
-                      onPressed: () {},
-                      child: Text('Postuler')),
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        primary: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        HeroDialogRoute(builder: (context) {
+                          return const _AddTodoPopupCard();
+                        }),
+                      );
+                    },
+                    child: Hero(
+                      tag: _heroAddTodo,
+                      child: Text('Postuler'),
+                    ),
+                  ),
                 )
               ],
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+const String _heroAddTodo = 'add-todo-hero';
+
+class _AddTodoPopupCard extends StatelessWidget {
+  const _AddTodoPopupCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Hero(
+          tag: _heroAddTodo,
+          child: Material(
+            color: Color.fromARGB(255, 67, 177, 183),
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Objet',
+                        border: InputBorder.none,
+                      ),
+                      cursorColor: Colors.white,
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 0.5,
+                    ),
+                    const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Saisir votre E-mail',
+                        border: InputBorder.none,
+                      ),
+                      cursorColor: Colors.white,
+                      maxLines: 10,
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 0.5,
+                    ),
+                    FlatButton(
+                      onPressed: () {},
+                      child: const Text('Postuler '),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
