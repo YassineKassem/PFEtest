@@ -141,4 +141,35 @@ router.route("/update").patch(middleware.checkToken, async (req, res) => {
     }
   );
 });
+
+router.route('/deleteCompetance/:index').delete(middleware.checkToken, async (req, res) => {
+  let index = req.params.index
+  dataUpdate=[]
+    Cv.find({username:req.decoded.username}, (err, rlt) => {
+      if (err) return res.json(err);  
+    for (var key in rlt) {
+        for(var i in rlt[key].Competence ){
+          dataUpdate.push(rlt[key].Competence[i])
+        }
+      }
+    dataUpdate.splice(index, 1); 
+
+    Cv.findOneAndUpdate(
+        { username: req.decoded.username },
+        {
+          $set: {     
+            Competence: dataUpdate
+          },
+        },
+        { new: true },
+        (err, result) => {
+          if (err) return res.json({ err: err });
+          if (result == null) return res.json({ data: [] });
+          else return res.json({ data: result });
+        }
+      );
+  });
+})
+
+
 module.exports = router;

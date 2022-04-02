@@ -21,7 +21,7 @@ class _MyLoginState extends State<MyLogin> {
   NetworkHandler networkHandler = NetworkHandler();
   final _formKey = GlobalKey<FormState>();
   Etudiant etd = new Etudiant(username: '', password: '');
-  Societe soc = new Societe('', '');
+  Societe soc = new Societe(username: '', password: '');
   String errorText = '';
   bool validate = false;
   bool circular = false;
@@ -191,8 +191,8 @@ class _MyLoginState extends State<MyLogin> {
                                                   } else {
                                                     
                                                     Map<String, String> data = {
-                                                      "username": soc.username,
-                                                      "password": soc.password,
+                                                      "username": soc.username as String,
+                                                      "password": soc.password as String,
                                                     };
                                                     var response =
                                                         await networkHandler.post(

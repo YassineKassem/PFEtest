@@ -88,6 +88,15 @@ class _createCVState extends State<createCV> {
     });
   }
 
+    void updateCompetance(int i) async {
+    var response = await networkHandler.delete("/cv/deleteCompetance/$i");
+    setState(() {
+     //fetchData();
+     circular = false;
+    });
+     
+  }
+
   int _currentStep = 0;
   int index = 0;
   int indexFormation = 0;
@@ -198,7 +207,7 @@ class _createCVState extends State<createCV> {
           f.add(LangueModel(nomLangue:langue[i].text,NiveauLangue:resultSlider));
       }
       return f;}}   
-  
+    
 
 
   @override
@@ -417,9 +426,21 @@ class _createCVState extends State<createCV> {
         isActive: _currentStep >= 3,
         title: Text('Competance'),
         content: Column(
+          children: [
+            ListView.separated(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemBuilder: (context, index) { 
+                  return Column(
                     children: [
-            BuildlargeTextField('Competance', DescriptionRealisation,""),
-          ],          
+                      competanceUI(index),
+                    ],
+                  );
+                 
+                },
+                separatorBuilder: (context, index) => Divider(),
+                itemCount: comp.nomCompetance!.length),
+          ],
         ),
       ),
       Step(
@@ -432,7 +453,7 @@ class _createCVState extends State<createCV> {
         title: Text('Realisation'),
         content: Column(
           children: [
-            BuildlargeTextField('Description', DescriptionRealisation,""),
+            BuildlargeTextField('Description', DescriptionRealisation,profileModel.Realisation),
           ],
         ),
       ),
@@ -692,23 +713,19 @@ class _createCVState extends State<createCV> {
       ),
     );
   }
-  stepperComp(m){
-      
-       ListView.separated(
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                itemBuilder: (context, m) {
-                  return Column(
-                    children: 
-                      [
-                        Column(children: [
+  
+  Widget competanceUI(index)
+  { 
+    return Column(
+      children: [
       Row(
         children: [
           Flexible(
-              child:BuildTextField('competance$m', competances[m],profileModel.Competence![m].nomCompetence),
+              child:profileModel.Competence!.length> index? BuildTextField('competance$index', competances[index],profileModel.Competence![index].nomCompetence):
+              BuildTextField('competance$index', competances[index],null),
                 ),
           Visibility(
-            visible: m == profileModel.Competence!.length - 1,
+            visible: index == comp.nomCompetance!.length - 1,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -723,7 +740,7 @@ class _createCVState extends State<createCV> {
             ),
           ),
           Visibility(
-            visible: m > 0,
+            visible: index > 0,
             child: SizedBox(
               width: 35,
               child: IconButton(
@@ -732,24 +749,22 @@ class _createCVState extends State<createCV> {
                   color: Colors.red,
                 ),
                 onPressed: () {
-                  removeCompetanceControl(m);
+                  if(index<=profileModel.Competence!.length)
+                  { 
+                    updateCompetance(index);
+                    setState(() {
+
+                    });
+                  }
+                  removeCompetanceControl(index);
                 },
               ),
             ),
           ),
         ],
       ),
-    ]),
-                      ],                   
-                  );
-                },
-                separatorBuilder: (context, i) => Divider(),
-                itemCount: comp.nomCompetance!.length);
-                
-     
-    
+    ]);
   }
-
 
   Widget centreInteretUI(indexci) {
     return Column(children: [

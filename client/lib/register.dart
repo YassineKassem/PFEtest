@@ -19,7 +19,7 @@ class _MyRegisterState extends State<MyRegister> {
   NetworkHandler networkHandler = NetworkHandler();
   final _formKey = GlobalKey<FormState>();
   Etudiant etd = Etudiant(username: '', password: '', email: '');
-  Societe soc = Societe('', '', '');
+  Societe soc = Societe(username: '', password: '', email: '');
   String errorText = '';
   bool validate=false;
   bool validate2=true;
@@ -362,7 +362,7 @@ class _MyRegisterState extends State<MyRegister> {
   }
 
   checkUserSoc() async {
-    if (soc.username.length == 0) {
+    if (soc.username?.length == 0) {
       setState(() {
         circular = false;
         validate = false;

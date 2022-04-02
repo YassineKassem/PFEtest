@@ -13,7 +13,7 @@ class AppBarS extends StatefulWidget {
 class AppBarSState extends State<AppBarS> {
   bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
-  CVmodel profileModel = CVmodel();
+  
 
   
    @override
