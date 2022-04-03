@@ -100,14 +100,12 @@ router.route("/PostulationByTokenOffre").get(middleware.checkToken,(req, res) =>
         console.log(id)
         const offre = await offreStage.findById(id)
         dataOffre.push(offre);
-    }
+        }
         return res.json({data:dataOffre });
       }
 
     });
   });
-  
-
 });
 
   module.exports = router;
