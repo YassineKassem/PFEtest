@@ -41,7 +41,9 @@ app.use("/offreStage", offreStageRoute);
 const favorisRoute = require("./routes/favoris");
 app.use("/favoris", favorisRoute);
 
-
+//middleware postulations
+const postulerRoute = require("./routes/postulations");
+app.use("/postulations", postulerRoute);
 
 data = {
   msg: "Welcome on DevStack Blog App development YouTube video series",

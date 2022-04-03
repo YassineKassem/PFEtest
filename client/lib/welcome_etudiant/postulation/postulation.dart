@@ -4,7 +4,19 @@ import 'package:pfe/search/widgets/search_input.dart';
 import 'package:pfe/search/widgets/search_list.dart';
 import 'package:pfe/search/widgets/search_option.dart';
 
-class Postulation extends StatelessWidget {
+import 'PostulationsList.dart';
+
+
+
+class Postulation extends StatefulWidget {
+  const Postulation({ Key? key }) : super(key: key);
+
+  @override
+  State<Postulation> createState() => _PostulationState();
+}
+
+
+class _PostulationState extends State<Postulation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +42,7 @@ class Postulation extends StatelessWidget {
             children: [
               SearchAppBar(),
               Expanded(
-                child: SearchList(),
+                child: PostulationsList(),
               )
             ],
           )
