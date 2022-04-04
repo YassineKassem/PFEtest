@@ -42,7 +42,7 @@ router.route("/checkusername/:username").get((req, res) => {
 router.route("/login").post(async(req, res) => {
 
   if (!(req.body.username && req.body.password)) {
-    return res.status(400).send("All input is required");
+    return res.status(400).json("All input is required");
   }
   const soc = await Societe.findOne({ username: req.body.username });
   if (soc && (await bcrypt.compare(req.body.password, soc.password))) {
