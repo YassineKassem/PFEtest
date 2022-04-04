@@ -6,12 +6,12 @@ class postulation{
 
   String? message;
   String? objet;
-  var offre;
-  var etudiant;
+  var offreId;
+  var etudiantId;
 
 
 
-  postulation({this.etudiant,this.offre,this.message,this.objet});
+  postulation({this.etudiantId,this.offreId,this.message,this.objet});
 
     factory postulation.fromJson(Map<String, dynamic> json) => _$postulationFromJson(json);
     Map<String, dynamic> toJson()=> _$postulationToJson(this);

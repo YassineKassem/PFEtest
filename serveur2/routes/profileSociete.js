@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
     cb(null, "./uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, req.decoded.username + ".jpg");
+    cb(null, req.decoded.societeId + ".jpg");
   },
 });
 
@@ -34,7 +34,7 @@ router
   .route("/add/image")
   .patch(middleware.checkToken, upload.single("img"), (req, res) => {
     ProfileS.findOneAndUpdate(
-      { username: req.decoded.username },
+      { societeId: req.decoded.societeId },
       {
         $set: {
           img: req.file.path,
@@ -56,6 +56,7 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
 
   const profile = ProfileS({
     username: req.decoded.username,
+    societeId: req.decoded.societeId,
     nom: req.body.nom,
     SecteurActivite: req.body.SecteurActivite,
     CodeFiscal: req.body.CodeFiscal,
@@ -78,18 +79,18 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
 // Check Profile data
 
 router.route("/checkProfile").get(middleware.checkToken, (req, res) => {
-  ProfileS.findOne({ username: req.decoded.username }, (err, result) => {
+  ProfileS.findOne({ societeId: req.decoded.societeId }, (err, result) => {
     if (err) return res.json({ err: err });
     else if (result == null) {
-      return res.json({ status: false, username: req.decoded.username });
+      return res.json({ status: false, username: req.decoded.username,societeId: req.decoded.societeId });
     } else {
-      return res.json({ status: true, username: req.decoded.username });
+      return res.json({ status: true, username: req.decoded.username,societeId: req.decoded.societeId });
     }
   });
 });
 
 router.route("/getData").get(middleware.checkToken, (req, res) => {
-  ProfileS.findOne({ username: req.decoded.username }, (err, result) => {
+  ProfileS.findOne({ societeId: req.decoded.societeId }, (err, result) => {
     if (err) return res.json({ err: err });
     if (result == null) return res.json({ data: [] });
     else return res.json({ data: result });
@@ -98,7 +99,7 @@ router.route("/getData").get(middleware.checkToken, (req, res) => {
 
 router.route("/update").patch(middleware.checkToken, async (req, res) => {
   let profile = {};
-  await ProfileS.findOne({ username: req.decoded.username }, (err, result) => {
+  await ProfileS.findOne({ societeId: req.decoded.societeId }, (err, result) => {
     if (err) {
       profile = {};
     }
@@ -107,7 +108,7 @@ router.route("/update").patch(middleware.checkToken, async (req, res) => {
     }
   });
   ProfileS.findOneAndUpdate(
-    { username: req.decoded.username },
+    { societeId: req.decoded.societeId },
     {
       $set: {     
     nom: req.body.nom ? req.body.nom : profile.nom,

@@ -16,6 +16,15 @@ router.route("/:username").get(middleware.checkToken, (req, res) => {
   });
 });
 
+router.route("/").get(middleware.checkToken, (req, res) => {
+  Societe.findOne({ _id: req.decoded.societeId }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result
+    });
+  });
+});
+
 router.route("/checkusername/:username").get((req, res) => {
   Societe.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
@@ -37,7 +46,7 @@ router.route("/login").post(async(req, res) => {
   }
   const soc = await Societe.findOne({ username: req.body.username });
   if (soc && (await bcrypt.compare(req.body.password, soc.password))) {
-    let token = jwt.sign({ username: req.body.username }, config.key, {});
+    let token = jwt.sign({ username: req.body.username,societeId: soc._id  }, config.key, {});
     res.status(200).json({
       token: token,
       msg: "success",
@@ -63,7 +72,7 @@ router.route("/register").post(async (req, res) => {
     .save()
     .then(() => {
       console.log("user registered");
-      let token = jwt.sign({ username: req.body.username }, config.key, {});
+      let token = jwt.sign({ username: req.body.username,societeId: soc._id  }, config.key, {});
       res.status(200).json({  token: token,msg: "User Successfully Registered" });
     })
     .catch((err) => {

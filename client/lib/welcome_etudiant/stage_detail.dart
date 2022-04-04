@@ -4,16 +4,42 @@ import 'package:pfe/welcome_etudiant/Postuler/hero_dialog_route.dart';
 import 'package:pfe/welcome_etudiant/Postuler/styles.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
 
-import 'NetworkHandler.dart';
-import 'model/offreStageModel.dart';
+import '../AccueilEtd.dart';
+import '../NetworkHandler.dart';
+import '../model/Etudiant.dart';
+import '../model/offreStageModel.dart';
+import '../model/postulation.dart';
 
-class JobDetail extends StatelessWidget {
-  final Stage stage;
 
-  JobDetail(this.stage);
+
+class JobDetail extends StatefulWidget {
+    final Stage stage;
+    JobDetail(this.stage);
+
+  @override
+  State<JobDetail> createState() => _JobDetailState();
+}
+
+class _JobDetailState extends State<JobDetail> {
+  
+   NetworkHandler networkHandler=NetworkHandler();
+   postulation postule = postulation();
+   TextEditingController objetControl=TextEditingController();
+   TextEditingController messageControl=TextEditingController();
+   final _formKey = GlobalKey<FormState>();
+   Etudiant etd =Etudiant();
+
+  void PostPostulation( String message,String objet) async {
+    Map<String, dynamic> data = {
+    "objet": objet,
+    "message": message,
+    };
+    var response = await networkHandler.post("/postulations/AddPostulation/${widget.stage.id}",data);
+  }
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       padding: EdgeInsets.all(25),
       decoration: BoxDecoration(
@@ -53,40 +79,27 @@ class JobDetail extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 20,
                             backgroundImage:
-                                NetworkHandler().getImage("${stage.username}"),
+                                NetworkHandler().getImage("${widget.stage.username}"),
                           ),
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
-                          stage.username as String,
+                          widget.stage.username as String,
                           style: TextStyle(
                             fontSize: 16,
                           ),
                         ),
                       ],
                     ),
-                    /*Row(
-                      children: [
-                        Icon(
-                          job.isMark
-                              ? Icons.bookmark
-                              : Icons.book_online_rounded,
-                          color: job.isMark
-                              ? Theme.of(context).primaryColor
-                              : Colors.black,
-                        ),
-                        Icon(Icons.more_horiz_outlined),
-                      ],
-                    )*/
                   ],
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  stage.nomOffre as String,
+                  widget.stage.nomOffre as String,
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -99,16 +112,16 @@ class JobDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconText(Icons.location_city_outlined,
-                        stage.localisation as String),
+                        widget.stage.localisation as String),
                     IconText(Icons.access_time_filled_outlined,
-                        stage.duree as String),
+                        widget.stage.duree as String),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
                 Text(
-                  stage.descriptionOffre as String,
+                  widget.stage.descriptionOffre as String,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -116,34 +129,6 @@ class JobDetail extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                /*...job.req
-                    .map((e) => Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          child: Row(children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 10),
-                              height: 5,
-                              width: 5,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.black),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                maxWidth: 300,
-                              ),
-                              child: Text(
-                                e,
-                                style: TextStyle(
-                                  wordSpacing: 2.5,
-                                ),
-                              ),
-                            ),
-                          ]),
-                        ))
-                    .toList(),*/
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 25),
                   height: 45,
@@ -158,7 +143,67 @@ class JobDetail extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         HeroDialogRoute(builder: (context) {
-                          return const _AddTodoPopupCard();
+                          return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Hero(
+          tag: _heroAddTodo,
+          child: Material(
+            color: Color.fromARGB(255, 67, 177, 183),
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: objetControl,
+                        decoration: InputDecoration(
+                          hintText: 'Objet',
+                          border: InputBorder.none,
+                        ),
+                        cursorColor: Colors.white,
+                      ),
+                      const Divider(
+                        color: Colors.white,
+                        thickness: 0.5,
+                      ),
+                      TextFormField(
+                        controller: messageControl,
+                        decoration: InputDecoration(
+                          hintText: 'Saisir votre Message',
+                          border: InputBorder.none,
+                        ),
+                        cursorColor: Colors.white,
+                        maxLines: 10,
+                      ),
+                      const Divider(
+                        color: Colors.white,
+                        thickness: 0.5,
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                            PostPostulation(messageControl.text,objetControl.text);
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AccueilEtd(),
+                                    ));
+                        },
+                        child: const Text('Postuler '),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
                         }),
                       );
                     },
@@ -179,61 +224,4 @@ class JobDetail extends StatelessWidget {
 
 const String _heroAddTodo = 'add-todo-hero';
 
-class _AddTodoPopupCard extends StatelessWidget {
-  const _AddTodoPopupCard({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Hero(
-          tag: _heroAddTodo,
-          child: Material(
-            color: Color.fromARGB(255, 67, 177, 183),
-            elevation: 2,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Objet',
-                        border: InputBorder.none,
-                      ),
-                      cursorColor: Colors.white,
-                    ),
-                    const Divider(
-                      color: Colors.white,
-                      thickness: 0.5,
-                    ),
-                    const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Saisir votre E-mail',
-                        border: InputBorder.none,
-                      ),
-                      cursorColor: Colors.white,
-                      maxLines: 10,
-                    ),
-                    const Divider(
-                      color: Colors.white,
-                      thickness: 0.5,
-                    ),
-                    FlatButton(
-                      onPressed: () {},
-                      child: const Text('Postuler '),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

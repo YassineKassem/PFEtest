@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math' as math; 
+import 'dart:math' as math;
+
+import 'package:pfe/welcome_societe/Screen/PostulerOffre.dart';
+
 class Dashboard extends StatefulWidget {
   @override
   _DashboardState createState() => _DashboardState();
@@ -26,48 +29,50 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "Espace,\n",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                        ),
-                                  ),
-                                  TextSpan(
-                                    text: "Société !",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                  )
-                                ],
+                
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Espace,\n",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                          ),
+                                    ),
+                                    TextSpan(
+                                      text: "Société !",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-            
-                          ],
-                        )
-                      ],
+                              
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
+
                   SizedBox(
                     height: 50.0,
                   ),
@@ -106,33 +111,38 @@ class _DashboardState extends State<Dashboard> {
                         Container(
                           child: Column(
                             children: [
-                            Container(
-                              margin: EdgeInsets.only(top:30,right:30,left:30,bottom:10),
-                              height : 120,
-                              width:300,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(28),
-                                color: Color.fromRGBO(0, 10, 56, 1)
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: SvgPicture.asset("assets/images/write.svg",
-                                    width: 70,
-                                    height: 90,)),
+                            GestureDetector(
+                              onTap:(){
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => Postuler()),);
+                    },
+                              child: Container(
+                                margin: EdgeInsets.only(top:30,right:30,left:30,bottom:10),
+                                height : 120,
+                                width:300,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(28),
+                                  color: Color.fromRGBO(0, 10, 56, 1)
+                                ),
+                                child: Stack(
+                                  children: [
                                     Positioned(
-                                      top: 15,
-                                      left: 10,
-                                      child: Text("Créer mon offre\n de stage",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 20
-                                        ),),
-                                    )
-                                ],
+                                      bottom: 0,
+                                      right: 0,
+                                      child: SvgPicture.asset("assets/images/write.svg",
+                                      width: 70,
+                                      height: 90,)),
+                                      Positioned(
+                                        top: 15,
+                                        left: 10,
+                                        child: Text("Créer mon offre\n de stage",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 20
+                                          ),),
+                                      )
+                                  ],
+                                ),
                               ),
                             ),
                             Container(

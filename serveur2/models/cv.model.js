@@ -10,6 +10,10 @@ const Cv = Schema(
       required: true,
       unique: true,
     },
+    etudiantId :{
+      type: Schema.Types.ObjectId,
+      ref: 'Etdudiant'
+    },
     nom: { type: String, default: null },
     email: { type: String, default: null},
     Prenom: { type: String, default: null },

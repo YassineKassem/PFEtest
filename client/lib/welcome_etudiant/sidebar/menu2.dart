@@ -39,7 +39,7 @@ class _NavigationDrowerState extends State<NavigationDrower> {
       circular = false;
     });
     
-    var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
+    var response2 = await networkHandler.get("/etudiant");
      setState(() {
       etd = Etudiant.fromJson(response2["data"]);
     }); 
@@ -171,7 +171,7 @@ class _NavigationDrowerState extends State<NavigationDrower> {
           ? Center(child: CircularProgressIndicator())
           :CircleAvatar(
                     radius: 20,
-                    backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
+                    backgroundImage: NetworkHandler().getImage("${profileModel.etudiantId}"),
                   ),
           ),
           Padding(

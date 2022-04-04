@@ -9,7 +9,7 @@ import '../../NetworkHandler.dart';
 import '../../model/SuperModelOffreStage.dart';
 import '../../model/offreStageModel.dart';
 import '../../model/postulation.dart';
-import '../../stage_detail.dart';
+import '../stage_detail.dart';
 import 'package:pfe/model/Etudiant.dart';
 
 
@@ -34,6 +34,7 @@ import 'package:pfe/model/Etudiant.dart';
     @override
     void initState() {
       fetchDataPostulationList();
+      fetchDataoffreList();
     }
 
 
@@ -42,12 +43,13 @@ import 'package:pfe/model/Etudiant.dart';
      ListPostulation= SuperModelPostulation.fromJson(response);
     setState(() {
       dataPostulation = ListPostulation.data!;
-      fetchDataoffreList();
+      
     });
+   
   }
 
-    void fetchDataoffreList() async {
-    var response = await networkHandler.get("/PostulationByTokenOffre");
+  void fetchDataoffreList() async {
+    var response = await networkHandler.get("/postulations/PostulationByTokenOffre");
      superModelOffre= SuperModelOffreStage.fromJson(response);
     setState(() {
       data = superModelOffre.data!;

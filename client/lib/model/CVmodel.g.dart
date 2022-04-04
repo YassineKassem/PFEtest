@@ -8,6 +8,7 @@ part of 'CVmodel.dart';
 
 CVmodel _$CVmodelFromJson(Map<String, dynamic> json) => CVmodel(
       username: json['username'] as String?,
+      etudiantId: json['etudiantId'],
       Competence: (json['Competence'] as List<dynamic>?)
           ?.map((e) => CompetanceModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -41,6 +42,7 @@ Map<String, dynamic> _$CVmodelToJson(CVmodel instance) => <String, dynamic>{
       'langue': instance.langue,
       'Ci': instance.Ci,
       'username': instance.username,
+      'etudiantId': instance.etudiantId,
       'nom': instance.nom,
       'Prenom': instance.Prenom,
       'email': instance.email,

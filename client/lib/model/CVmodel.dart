@@ -16,6 +16,7 @@ class CVmodel {
   List<CentreInteretModel>? Ci;
   
   String? username;
+  var etudiantId;
   String? nom;
   String? Prenom;
   String? email ;
@@ -26,7 +27,7 @@ class CVmodel {
   String? Profil ;
   String? Realisation ;
 
-  CVmodel({this.username,this.Competence,this.Formations,this.Stage,this.langue,
+  CVmodel({this.username,this.etudiantId,this.Competence,this.Formations,this.Stage,this.langue,
     this.nom,this.Prenom,this.email,this.Numerotel,this.Adresse,this.Codepostale
     ,this.Ville,this.Profil,this.Realisation,this.Ci}) ;
 

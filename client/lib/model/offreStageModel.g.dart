@@ -8,6 +8,8 @@ part of 'offreStageModel.dart';
 
 Stage _$StageFromJson(Map<String, dynamic> json) => Stage(
       username: json['username'] as String?,
+      societeId: json['societeId'],
+      id: json['_id'] as String?,
       nomOffre: json['nomOffre'] as String?,
       descriptionOffre: json['descriptionOffre'] as String?,
       localisation: json['localisation'] as String?,
@@ -21,7 +23,9 @@ Stage _$StageFromJson(Map<String, dynamic> json) => Stage(
     );
 
 Map<String, dynamic> _$StageToJson(Stage instance) => <String, dynamic>{
+      '_id': instance.id,
       'username': instance.username,
+      'societeId': instance.societeId,
       'nomOffre': instance.nomOffre,
       'descriptionOffre': instance.descriptionOffre,
       'localisation': instance.localisation,

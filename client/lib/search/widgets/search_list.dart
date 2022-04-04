@@ -7,7 +7,7 @@ import '../../NetworkHandler.dart';
 
 import '../../model/SuperModelOffreStage.dart';
 import '../../model/offreStageModel.dart';
-import '../../stage_detail.dart';
+import '../../welcome_etudiant/stage_detail.dart';
 
 
 

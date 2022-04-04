@@ -177,8 +177,7 @@ class _MyLoginState extends State<MyLogin> {
                                                           ),
                                                           (route) => false);
                                                     } else {
-                                                      String output = json
-                                                          .decode(response.body);
+                                                      String output = json.decode(response.body);
                                                       setState(() {
                                                         validate2=false;
                                                         validate = false;

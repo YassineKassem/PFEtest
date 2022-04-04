@@ -7,8 +7,8 @@ part of 'postulation.dart';
 // **************************************************************************
 
 postulation _$postulationFromJson(Map<String, dynamic> json) => postulation(
-      etudiant: json['etudiant'],
-      offre: json['offre'],
+      etudiantId: json['etudiantId'],
+      offreId: json['offreId'],
       message: json['message'] as String?,
       objet: json['objet'] as String?,
     );
@@ -17,6 +17,6 @@ Map<String, dynamic> _$postulationToJson(postulation instance) =>
     <String, dynamic>{
       'message': instance.message,
       'objet': instance.objet,
-      'offre': instance.offre,
-      'etudiant': instance.etudiant,
+      'offreId': instance.offreId,
+      'etudiantId': instance.etudiantId,
     };

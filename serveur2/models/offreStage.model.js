@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const offreStage = Schema({
   username: String,
+  societeId :{
+    type: Schema.Types.ObjectId,
+    ref: 'Societe'
+  },
   img: {type: String,default:""},
   nomOffre:{ type: String, default: null } , 
   descriptionOffre:{ type: String, default: null } ,

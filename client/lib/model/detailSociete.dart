@@ -5,6 +5,7 @@ part 'detailSociete.g.dart';
 class DetailSociete {
 
   String? username;
+  var societeId;
   String? nom;
   String? SecteurActivite;
   String? CodeFiscal;
@@ -13,7 +14,7 @@ class DetailSociete {
   String? CodePostal;
   int? tel;
 
-  DetailSociete({this.username,this.nom,this.SecteurActivite,
+  DetailSociete({this.username,this.societeId,this.nom,this.SecteurActivite,
   this.CodeFiscal,this.Email,this.EmailR,this.CodePostal,this.tel}) ;
 
   factory DetailSociete.fromJson(Map<String, dynamic> json) => _$DetailSocieteFromJson(json);

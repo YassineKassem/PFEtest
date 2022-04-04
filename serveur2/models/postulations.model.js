@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const postulations = Schema({
   
-    etudiant :{
+    etudiantId :{
         type: Schema.Types.ObjectId,
         ref: 'Etdudiant'
     },
-    offre :{
+    offreId :{
         type: Schema.Types.ObjectId,
         ref: 'offreStage'
     },

@@ -30,7 +30,7 @@ class _ProfileScreen extends State<ProfileScreen> {
       
     });
     
-    var response2 = await networkHandler.get("/etudiant/${profileModel.username}");
+    var response2 = await networkHandler.get("/etudiant/");
      setState(() {
       etd = Etudiant.fromJson(response2["data"]);
       circular = false;
@@ -59,7 +59,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                 Center(
                   child: CircleAvatar(
                     radius: 80,
-                    backgroundImage:NetworkHandler().getImage("${profileModel.username}"),
+                    backgroundImage:NetworkHandler().getImage("${profileModel.etudiantId}"),
                   ),
                 ),
                 SizedBox(

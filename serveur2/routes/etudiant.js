@@ -6,7 +6,7 @@ let middleware = require("../middleware");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 
-router.route("/:username").get(middleware.checkToken, (req, res) => {
+router.route("user/:username").get(middleware.checkToken, (req, res) => {
   Etudiant.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
     return res.json({
@@ -15,6 +15,16 @@ router.route("/:username").get(middleware.checkToken, (req, res) => {
     });
   });
 });
+router.route("/").get(middleware.checkToken, (req, res) => {
+  Etudiant.findOne({ _id: req.decoded.etudiantId }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result
+    });
+  });
+});
+
+
 router.route("listFavoris/:username").get(middleware.checkToken, (req, res) => {
   Etudiant.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
@@ -26,11 +36,13 @@ router.route("listFavoris/:username").get(middleware.checkToken, (req, res) => {
 });
 
 router.route("/getData").get(middleware.checkToken, (req, res) => {
-  Etudiant.findOne({ username: req.decoded.username }, (err, result) => {
-    if (err) return res.json({ err: err });
+  Etudiant.findOne({ _id: req.decoded.etudiantId }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
     if (result == null) return res.json({ data: [] });
-    else return res.json({ data: result });
-  });
+    return res.json({
+      data: result
+    });
+  })
 });
 
 router.route("/checkusername/:username").get((req, res) => {
@@ -50,11 +62,11 @@ router.route("/checkusername/:username").get((req, res) => {
 router.route("/login").post(async(req, res) => {
 
   if (!(req.body.username && req.body.password)) {
-    return res.status(400).send("All input is required");
+    return res.status(400).json("All input is required");
   }
   const etd = await Etudiant.findOne({ username: req.body.username });
   if (etd && (await bcrypt.compare(req.body.password, etd.password))) {
-    let token = jwt.sign({ username: req.body.username }, config.key, {});
+    let token = jwt.sign({  username: req.body.username,etudiantId: etd._id }, config.key, {});
     res.status(200).json({
       token: token,
       msg: "success",
@@ -81,7 +93,7 @@ router.route("/register").post(async (req, res) => {
     .save()
     .then(() => {
       console.log("user registered");
-      let token = jwt.sign({ username: req.body.username }, config.key, {});
+      let token = jwt.sign({  username: req.body.username,etudiantId: etd._id }, config.key, {});
       res.status(200).json({  token: token,msg: "User Successfully Registered" });
     })
     .catch((err) => {
@@ -107,8 +119,8 @@ router.route("/update/:username").patch(async(req, res) => {
   );
 });
 
-router.route("/delete/:username").delete((req, res) => {
-  Etudiant.findOneAndDelete({ username: req.params.username }, (err, result) => {
+router.route("/delete/:id").delete(async(req, res) => {
+  Etudiant.findOneAndDelete({ _id: req.params.id }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
     const msg = {
       msg: "User deleted",
@@ -118,9 +130,9 @@ router.route("/delete/:username").delete((req, res) => {
   });
 });
 
-router.route("/updateEtudiant/:username").patch(middleware.checkToken, async (req, res) => {
+router.route("/updateEtudiant").patch(middleware.checkToken, async (req, res) => {
   Etudiant.findOneAndUpdate(
-    { username: req.params.username },
+    {  _id: req.decoded.etudiantId },
     { $set: { email: req.body.email }},
     (err, result) => {
       if (err) return res.status(500).json({ msg: err });

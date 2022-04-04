@@ -38,7 +38,7 @@ class _EditProfile extends State<EditProfile> {
     });
 
     var response2 =
-        await networkHandler.get("/etudiant/${profileModel.username}");
+        await networkHandler.get("/etudiant/");
     setState(() {
       etd = Etudiant.fromJson(response2["data"]);
     });
@@ -129,7 +129,7 @@ class _EditProfile extends State<EditProfile> {
                               'email': emailEdit.text,
                             };
                             var responseEdit = await networkHandler.patch(
-                                "/etudiant/updateEtudiant/${profileModel.username}",
+                                "/etudiant/updateEtudiant",
                                 data);
                             if (responseEdit.statusCode == 200 ||
                                 responseEdit.statusCode == 201) {
@@ -170,7 +170,7 @@ class _EditProfile extends State<EditProfile> {
         CircleAvatar(
           radius: 80,
           backgroundImage: _imageFile == null
-              ? NetworkHandler().getImage("${profileModel.username}")
+              ? NetworkHandler().getImage("${profileModel.etudiantId}")
               : FileImage(File(_imageFile!.path)) as ImageProvider,
         ),
         Positioned(

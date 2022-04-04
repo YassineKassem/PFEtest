@@ -12,6 +12,8 @@ class NetworkHandler {
   FlutterSecureStorage storage = FlutterSecureStorage();
   Future get(String url) async {
     String token = await storage.read(key: "token");
+    print('******');
+    print(token);
     url = formater(url);
     // /user/register
     var response = await http.get(
@@ -30,6 +32,8 @@ class NetworkHandler {
 
   Future<http.Response> post(String url, Map<String, dynamic> body) async {
     String token = await storage.read(key: "token");
+      print('******');
+      print(token);
     url = formater(url);
     log.d(body);
     var response = await http.post(
@@ -42,6 +46,7 @@ class NetworkHandler {
   Future<http.StreamedResponse> patchImage(String url, String filepath) async {
     url = formater(url);
     String token = await storage.read(key: "token");
+    print(token);
     var request = http.MultipartRequest('PATCH', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath("img", filepath));
     request.headers.addAll({

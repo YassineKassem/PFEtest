@@ -9,6 +9,7 @@ part of 'detailSociete.dart';
 DetailSociete _$DetailSocieteFromJson(Map<String, dynamic> json) =>
     DetailSociete(
       username: json['username'] as String?,
+      societeId: json['societeId'],
       nom: json['nom'] as String?,
       SecteurActivite: json['SecteurActivite'] as String?,
       CodeFiscal: json['CodeFiscal'] as String?,
@@ -21,6 +22,7 @@ DetailSociete _$DetailSocieteFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$DetailSocieteToJson(DetailSociete instance) =>
     <String, dynamic>{
       'username': instance.username,
+      'societeId': instance.societeId,
       'nom': instance.nom,
       'SecteurActivite': instance.SecteurActivite,
       'CodeFiscal': instance.CodeFiscal,

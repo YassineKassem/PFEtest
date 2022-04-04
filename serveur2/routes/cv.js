@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
     cb(null, "./uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, req.decoded.username + ".jpg");
+    cb(null, req.decoded.etudiantId + ".jpg");
   },
 });
 
@@ -34,7 +34,7 @@ router
   .route("/add/image")
   .patch(middleware.checkToken, upload.single("img"), (req, res) => {
     Cv.findOneAndUpdate(
-      { username: req.decoded.username },
+      { etudiantId: req.decoded.etudiantId },
       {
         $set: {
           img: req.file.path,
@@ -56,6 +56,7 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
 
   const profile = Cv({
     username: req.decoded.username,
+    etudiantId: req.decoded.etudiantId,
     nom: req.body.nom,
     Prenom: req.body.Prenom,
     email: req.body.email,
@@ -84,18 +85,18 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
 // Check Profile data
 
 router.route("/checkProfile").get(middleware.checkToken, (req, res) => {
-  Cv.findOne({ username: req.decoded.username }, (err, result) => {
+  Cv.findOne({ etudiantId: req.decoded.etudiantId }, (err, result) => {
     if (err) return res.json({ err: err });
     else if (result == null) {
-      return res.json({ status: false, username: req.decoded.username });
+      return res.json({ status: false, username: req.decoded.username,etudiantId: req.decoded.etudiantId });
     } else {
-      return res.json({ status: true, username: req.decoded.username });
+      return res.json({ status: true, username: req.decoded.username,etudiantId: req.decoded.etudiantId });
     }
   });
 });
 
 router.route("/getData").get(middleware.checkToken, (req, res) => {
-  Cv.findOne({ username: req.decoded.username }, (err, result) => {
+  Cv.findOne({ etudiantId: req.decoded.etudiantId }, (err, result) => {
     if (err) return res.json({ err: err });
     if (result == null) return res.json({ data: [] });
     else return res.json({ data: result });
@@ -105,7 +106,7 @@ router.route("/getData").get(middleware.checkToken, (req, res) => {
 
 router.route("/update").patch(middleware.checkToken, async (req, res) => {
   let profile = {};
-  await Cv.findOne({ username: req.decoded.username }, (err, result) => {
+  await Cv.findOne({ etudiantId: req.decoded.etudiantId }, (err, result) => {
     if (err) {
       profile = {};
     }
@@ -114,7 +115,7 @@ router.route("/update").patch(middleware.checkToken, async (req, res) => {
     }
   });
   Cv.findOneAndUpdate(
-    { username: req.decoded.username },
+    { etudiantId: req.decoded.etudiantId },
     {
       $set: {     
     nom: req.body.nom ? req.body.nom : profile.nom,
@@ -145,7 +146,7 @@ router.route("/update").patch(middleware.checkToken, async (req, res) => {
 router.route('/deleteCompetance/:index').delete(middleware.checkToken, async (req, res) => {
   let index = req.params.index
   dataUpdate=[]
-    Cv.find({username:req.decoded.username}, (err, rlt) => {
+    Cv.find({etudiantId: req.decoded.etudiantId}, (err, rlt) => {
       if (err) return res.json(err);  
     for (var key in rlt) {
         for(var i in rlt[key].Competence ){
@@ -155,7 +156,7 @@ router.route('/deleteCompetance/:index').delete(middleware.checkToken, async (re
     dataUpdate.splice(index, 1); 
 
     Cv.findOneAndUpdate(
-        { username: req.decoded.username },
+        { etudiantId: req.decoded.etudiantId },
         {
           $set: {     
             Competence: dataUpdate

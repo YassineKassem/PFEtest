@@ -7,6 +7,7 @@ const multer = require("multer");
 router.route("/Add").post(middleware.checkToken, (req, res) => {
   const offre = offreStage({
     username: req.decoded.username,
+    societeId: req.decoded.societeId,
     img:`uploads/${req.decoded.username}.jpg`,
     nomOffre: req.body.nomOffre, 
     descriptionOffre: req.body.descriptionOffre, 
@@ -26,7 +27,7 @@ router.route("/Add").post(middleware.checkToken, (req, res) => {
 });
 
 router.route("/getOwnBlog").get(middleware.checkToken, (req, res) => {
-  offreStage.find({ username: req.decoded.username }, (err, result) => {
+  offreStage.find({ societeId: req.decoded.societeId }, (err, result) => {
     if (err) return res.json(err);
     return res.json({ data: result });
   });
@@ -128,7 +129,7 @@ router.route("/search2").get(async(req, res) => {
 router.route("/delete/:id").delete(middleware.checkToken, (req, res) => {
   offreStage.findOneAndDelete(
     {
-      $and: [{ username: req.decoded.username }, { _id: req.params.id }],
+      $and: [{ societeId: req.decoded.societeId }, { _id: req.params.id }],
     },
     (err, result) => {
       if (err) return res.json(err);

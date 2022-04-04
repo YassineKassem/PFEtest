@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.route("/AddFavaoris/:username/:nomOffre").patch(middleware.checkToken, async (req, res) => {
   dataUpdate=[]
-  Etudiant.find({username:req.decoded.username}, (err, rlt) => {
+  Etudiant.find({_id: req.decoded.etudiantId}, (err, rlt) => {
     if (err) return res.json(err);  
   
   for (var key in rlt) {
@@ -24,10 +24,10 @@ router.route("/AddFavaoris/:username/:nomOffre").patch(middleware.checkToken, as
       console.log("existe deja")
     }
     else
-      dataUpdate.push(doc)
+      dataUpdate.push(doc)  
   }
   Etudiant.findOneAndUpdate(
-    { username: req.decoded.username },
+    { _id: req.decoded.etudiantId },
     {
       $set: {     
         favorisList: dataUpdate
@@ -47,7 +47,7 @@ router.route("/AddFavaoris/:username/:nomOffre").patch(middleware.checkToken, as
 });
 
 router.route("/list").get(middleware.checkToken, (req, res) => {
-  Etudiant.findOne({ username: req.decoded.username }, (err, result) => {
+  Etudiant.findOne({ _id: req.decoded.etudiantId }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
     return res.json({
       data: result.favorisList,
@@ -56,38 +56,38 @@ router.route("/list").get(middleware.checkToken, (req, res) => {
   });
 });
 
-  router.route("/removeFromFavoris/:username/:nomOffre").delete(middleware.checkToken, (req, res) => {
-    dataUpdate=[]
-    Etudiant.find({username:req.decoded.username}, (err, rlt) => {
-      if (err) return res.json(err);  
-    for (var key in rlt) {
-        for(var i in rlt[key].favorisList ){
-          dataUpdate.push(rlt[key].favorisList[i])
-        }
+router.route("/removeFromFavoris/:username/:nomOffre").delete(middleware.checkToken, (req, res) => {
+  dataUpdate=[]
+  Etudiant.find({_id: req.decoded.etudiantId}, (err, rlt) => {
+    if (err) return res.json(err);  
+  for (var key in rlt) {
+      for(var i in rlt[key].favorisList ){
+        dataUpdate.push(rlt[key].favorisList[i])
       }
-
-    
-    for(let i=0; i<dataUpdate.length;i++)
-    {
-      if(dataUpdate[i].username == req.params.username && dataUpdate[i].nomOffre == req.params.nomOffre)
-        dataUpdate.splice(i, 1); 
     }
 
-    Etudiant.findOneAndUpdate(
-        { username: req.decoded.username },
-        {
-          $set: {     
-            favorisList: dataUpdate
-          },
+  
+  for(let i=0; i<dataUpdate.length;i++)
+  {
+    if(dataUpdate[i].username == req.params.username && dataUpdate[i].nomOffre == req.params.nomOffre)
+      dataUpdate.splice(i, 1); 
+  }
+
+  Etudiant.findOneAndUpdate(
+      { _id: req.decoded.etudiantId},
+      {
+        $set: {     
+          favorisList: dataUpdate
         },
-        { new: true },
-        (err, result) => {
-          if (err) return res.json({ err: err });
-          if (result == null) return res.json({ data: [] });
-          else return res.json({ data: result });
-        }
-      );
-  });
+      },
+      { new: true },
+      (err, result) => {
+        if (err) return res.json({ err: err });
+        if (result == null) return res.json({ data: [] });
+        else return res.json({ data: result });
+      }
+    );
+});
 });
 
 

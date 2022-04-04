@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 
 const profileSociete = Schema(
 
-  {
+  { 
+    societeId :{
+      type: Schema.Types.ObjectId,
+      ref: 'Societe'
+    },
     username: {
       type: String,
       required: true,

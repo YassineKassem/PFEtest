@@ -92,7 +92,7 @@ class HomeAppBarState extends State<HomeAppBar> {
               ),
               CircleAvatar(
                 radius: 20,
-                backgroundImage:NetworkHandler().getImage("${profileModel.username}"),
+                backgroundImage:NetworkHandler().getImage("${profileModel.etudiantId}"),
               )
             ],
           )

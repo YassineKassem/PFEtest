@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pfe/stage_detail.dart';
+import 'package:pfe/welcome_etudiant/stage_detail.dart';
 import 'package:pfe/welcome_etudiant/stage_item.dart';
 
 import '../NetworkHandler.dart';
