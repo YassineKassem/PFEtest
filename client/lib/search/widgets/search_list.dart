@@ -38,6 +38,7 @@ import '../../welcome_etudiant/stage_detail.dart';
     var response2 = await networkHandler.get("/offreStage/search1/$S");
     
     superModelOffre2= SuperModelOffreStage.fromJson(response2);
+    if (!mounted) return;
     setState(() {
       dataSearch = superModelOffre2.data!;
     });
@@ -47,6 +48,7 @@ import '../../welcome_etudiant/stage_detail.dart';
     void fetchData() async {
     var response = await networkHandler.get("/offreStage/getAllOffre");
     superModelOffre= SuperModelOffreStage.fromJson(response);
+    if (!mounted) return;
     setState(() {
       data = superModelOffre.data!;
       Nodata="";
@@ -69,7 +71,9 @@ import '../../welcome_etudiant/stage_detail.dart';
               controller : controlSearch,
               onChanged: (value)async{
                 if(!value.isEmpty)
-                {setState(() {
+                {
+                  if (!mounted) return;
+                  setState(() {
                   Nodata="";
                   Search=value;
                                    
@@ -77,10 +81,12 @@ import '../../welcome_etudiant/stage_detail.dart';
                 await fetchDataSearch(Search);
                 if(dataSearch.length==0)
                 {
+                if (!mounted) return;
                 setState(() {
                   Nodata="Aucun resultat trouver";
                 });
                 }else{
+                  if (!mounted) return;
                   setState(() {
                   Nodata="";
                 });
@@ -88,6 +94,7 @@ import '../../welcome_etudiant/stage_detail.dart';
                 }
                 else{
                   fetchData();
+                if (!mounted) return;
                 setState(() {
                   Search="";
                   
