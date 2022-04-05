@@ -103,10 +103,10 @@ router.route("/register").post(async (req, res) => {
 
 
 
-router.route("/update/:username").patch(async(req, res) => {
-  console.log(req.params.username);
+router.route("/updatePwd").patch(middleware.checkToken,async(req, res) => {
+  console.log(req.decoded.etudiantId);
   Etudiant.findOneAndUpdate(
-    { username: req.params.username },
+    { _id: req.decoded.etudiantId },
     { $set: { password: await bcrypt.hash(req.body.password, 10)} },
     (err, result) => {
       if (err) return res.status(500).json({ msg: err });

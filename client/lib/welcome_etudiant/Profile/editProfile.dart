@@ -8,6 +8,7 @@ import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
 import '../../NetworkHandler.dart';
 import '../../model/CVmodel.dart';
 import '../../model/Etudiant.dart';
+import '../../search/widgets/search_app_bar.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -47,120 +48,117 @@ class _EditProfile extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.green,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      resizeToAvoidBottomInset : false,
       body: circular
           ? Center(child: CircularProgressIndicator())
-          : Container(
-              padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-              child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: ListView(
-                  children: [
-                    Text(
-                      "Modifier Profile",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: Stack(
-                        children: [
-                          Center(
-                            child: Stack(children: [
-                              imageProfile(),
-                            ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 35,
-                    ),
-                    buildTextField("E-mail", "${etd.email}", false, emailEdit),
-                    SizedBox(
-                      height: 35,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          : Column(
+            children: [
+          SearchAppBar(),
+          SizedBox(
+          height: 50,
+          ),
+              Container(
+                  padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+                  child: GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: ListView(
+                      shrinkWrap: true,
                       children: [
-                        OutlineButton(
-                          padding: EdgeInsets.symmetric(horizontal: 35),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text("Annuler",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  letterSpacing: 2.2,
-                                  color: Colors.black)),
+                        Text(
+                          "Modifier Profile",
+                          style:
+                              TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                         ),
-                        RaisedButton(
-                          onPressed: () async {
-                            if (_imageFile?.path != null) {
-                              var imageResponse =
-                                  await networkHandler.patchImage(
-                                      "/cv/add/image", _imageFile!.path);
-                              if (imageResponse.statusCode == 200) {
-                                print('true');
-                                setState(() {
-                                  circular = false;
-                                });
-                              }
-                            }
-                            Map<String, dynamic> data = {
-                              'email': emailEdit.text,
-                            };
-                            var responseEdit = await networkHandler.patch(
-                                "/etudiant/updateEtudiant",
-                                data);
-                            if (responseEdit.statusCode == 200 ||
-                                responseEdit.statusCode == 201) {
-                              print("ok");
-                              //refreshpage
-                              Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => AccueilEtd()),
-                              (Route<dynamic> route) => false,
-                              );
-                            }
-                          },
-                          color: Colors.grey,
-                          padding: EdgeInsets.symmetric(horizontal: 35),
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Text(
-                            "Enregistrer",
-                            style: TextStyle(
-                                fontSize: 14,
-                                letterSpacing: 2.2,
-                                color: Colors.white),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Center(
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: Stack(children: [
+                                  imageProfile(),
+                                ]),
+                              ),
+                            ],
                           ),
+                        ),
+                        SizedBox(
+                          height: 35,
+                        ),
+                        buildTextField("E-mail", "${etd.email}", false, emailEdit),
+                        SizedBox(
+                          height: 35,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OutlineButton(
+                              padding: EdgeInsets.symmetric(horizontal: 35),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Annuler",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      letterSpacing: 2.2,
+                                      color: Colors.black)),
+                            ),
+                            RaisedButton(
+                              onPressed: () async {
+                                if (_imageFile?.path != null) {
+                                  var imageResponse =
+                                      await networkHandler.patchImage(
+                                          "/cv/add/image", _imageFile!.path);
+                                  if (imageResponse.statusCode == 200) {
+                                    print('true');
+                                    setState(() {
+                                      circular = false;
+                                    });
+                                  }
+                                }
+                                Map<String, dynamic> data = {
+                                  'email': emailEdit.text,
+                                };
+                                var responseEdit = await networkHandler.patch(
+                                    "/etudiant/updateEtudiant",
+                                    data);
+                                if (responseEdit.statusCode == 200 ||
+                                    responseEdit.statusCode == 201) {
+                                  print("ok");
+                                  //refreshpage
+                                  Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => AccueilEtd()),
+                                  (Route<dynamic> route) => false,
+                                  );
+                                }
+                              },
+                              color: Colors.grey,
+                              padding: EdgeInsets.symmetric(horizontal: 35),
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                "Enregistrer",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    letterSpacing: 2.2,
+                                    color: Colors.white),
+                              ),
+                            )
+                          ],
                         )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
+            ],
+          ),
     );
   }
 
