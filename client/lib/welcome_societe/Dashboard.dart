@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
-import 'package:pfe/welcome_societe/Screen/PostulerOffre.dart';
+import 'package:pfe/welcome_societe/Screen/CreeOffre.dart';
 import 'package:pfe/welcome_societe/Screen/consulterStagiaire.dart';
 import 'package:pfe/welcome_societe/Screen/listStgiaires.dart';
 
@@ -113,7 +113,7 @@ class _DashboardState extends State<Dashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Postuler()),
+                                      builder: (context) => CreeOffre()),
                                 );
                               },
                               child: Container(
@@ -212,7 +212,7 @@ class _DashboardState extends State<Dashboard> {
                                     top: 15,
                                     left: 10,
                                     child: Text(
-                                      "Consulter les stagiaires\n pour mes stage",
+                                      "Consulter les stagiaires\n pour mes stages",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,

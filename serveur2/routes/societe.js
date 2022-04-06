@@ -82,10 +82,10 @@ router.route("/register").post(async (req, res) => {
 
 
 
-router.route("/update/:username").patch(async(req, res) => {
-  console.log(req.params.username);
+router.route("/updatePwd").patch(middleware.checkToken,async(req, res) => {
+  console.log(req.decoded.societeId);
   Societe.findOneAndUpdate(
-    { username: req.params.username },
+    { _id: req.decoded.societeId },
     { $set: { password: await bcrypt.hash(req.body.password, 10)} },
     (err, result) => {
       if (err) return res.status(500).json({ msg: err });
@@ -110,28 +110,16 @@ router.route("/delete/:username").delete((req, res) => {
 });
 
 router.route("/updateSociete").patch(middleware.checkToken, async (req, res) => {
-  let profile = {};
-  await Societe.findOne({ password: req.decoded.password }, (err, result) => {
-    if (err) {
-      profile = {};
-    }
-    if (result != null) {
-      profile = result;
-    }
-  });
   Societe.findOneAndUpdate(
-    { password:req.decoded.password },
-    {
-      $set: {     
-    username: req.body.username ? req.body.username : profile.username,
-    email: req.body.email ? req.body.email :profile.email ,
-      },
-    },
-    { new: true },
+    {  _id: req.decoded.societeId },
+    { $set: { email: req.body.email }},
     (err, result) => {
-      if (err) return res.json({ err: err });
-      if (result == null) return res.json({ data: [] });
-      else return res.json({ data: result });
+      if (err) return res.status(500).json({ msg: err });
+      const msg = {
+        msg: "profile successfully updated",
+        email: req.body.email
+      };
+      return res.json(msg);
     }
   );
 });

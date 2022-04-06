@@ -6,14 +6,14 @@ import '../../model/offreStageModel.dart';
 import '../../search/widgets/search_app_bar.dart';
 import '../kConst.dart';
 
-class Postuler extends StatefulWidget {
-  const Postuler({Key? key}) : super(key: key);
+class CreeOffre extends StatefulWidget {
+  const CreeOffre({Key? key}) : super(key: key);
 
   @override
-  State<Postuler> createState() => _PostulerState();
+  State<CreeOffre> createState() => _CreeOffreState();
 }
 
-class _PostulerState extends State<Postuler> {
+class _CreeOffreState extends State<CreeOffre> {
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
   NetworkHandler networkHandler = NetworkHandler();
   TextEditingController NomOffre = TextEditingController();

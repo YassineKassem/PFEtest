@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../NetworkHandler.dart';
 import '../model/CVmodel.dart';
+import '../model/detailSociete.dart';
 
 class AppBarS extends StatefulWidget {
   const AppBarS({ Key? key }) : super(key: key);
@@ -13,8 +14,21 @@ class AppBarS extends StatefulWidget {
 class AppBarSState extends State<AppBarS> {
   bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
-  
+  DetailSociete profileModel = DetailSociete();
+  @override
+  void initState() {
+    super.initState();
 
+    fetchData();
+  }
+
+  void fetchData() async {
+    var response = await networkHandler.get("/profileSociete/getData");
+    setState(() {
+      profileModel = DetailSociete.fromJson(response["data"]);
+      circular = false;
+    });
+  }
   
    @override
   Widget build(BuildContext context) {
@@ -49,9 +63,10 @@ class AppBarSState extends State<AppBarS> {
           ),
           Row(
             children: [
-              CircleAvatar(
+              circular? Center(child: CircularProgressIndicator())
+              :CircleAvatar(
                 radius: 20,
-                //backgroundImage:NetworkHandler().getImage("assets/images/avatar.png"),
+                backgroundImage:NetworkHandler().getImage("${profileModel.societeId}"),
               )
             ],
           )
