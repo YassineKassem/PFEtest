@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
 import 'package:pfe/welcome_societe/Screen/CreeOffre.dart';
-import 'package:pfe/welcome_societe/Screen/consulterStagiaire.dart';
+import 'package:pfe/welcome_societe/Screen/ConsulterOffre.dart';
 import 'package:pfe/welcome_societe/Screen/listStgiaires.dart';
 
 class Dashboard extends StatefulWidget {
@@ -154,7 +154,7 @@ class _DashboardState extends State<Dashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => listStagiaires()),
+                                      builder: (context) => ConsulterOffre()),
                                 );
                               },
                               child: Container(

@@ -39,8 +39,7 @@ class _createCVState extends State<createCV> {
   final ImagePicker _picker = ImagePicker();
   CompetanceModel CompetanceM=CompetanceModel();
   List<CompetanceModel> complist=[];
-
-
+  
 
   @override
   void initState() {
@@ -78,6 +77,7 @@ class _createCVState extends State<createCV> {
     stg.DescriptionS = List<String>.empty(growable: true);
     stg.DescriptionS!.add("");
     fetchData(); 
+    
   }
 
   void fetchData() async {
@@ -109,35 +109,35 @@ class _createCVState extends State<createCV> {
 
   List<double> _currentSliderValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  final Nom = TextEditingController();
-  final Prenom = TextEditingController();
-  final Adressemail = TextEditingController();
-  final Numerotel = TextEditingController();
-  final Adresse = TextEditingController();
-  final Codepostale = TextEditingController();
-  final Ville = TextEditingController();
+  TextEditingController Nom = TextEditingController();
+  TextEditingController Prenom = TextEditingController();
+  TextEditingController Adressemail = TextEditingController();
+  TextEditingController Numerotel = TextEditingController();
+  TextEditingController Adresse = TextEditingController();
+  TextEditingController Codepostale = TextEditingController();
+  TextEditingController Ville = TextEditingController();
 
-  final Formation = List.generate(100, (i) => TextEditingController());
-  final EtablissementF = List.generate(100, (i) => TextEditingController());
-  final VilleF = List.generate(100, (i) => TextEditingController());
-  final DatedebutF = List.generate(100, (i) => TextEditingController());
-  final DatefinF = List.generate(100, (i) => TextEditingController());
-  final DescriptionF = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> Formation = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> EtablissementF = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> VilleF = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> DatedebutF = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> DatefinF = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> DescriptionF = List.generate(100, (i) => TextEditingController());
 
-  final DescriptionP = TextEditingController();
+  TextEditingController DescriptionP = TextEditingController();
 
-  final DescriptionRealisation = TextEditingController();
+  TextEditingController DescriptionRealisation = TextEditingController();
 
-  final competances = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> competances = List.generate(100, (i) => TextEditingController());
 
-  final langue = List.generate(10, (i) => TextEditingController());
-  final centreInteret = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> langue = List.generate(10, (i) => TextEditingController());
+  List<TextEditingController> centreInteret = List.generate(100, (i) => TextEditingController());
 
-  final nomSociete = List.generate(100, (i) => TextEditingController());
-  final DatedebutS = List.generate(100, (i) => TextEditingController());
-  final DatefinS = List.generate(100, (i) => TextEditingController());
-  final DescriptionS = List.generate(100, (i) => TextEditingController());
-
+  List<TextEditingController> nomSociete = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> DatedebutS = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> DatefinS = List.generate(100, (i) => TextEditingController());
+  List<TextEditingController> DescriptionS = List.generate(100, (i) => TextEditingController());
+  
   
   getstage(){
      List<StageModel> f=[];
@@ -207,6 +207,32 @@ class _createCVState extends State<createCV> {
           f.add(LangueModel(nomLangue:langue[i].text,NiveauLangue:resultSlider));
       }
       return f;}}   
+
+    void updateData()async{
+          Map<String, dynamic> data = {
+                                "nom": Nom.text,
+                                'Prenom': Prenom.text,
+                                'email': Adressemail.text,
+                                "Numerotel": int.parse(Numerotel.text),
+                                'Adresse': Adresse.text,
+                                'Codepostale': Codepostale.text,
+                                'Ville': Ville.text,
+                                'Profil':DescriptionP.text,
+                                'Realisation':DescriptionRealisation.text,
+                                'Formation': getformation(),
+                                'Competence': getcompetances(),
+                                'Stage': getstage(),
+                                'Ci': getinteret(),
+                                'langue': getlangue()
+                            };
+          var responseEdit = await networkHandler.patch("/cv/update",data);
+          if (responseEdit.statusCode == 200 ||responseEdit.statusCode == 201) {
+            print('updated succes');
+            }
+          setState(() {
+          circular = false;
+          });
+      }
     
 
 
@@ -258,32 +284,7 @@ class _createCVState extends State<createCV> {
                   });
                   if (globalkey.currentState!.validate()) {
                    // Navigator.pushNamed(context, '/AccueilEtd');
-                   Map<String, dynamic> data = {
-                                "nom": Nom.text,
-                                'Prenom': Prenom.text,
-                                'email': Adressemail.text,
-                                "Numerotel": int.parse(Numerotel.text),
-                                'Adresse': Adresse.text,
-                                'Codepostale': Codepostale.text,
-                                'Ville': Ville.text,
-                                'Profil':DescriptionP.text,
-                                'Realisation':DescriptionRealisation.text,
-                                'Formation': getformation(),
-                                'Competence': getcompetances(),
-                                'Stage': getstage(),
-                                'Ci': getinteret(),
-                                'langue': getlangue()
-                            };
-                    var responseEdit = await networkHandler.patch(
-                      "/cv/update",
-                      data);
-                      if (responseEdit.statusCode == 200 ||
-                      responseEdit.statusCode == 201) {
-                        print('updated succes');
-                      }
-                      setState(() {
-                        circular = false;
-                      });
+                       updateData();
                      
                   } else {
                       print('no');
@@ -623,7 +624,11 @@ class _createCVState extends State<createCV> {
         children: [
           Text(titre),
           TextFormField(
-            controller: c..text=value as String,
+            
+            initialValue: value,
+            onChanged: (text){
+              c.text=text;
+            },
             decoration: InputDecoration(
               fillColor: Colors.white10, filled: true,
               border: OutlineInputBorder(),
@@ -633,7 +638,7 @@ class _createCVState extends State<createCV> {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
               }
-              return null;
+              
             },
           ),
         ],
@@ -649,7 +654,11 @@ class _createCVState extends State<createCV> {
         children: [
           Text(titre),
           TextFormField(
-            controller: c..text=value as String,
+
+            initialValue: value,
+            onChanged: (text){
+              c.text=text;
+            },
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               isDense: true, // Added this
@@ -1121,7 +1130,7 @@ bool isNumeric(String str) {
 
     // fullName
     final String NPChamp = '${Nom.text} ${Prenom.text}\r\n\r\n';
-    final Size contentSizeNP = contentFont.measureString(NPChamp);
+   
     PdfTextElement(
             text: NPChamp.toUpperCase(),
             brush: PdfSolidBrush(PdfColor(0, 204, 204)),
@@ -1146,7 +1155,7 @@ bool isNumeric(String str) {
             bounds: Rect.fromLTWH(
                 120, NPsize, pageSize.width - 150, pageSize.height - 120));
     final DetailPersonnelsize = NPsize + DetailPersonnel.length - 10;
-
+    final Size contentSize = contentFont.measureString(NPChamp+DetailPersonnel);
     // profil
     final String ProfilChamp = '${DescriptionP.text}\r\n\r\n';
     PdfTextElement(
@@ -1155,9 +1164,9 @@ bool isNumeric(String str) {
             font: font)
         .draw(
             page: page,
-            bounds: Rect.fromLTWH(120, DetailPersonnelsize,
+            bounds: Rect.fromLTWH(120, /*DetailPersonnelsize +30*/140,
                 pageSize.width - 150, pageSize.height - 120));
-    final profilSize = ProfilChamp.length + DetailPersonnelsize - 20;
+    final profilSize = ProfilChamp.length + DetailPersonnelsize -20;
 
     //initialisation variable
     String CIChamp2 = '';
@@ -1182,7 +1191,7 @@ bool isNumeric(String str) {
               font: PdfStandardFont(PdfFontFamily.courier, 15))
           .draw(
               page: page,
-              bounds: Rect.fromLTWH(120, profilSize, pageSize.width - 150,
+              bounds: Rect.fromLTWH(120, /*profilSize*/170, pageSize.width - 150,
                   pageSize.height - 120));
       for (int i = 0; i < Formation.length; i++) {
         if (Formation[i].text != '')
