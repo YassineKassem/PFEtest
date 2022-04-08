@@ -59,6 +59,25 @@ router.route("/PostulationByOffre/:idOffre").get( (req, res) => {
   });
 });
 
+router.route("/getEtudiantOffre/:idOffre").get( (req, res) => {
+  
+  postuler.find({ offreId: req.params.idOffre}, async(err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    else{
+      var etudiantList=[]
+      for(const doc of result){
+        console.log(doc)
+      var id =doc.etudiantId
+      console.log(id)
+      const etd = await Etudiant.findOne(id)
+      etudiantList.push(etd)
+
+    }
+    return res.json({data:etudiantList });
+    }
+  });
+});
+
 router.route("/PostulationByEtd/:idEtd").get( (req, res) => {
 
   postuler.find({ etudiantId: req.params.idEtd}, (err, result) => {

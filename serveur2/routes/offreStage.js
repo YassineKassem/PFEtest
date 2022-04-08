@@ -26,7 +26,7 @@ router.route("/Add").post(middleware.checkToken, (req, res) => {
     });
 });
 
-router.route("/getOwnBlog").get(middleware.checkToken, (req, res) => {
+router.route("/getOwnOffre").get(middleware.checkToken, (req, res) => {
   offreStage.find({ societeId: req.decoded.societeId }, (err, result) => {
     if (err) return res.json(err);
     return res.json({ data: result });

@@ -6,7 +6,7 @@ import 'dart:math' as math;
 
 import 'package:pfe/welcome_societe/Screen/CreeOffre.dart';
 import 'package:pfe/welcome_societe/Screen/ConsulterOffre.dart';
-import 'package:pfe/welcome_societe/Screen/listStgiaires.dart';
+import 'package:pfe/welcome_societe/widgets/listStgiaires.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(255, 215, 168, 86),
+      color: const Color.fromARGB(255, 215, 168, 86),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -27,11 +27,11 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
                     ),
                     child: Column(
@@ -71,7 +71,7 @@ class _DashboardState extends State<Dashboard> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50.0,
                   ),
                   Container(
@@ -79,25 +79,25 @@ class _DashboardState extends State<Dashboard> {
                     constraints: BoxConstraints(
                       minHeight: MediaQuery.of(context).size.height - 200.0,
                     ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
+                        topLeft:  Radius.circular(30.0),
+                        topRight:  Radius.circular(30.0),
                       ),
                       color: Color.fromRGBO(245, 247, 249, 1),
                     ),
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 24.0,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
+                        const Padding(
+                          padding:  EdgeInsets.symmetric(
                             horizontal: 24.0,
                           ),
-                          child: Text(
+                          child:  Text(
                             "Mes opérations",
                             style: TextStyle(
                               color: Color.fromRGBO(19, 22, 33, 1),
@@ -105,7 +105,7 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 7.0),
+                        const SizedBox(height: 7.0),
                         Container(
                           child: Column(children: [
                             GestureDetector(
@@ -113,17 +113,17 @@ class _DashboardState extends State<Dashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CreeOffre()),
+                                      builder: (context) => const CreeOffre()),
                                 );
                               },
                               child: Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                     top: 30, right: 30, left: 30, bottom: 10),
                                 height: 120,
                                 width: 300,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color: Color.fromRGBO(0, 10, 56, 1)),
+                                    color: const Color.fromRGBO(0, 10, 56, 1)),
                                 child: Stack(
                                   children: [
                                     Positioned(
@@ -134,10 +134,10 @@ class _DashboardState extends State<Dashboard> {
                                           width: 70,
                                           height: 90,
                                         )),
-                                    Positioned(
+                                    const Positioned(
                                       top: 15,
                                       left: 10,
-                                      child: Text(
+                                      child:  Text(
                                         "Créer mon offre\n de stage",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -158,13 +158,13 @@ class _DashboardState extends State<Dashboard> {
                                 );
                               },
                               child: Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                     top: 30, right: 30, left: 30, bottom: 10),
                                 height: 120,
                                 width: 300,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color: Color.fromARGB(255, 127, 60, 106)),
+                                    color: const Color.fromARGB(255, 127, 60, 106)),
                                 child: Stack(
                                   children: [
                                     Transform(
@@ -175,7 +175,7 @@ class _DashboardState extends State<Dashboard> {
                                           width: 100,
                                           height: 100,
                                         )),
-                                    Positioned(
+                                    const Positioned(
                                       top: 25,
                                       right: 50,
                                       child: Text(
@@ -191,7 +191,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                   top: 30, right: 30, left: 30, bottom: 10),
                               height: 120,
                               width: 300,
@@ -208,7 +208,7 @@ class _DashboardState extends State<Dashboard> {
                                         width: 70,
                                         height: 90,
                                       )),
-                                  Positioned(
+                                  const Positioned(
                                     top: 15,
                                     left: 10,
                                     child: Text(

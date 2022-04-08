@@ -2,14 +2,20 @@ import 'package:animator/animator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
-import 'package:pfe/welcome_societe/models/offre.dart';
-
+import '../../NetworkHandler.dart';
+import '../../model/offreStageModel.dart';
 import '../Screen/CreeOffre.dart';
 
-class OffreItem extends StatelessWidget {
-  final offre Offre;
-  final bool showTime;
-  OffreItem(this.Offre, {this.showTime = true});
+
+class OffreItem extends StatefulWidget {
+  final Stage stage;
+  OffreItem(this.stage);
+
+  @override
+  State<OffreItem> createState() => _OffreItemState();
+}
+
+class _OffreItemState extends State<OffreItem> {
 
   @override
   Widget build(BuildContext context) {
@@ -24,41 +30,40 @@ class OffreItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    height: 40,
-                    width: 40,
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.1),
+              GestureDetector(
+                onTap: () => {
+                  
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      height: 40,
+                      width: 40,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                    child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage:NetworkHandler().getImage("${widget.stage.societeId}"),
+                  ),
                     ),
-                    child: Image.asset(Offre.logoUrl),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    Offre.company,
-                    style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      widget.stage.username as String,
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
               const PopUpMen(
                 menuList: [
-                  PopupMenuItem(
-                      child: ListTile(
-                        title: Text("Détails"),
-                        leading: Icon(
-                          CupertinoIcons.doc_append,
-                        ),
-                      ),
-                      value: 0),
-                  PopupMenuDivider(),
                   PopupMenuItem(
                       child: ListTile(
                         title: Text("Modifier"),
@@ -66,7 +71,7 @@ class OffreItem extends StatelessWidget {
                           CupertinoIcons.pencil_ellipsis_rectangle,
                         ),
                       ),
-                      value: 1),
+                      value: 0),
                   PopupMenuDivider(),
                   PopupMenuItem(
                       child: ListTile(
@@ -79,18 +84,17 @@ class OffreItem extends StatelessWidget {
                           color: Colors.red,
                         ),
                       ),
-                      value: 2),
+                      value: 1),
                 ],
               ),
-              //Icon(Offre.isMark? Icons.bookmark : Icons.bookmark_outline_outlined,
-              //color: Offre.isMark? Theme.of(context).primaryColor: Colors.black,)
+
             ],
           ),
           const SizedBox(
             height: 15,
           ),
           Text(
-            Offre.title,
+            widget.stage.nomOffre as String,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(
@@ -99,8 +103,8 @@ class OffreItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconText(Icons.location_on_outlined, Offre.location),
-              if (showTime) IconText(Icons.access_time_outlined, Offre.time),
+              IconText(Icons.location_on_outlined, widget.stage.localisation as String),
+              IconText(Icons.access_time_outlined, widget.stage.duree as String),
             ],
           )
         ],
@@ -108,6 +112,7 @@ class OffreItem extends StatelessWidget {
     );
   }
 }
+
 
 class PopUpMen extends StatelessWidget {
   final List<PopupMenuEntry> menuList;
