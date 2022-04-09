@@ -79,7 +79,7 @@ class _JobDetailState extends State<JobDetail> {
                           child: CircleAvatar(
                             radius: 20,
                             backgroundImage:
-                                NetworkHandler().getImage("${widget.stage.username}"),
+                                NetworkHandler().getImage("${widget.stage.societeId}"),
                           ),
                         ),
                         SizedBox(

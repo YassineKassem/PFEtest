@@ -4,6 +4,7 @@ import '../../NetworkHandler.dart';
 import '../../model/Etudiant.dart';
 import '../../model/SuperModelEtudiant.dart';
 import '../../model/offreStageModel.dart';
+import 'StagiaireDetail.dart';
 import 'itemStagiaire.dart';
 
 class listStagiaires extends StatefulWidget {
@@ -54,11 +55,11 @@ class _listStagiairesState extends State<listStagiaires> {
           ),         
           itemBuilder: (context, index) => GestureDetector(
               onTap: () {
-                //showModalBottomSheet(
-                 //   backgroundColor: Colors.transparent,
-                 //   isScrollControlled: true,
-                  //  context: context,
-                  //  builder: (context) => offreDetailSoc(offreList[index]));
+                showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) => StagiaireDetail(etudiantList[index],widget.stage));
               },
               child: itemStagiaire(etudiantList[index])),
           

@@ -248,7 +248,7 @@ class _MenuState extends State<Menu> {
 
   Widget bloclogoutPortrait() {
     return Container(
-      padding: EdgeInsets.only(top: 290, left: 15),
+      padding: EdgeInsets.only(top: 230, left: 15),
       child: GestureDetector(
         onTap: logout,
         child: Row(

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const offreStage = require("../models/offreStage.model")
+const postuler = require("../models/postulations.model")
 const middleware = require("../middleware");
 const multer = require("multer");
 
@@ -131,13 +132,14 @@ router.route("/delete/:id").delete(middleware.checkToken, (req, res) => {
     {
       $and: [{ societeId: req.decoded.societeId }, { _id: req.params.id }],
     },
-    (err, result) => {
+     async(err, result) => {
       if (err) return res.json(err);
-      else if (result) {
-        console.log(result);
-        return res.json("Offre deleted");
+      else if (result){
+        await postuler.deleteMany({offreId: req.params.id})
+        return res.json("offre et ses postulation correspondant supprimer");
+
       }
-      return res.json("offre not deleted");
+      return res.json("offre supprimer");
     }
   );
 });

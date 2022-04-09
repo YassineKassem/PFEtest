@@ -10,12 +10,21 @@ import '../Screen/CreeOffre.dart';
 class OffreItem extends StatefulWidget {
   final Stage stage;
   OffreItem(this.stage);
+ 
 
   @override
   State<OffreItem> createState() => _OffreItemState();
 }
 
 class _OffreItemState extends State<OffreItem> {
+   NetworkHandler networkHandler=NetworkHandler();
+   
+  void SupprimerOffre()async{
+   var response = await networkHandler.delete("/offreStage/delete/${widget.stage.id}");
+    if (response.statusCode ==200 ||response.statusCode ==201){
+      print("offre supprimer");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +93,8 @@ class _OffreItemState extends State<OffreItem> {
                           color: Colors.red,
                         ),
                       ),
-                      value: 1),
+                      value: 1,
+                      ),
                 ],
               ),
 
@@ -130,11 +140,6 @@ class PopUpMen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => CreeOffre()),
           );
         } else if (result == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreeOffre()),
-          );
-        } else {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CreeOffre()),

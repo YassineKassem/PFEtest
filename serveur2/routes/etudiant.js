@@ -1,5 +1,6 @@
 const express = require("express");
 const Etudiant = require("../models/etudiants.model");
+const Cv = require("../models/cv.model");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 let middleware = require("../middleware");
@@ -120,13 +121,16 @@ router.route("/updatePwd").patch(middleware.checkToken,async(req, res) => {
 });
 
 router.route("/delete/:id").delete(async(req, res) => {
-  Etudiant.findOneAndDelete({ _id: req.params.id }, (err, result) => {
+  Etudiant.findOneAndDelete({ _id: req.params.id },async (err, result) => {
     if (err) return res.status(500).json({ msg: err });
+    else if (result){
+    await Cv.findOneAndDelete({etudiantId: req.params.id})
     const msg = {
-      msg: "User deleted",
+      msg: "User and his CV deleted",
       username: req.params.username,
     };
     return res.json(msg);
+    }
   });
 });
 

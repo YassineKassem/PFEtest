@@ -126,4 +126,27 @@ router.route("/PostulationByTokenOffre").get(middleware.checkToken,(req, res) =>
   });
 });
 
+router.route("/delete/:idPostulation").delete((req, res) => {
+  postuler.findOneAndDelete(
+    {
+       _id: req.params.idPostulation 
+    },
+     async(err, result) => {
+      if (err) return res.json(err);
+      return res.json("postulation supprimer");
+      }
+
+  );
+});
+
+router.route("/PostulationByEtdAndOffre/:idEtd/:idOffre").get( (req, res) => {
+
+  postuler.findOne({ etudiantId: req.params.idEtd, offreId: req.params.idOffre}, (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result,
+    });
+  });
+});
+
   module.exports = router;
