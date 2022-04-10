@@ -8,7 +8,7 @@ import '../../NetworkHandler.dart';
 import '../../model/Etudiant.dart';
 import '../../model/offreStageModel.dart';
 import '../../model/postulation.dart';
-
+import 'package:intl/intl.dart';
 
 class StagiaireDetail extends StatefulWidget {
     final Etudiant etd;
@@ -26,6 +26,9 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
    final _formKey = GlobalKey<FormState>();
    postulation postule=postulation();
    bool circular=true;
+   TextEditingController objetControl=TextEditingController();
+   TextEditingController messageControl=TextEditingController();
+   TextEditingController dateControl=TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -41,6 +44,15 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
       postule = postulation.fromJson(response["data"]);
       circular = false;
        }); 
+   }
+
+   void Repondre(String message,String objet,String date)async{
+     Map<String, dynamic> data = {
+    "objet": objet,
+    "message": message,
+    "date":date 
+    };
+    var response = await networkHandler.post("/repondreEtudiant/AddReponse/${postule.id}",data);
    }
 
   @override
@@ -154,9 +166,109 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
                           borderRadius: BorderRadius.circular(20),
                         )),
                     onPressed: () {
-                       //Navigator.of(context).push(MaterialPageRoute(
-                       //builder: (context) => listStagiaires(widget.stage),
-                       //));
+                       
+                      Navigator.of(context).push(
+                        HeroDialogRoute(builder: (context) {
+                          return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Hero(
+          tag: _heroAddTodo,
+          child: Material(
+            color: Color.fromARGB(255, 67, 177, 183),
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: objetControl,
+                        decoration: InputDecoration(
+                          hintText: 'Objet',
+                          border: InputBorder.none,
+                        ),
+                        cursorColor: Colors.white,
+                      ),
+                      const Divider(
+                        color: Colors.white,
+                        thickness: 0.5,
+                      ),
+                      TextFormField(
+                        controller: messageControl,
+                        decoration: InputDecoration(
+                          hintText: 'Saisir votre Message',
+                          border: InputBorder.none,
+                        ),
+                        cursorColor: Colors.white,
+                        maxLines: 10,
+                      ),
+                      const Divider(
+                        color: Colors.white,
+                        thickness: 0.5,
+                      ),
+                      TextFormField(
+                        controller: dateControl,
+                        decoration: InputDecoration(
+                          hintText: 'Saisir date entretien',
+                          border: InputBorder.none,
+                        ),
+                        cursorColor: Colors.white,
+                      onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(
+                              2000), //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2101));
+
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2021-03-16
+                        //you can implement different kind of Date Format here according to your requirement
+
+                        setState(() {
+                          dateControl.text =
+                              formattedDate; //set output date to TextField value.
+                        });
+                      } else {
+                        print("Date is not selected");
+                      }
+                    },
+                
+                      ),
+                     const Divider(
+                        color: Colors.white,
+                        thickness: 0.5,
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                            Repondre(objetControl.text,messageControl.text,dateControl.text);
+                             
+                        },
+                        child: const Text('Postuler '),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+                        }),
+                      );
+                    
                     },
                     child: const Text('Repondre étudiant'),
                     
@@ -170,8 +282,7 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
     );
   }
 
-
 }
 
-
+const String _heroAddTodo = 'add-todo-hero';
 
