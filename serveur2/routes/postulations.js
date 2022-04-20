@@ -4,7 +4,7 @@ const offreStage = require("../models/offreStage.model")
 const postuler = require("../models/postulations.model")
 let middleware = require("../middleware");
 const router = express.Router();
-
+const {spawn} = require('child_process')
 
 router.route("/AddPostulation/:idOffre").post(middleware.checkToken, (req, res) => {
   const dataOffre=[]
@@ -26,14 +26,14 @@ router.route("/AddPostulation/:idOffre").post(middleware.checkToken, (req, res) 
         postule
           .save()
           .then((result) => {
-            res.json({ data: result });
+            res.status(200).json({ data: result });
           })
           .catch((err) => {
             console.log(err), res.json({ err: err });
           });
         }
     else
-      res.json('existe deja')    
+      res.status(201).json('existe deja')    
 
   });  
 
@@ -60,19 +60,37 @@ router.route("/PostulationByOffre/:idOffre").get( (req, res) => {
 });
 
 router.route("/getEtudiantOffre/:idOffre").get( (req, res) => {
-  
+  var etudiantList=[]
   postuler.find({ offreId: req.params.idOffre}, async(err, result) => {
     if (err) return res.status(500).json({ msg: err });
     else{
-      var etudiantList=[]
+      
       for(const doc of result){
-        console.log(doc)
       var id =doc.etudiantId
       console.log(id)
       const etd = await Etudiant.findOne(id)
       etudiantList.push(etd)
-
+    
     }
+     //start
+        data={}
+const childPython = spawn('python',['./routes/test.py',JSON.stringify({data:etudiantList })])
+
+childPython.stdout.on('data',(data)=>{
+    console.log(`stdout: ${data}`)
+
+})
+
+childPython.stderr.on('data',(data)=>{
+    console.error(`stdout: ${data}`)
+    
+})
+
+childPython.on('close',(code)=>{
+    console.log(`child process exited with code: ${code}`)
+    
+})
+//end
     return res.json({data:etudiantList });
     }
   });

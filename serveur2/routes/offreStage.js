@@ -5,6 +5,7 @@ const postuler = require("../models/postulations.model")
 const middleware = require("../middleware");
 const multer = require("multer");
 
+
 router.route("/Add").post(middleware.checkToken, (req, res) => {
   const offre = offreStage({
     username: req.decoded.username,
@@ -37,7 +38,6 @@ router.route("/getOwnOffre").get(middleware.checkToken, (req, res) => {
 router.route("/getAllOffre").get((req, res) => {
   offreStage.find((err, result) => {
     if (err) return res.json(err);
-    
     return res.json({ data: result });
   });
 });

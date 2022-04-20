@@ -46,8 +46,8 @@ const Cv = Schema(
     langue :[{ nomLangue: { type: String, default: null },
       NiveauLangue: { type: String, default: null } }],
   
-    img:{type: String,default:""}
-
+    img:{type: String,default:""},
+    pdfCV:{type: String,default:""},
   },
   {
     timestamp: true,

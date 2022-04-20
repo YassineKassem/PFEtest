@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
+import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
 import 'package:pfe/welcome_etudiant/Profile/editPwd.dart';
+import 'importerCV.dart';
+import 'importerVScreeCv.dart';
 import 'loader.dart';
 import 'AccueilEtd.dart';
 import 'AccueilSoc.dart';
@@ -42,6 +45,9 @@ class MyApp extends StatelessWidget {
         '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
         '/formSociete': (context) => formSociete(),
+        '/importerCV': (context) => importerCV(),
+        '/importerVScreeCv': (context) => importerVScreeCv(),
+        '/ProfileScreen': (context) => ProfileScreen()
       },
       debugShowCheckedModeBanner: false,
     );

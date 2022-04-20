@@ -60,7 +60,10 @@ class NetworkHandler {
   NetworkImage getImage(String imageName) {
     
     String url = formater("/uploads//$imageName.jpg");
-    return NetworkImage(url);
+  
+  return NetworkImage(url);
+
+    
   }
 
   Future<http.Response> patch(String url, Map<String, dynamic> body) async {
@@ -89,6 +92,20 @@ class NetworkHandler {
       },
    
     );
+    return response;
+  }
+
+    Future<http.StreamedResponse> postCV(String url, String filepath) async {
+    url = formater(url);
+    String token = await storage.read(key: "token");
+    print(token);
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath("pdfCV", filepath));
+    request.headers.addAll({
+      "Content-type": "multipart/form-data",
+      "Authorization": "Bearer $token"
+    });
+    var response = request.send();
     return response;
   }
 

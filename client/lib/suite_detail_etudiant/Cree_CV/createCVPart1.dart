@@ -5,12 +5,9 @@ import '../../AccueilEtd.dart';
 import '../../NetworkHandler.dart';
 import '../../model/CVmodel.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
-
 import '../../signin.dart';
 import 'display.dart';
 import 'dart:convert';
@@ -26,7 +23,7 @@ class createCVPart1 extends StatefulWidget {
 class _createCVPart1State extends State<createCVPart1> {
 
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
-  
+  bool AlertError =false;
   int _currentStep = 0;
   String resultSlider = '';
   bool isComplete = false;
@@ -46,9 +43,9 @@ class _createCVPart1State extends State<createCVPart1> {
 
 
   
-    PickedFile? _imageFile;
+  PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,14 +53,14 @@ class _createCVPart1State extends State<createCVPart1> {
         centerTitle: true,
         title: Text(
           'Créer votre CV',
-          style: TextStyle(color: Colors.red),
+          style: TextStyle(color: Colors.blue.shade300,),
         ),
         backgroundColor: Colors.white,
       ),
       body: Center(
         child: Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(primary: Colors.red),
+            colorScheme: ColorScheme.light(primary: Colors.blue.shade300,),
           ),
           child: Form(
             key: globalkey,
@@ -108,25 +105,26 @@ class _createCVPart1State extends State<createCVPart1> {
                       if (imageResponse.statusCode == 200) {
                         setState(() {
                           circular = false;
+                          AlertError=false;
                         });
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => AccueilEtd()),
-                            (route) => false);
+                        _showDialog(context,"la procédure d'inscription est terminé avec succée.\nBienvenue dans Sattegeny\n ${Nom.text} ${Prenom.text}",AlertError);
                       }
                     } else {
                       
                       setState(() {
                         isComplete = true;
                         circular = false;
+                        AlertError=false;
                       });
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => AccueilEtd()),
-                          (route) => false);
+                      _showDialog(context,"la procédure d''inscription est terminé avec succée.\nBienvenue dans Sattegeny\n ${Nom.text} ${Prenom.text}",AlertError);
                           }
                       }
                       
                       }else{
-                        showAlertDialog(context,'Veuillez ajouter une image de profil');
+                         setState(() {
+                            AlertError=true;
+                           });
+                        _showDialog(context,'Veuillez ajouter une image de profil',AlertError);
                       }
                       
                       }
@@ -143,7 +141,7 @@ class _createCVPart1State extends State<createCVPart1> {
             children: <Widget>[
               SizedBox(height: 70.0),
               Container(
-                color: Colors.red,
+                color: Colors.blue.shade300,
                 child: TextButton(
                   onPressed: details.onStepContinue,
                   child: _currentStep != 1? const Text('Continuer',
@@ -368,32 +366,31 @@ class _createCVPart1State extends State<createCVPart1> {
       ),
     );
   }
-
+_showDialog(BuildContext context,String text,bool Error){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+         return CupertinoAlertDialog(
+        title: Column(
+          children: <Widget>[
+            Text(text),
+            
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () {
+              if(Error==true) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.pushNamed(context,'/AccueilEtd');
+              } 
+            },),
+        ],
+      );
+       });
 }
 
-showAlertDialog(BuildContext context, String text) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Error"),
-    content: Text(text),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

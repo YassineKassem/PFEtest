@@ -11,6 +11,7 @@ class HomeAppBar extends StatefulWidget {
 }
 
 class HomeAppBarState extends State<HomeAppBar> {
+  
   bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
@@ -92,8 +93,10 @@ class HomeAppBarState extends State<HomeAppBar> {
               ),
               CircleAvatar(
                 radius: 20,
-                backgroundImage:NetworkHandler().getImage("${profileModel.etudiantId}"),
-              )
+                backgroundImage:
+                NetworkHandler().getImage("${profileModel.etudiantId}")
+                ),
+              
             ],
           )
         ],

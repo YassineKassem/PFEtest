@@ -21,7 +21,7 @@ class JobDetail extends StatefulWidget {
 }
 
 class _JobDetailState extends State<JobDetail> {
-  
+   bool AlertError=false;
    NetworkHandler networkHandler=NetworkHandler();
    postulation postule = postulation();
    TextEditingController objetControl=TextEditingController();
@@ -35,6 +35,19 @@ class _JobDetailState extends State<JobDetail> {
     "message": message,
     };
     var response = await networkHandler.post("/postulations/AddPostulation/${widget.stage.id}",data);
+    if(response.statusCode==200){
+     print('postulatioin succes');
+        setState(() {AlertError=false;});
+        _showDialog(context,"Votre demande de postulation est envoyé avec succée.",AlertError);                 
+    }else if (response.statusCode==201){
+    setState(() {AlertError=false;});
+    _showDialog(context,"Vous avez deja postuler à cette offre de stage.",AlertError);                 
+    }
+    else{
+      print('postulatioin failed');
+        setState(() {AlertError=true;});
+        _showDialog(context,"Votre demande de postulation a échoué.",AlertError);                 
+      }
   }
 
   @override
@@ -188,10 +201,7 @@ class _JobDetailState extends State<JobDetail> {
                       ),
                       FlatButton(
                         onPressed: () {
-                            PostPostulation(messageControl.text,objetControl.text);
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => AccueilEtd(),
-                                    ));
+                        PostPostulation(messageControl.text,objetControl.text);  
                         },
                         child: const Text('Postuler '),
                       ),
@@ -220,6 +230,33 @@ class _JobDetailState extends State<JobDetail> {
       ),
     );
   }
+_showDialog(BuildContext context,String text,bool Error){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+         return CupertinoAlertDialog(
+        title: Column(
+          children: <Widget>[
+            Text(text),
+            
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () {
+              if(Error==true) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.pushNamed(context,'/AccueilEtd');
+              } 
+            },),
+        ],
+      );
+       });
+}
+
+
 }
 
 const String _heroAddTodo = 'add-todo-hero';

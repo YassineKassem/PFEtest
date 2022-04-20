@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pfe/AccueilEtd.dart';
@@ -16,6 +17,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfile extends State<EditProfile> {
+  bool AlertError=false;
   bool circular = true;
   PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -88,7 +90,7 @@ class _EditProfile extends State<EditProfile> {
                         SizedBox(
                           height: 35,
                         ),
-                        buildTextField("E-mail", "${etd.email}", false, emailEdit),
+                        buildTextField("E-mail", etd.email as String, false, emailEdit),
                         SizedBox(
                           height: 35,
                         ),
@@ -130,12 +132,11 @@ class _EditProfile extends State<EditProfile> {
                                 if (responseEdit.statusCode == 200 ||
                                     responseEdit.statusCode == 201) {
                                   print("ok");
-                                  //refreshpage
-                                  Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AccueilEtd()),
-                                  (Route<dynamic> route) => false,
-                                  );
+                                  setState(() {
+                                  AlertError=false;
+                                  });
+                            _showDialog(context,"modification profile est terminé avec succée",AlertError);
+                            
                                 }
                               },
                               color: Colors.grey,
@@ -241,7 +242,10 @@ class _EditProfile extends State<EditProfile> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextFormField(
-        controller: control..text=placeholder,
+        initialValue: placeholder,
+            onChanged: (text){
+              control.text=text;
+            },
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
@@ -268,4 +272,32 @@ class _EditProfile extends State<EditProfile> {
       ),
     );
   }
+
+ _showDialog(BuildContext context,String text,bool Error){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+         return CupertinoAlertDialog(
+        title: Column(
+          children: <Widget>[
+            Text(text),
+            
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () {
+              if(Error==true) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.pushNamed(context,'/AccueilEtd');
+              } 
+            },),
+        ],
+      );
+       });
+}
+
+
 }

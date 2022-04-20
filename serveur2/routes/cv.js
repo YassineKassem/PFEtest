@@ -13,6 +13,15 @@ const storage = multer.diskStorage({
   },
 });
 
+const storageCV = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./resume");
+  },
+  filename: (req, file, cb) => {
+    cb(null, req.decoded.etudiantId + ".pdf");
+  },
+});
+
 const fileFilter = (req, file, cb) => {
   if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
     cb(null, true);
@@ -20,6 +29,12 @@ const fileFilter = (req, file, cb) => {
     cb(null, false);
   }
 };
+
+const uploadCV = multer({
+  storage: storageCV,
+
+  // fileFilter: fileFilter,
+});
 
 const upload = multer({
   storage: storage,
@@ -52,6 +67,25 @@ router
     );
   });
 
+  //adding and update resume pdf
+router
+.route("/add/pdf")
+.post(middleware.checkToken, uploadCV.single("pdfCV"), (req, res) => {
+  const profile = Cv({
+    username: req.decoded.username,
+    etudiantId: req.decoded.etudiantId,
+    pdfCV: req.file.path,
+  });
+  profile
+    .save()
+    .then(() => {
+      return res.json({ msg: "resume successfully stored" });
+    })
+    .catch((err) => {
+      return res.status(400).json({ err: err });
+    });
+});
+
 router.route("/add").post(middleware.checkToken, (req, res) => {
 
   const profile = Cv({
@@ -71,6 +105,7 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
     Stage: req.body.Stage,
     Ci: req.body.Ci,
     langue: req.body.langue,
+    
   });
   profile
     .save()

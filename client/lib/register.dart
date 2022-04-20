@@ -247,7 +247,7 @@ class _MyRegisterState extends State<MyRegister> {
                                                     circular = false;
                                                   });
                                                   Navigator.pushNamed(context,
-                                                      '/createCVPart1');
+                                                      '/importerVScreeCv');
                                                 } else {
                                                   print("not ok");
                                                   setState(() {

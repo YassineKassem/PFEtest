@@ -7,6 +7,8 @@ let middleware = require("../middleware");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 
+
+
 router.route("user/:username").get(middleware.checkToken, (req, res) => {
   Etudiant.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
@@ -26,9 +28,12 @@ router.route("/").get(middleware.checkToken, (req, res) => {
 });
 
 
+
+
 router.route("listFavoris/:username").get(middleware.checkToken, (req, res) => {
   Etudiant.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
+    
     return res.json({
       data: result,
       username: req.params.username,
@@ -74,6 +79,21 @@ router.route("/login").post(async(req, res) => {
     });
   }else {
     res.status(403).json("Invalid Username/Password");
+  }
+
+});
+
+router.route("/checkEtdPassword").post(middleware.checkToken,async(req, res) => {
+
+  if (!(req.body.password)) {
+    return res.status(400).json("Password input is required");
+  }
+  const etd = await Etudiant.findOne({ username: req.decoded.username });
+  
+  if (etd && (await bcrypt.compare(req.body.password, etd.password))) {
+    res.status(200).json("Correct Password");
+  }else {
+    res.status(400).json("Invalid Password");
   }
 
 });

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../NetworkHandler.dart';
@@ -14,6 +15,7 @@ class CreeOffre extends StatefulWidget {
 }
 
 class _CreeOffreState extends State<CreeOffre> {
+  bool AlertError=false;
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
   NetworkHandler networkHandler = NetworkHandler();
   TextEditingController NomOffre = TextEditingController();
@@ -44,6 +46,15 @@ class _CreeOffreState extends State<CreeOffre> {
     var response = await networkHandler.post("/offreStage/Add", data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       print("offre de stage ajouter avec succee");
+      setState(() {
+      AlertError=false;
+      });
+      _showDialog(context,"la création de l'offre de stage ${NomOffre.text} est términer avec succée. ",AlertError);
+    }else{
+      setState(() {
+      AlertError=true;
+      });
+      _showDialog(context,"la création de l'offre de stage a échoué",AlertError);
     }
   }
 
@@ -323,4 +334,31 @@ class _CreeOffreState extends State<CreeOffre> {
       ),
     );
   }
+  
+ _showDialog(BuildContext context,String text,bool Error){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+         return CupertinoAlertDialog(
+        title: Column(
+          children: <Widget>[
+            Text(text),
+            
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () {
+              if(Error==true) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.pushNamed(context,'/AccueilSoc');
+              } 
+            },),
+        ],
+      );
+       });
+}
+
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -13,7 +14,7 @@ class formSociete extends StatefulWidget {
 }
 
 class _formSocieteState extends State<formSociete> {
-
+  bool AlertError=false;
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
   int _currentStep = 0;
   bool isComplete =false;
@@ -35,14 +36,14 @@ class _formSocieteState extends State<formSociete> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Saisir details societe',
-          style: TextStyle(color:Colors.red) ,),
+          style: TextStyle(color:Colors.blue.shade300,) ,),
         backgroundColor: Colors.white,
 
       ),
       body:  Center(
               child: Theme(
                 data: Theme.of(context).copyWith(
-                  colorScheme: ColorScheme.light(primary: Colors.red),
+                  colorScheme: ColorScheme.light(primary: Colors.blue.shade300,),
                 ),
                 child: Form(
                   key: globalkey,
@@ -61,7 +62,7 @@ class _formSocieteState extends State<formSociete> {
                         });
                       }
                       else if(isLastStep){
-                        if (globalkey.currentState!.validate()) {
+                        if (globalkey.currentState!.validate() && _imageFile?.path != null) {
                   Map<String, dynamic> data = {
                                 "nom": Nom.text,
                                 'SecteurActivite': SecteurActivite.text,
@@ -81,22 +82,28 @@ class _formSocieteState extends State<formSociete> {
                       if (imageResponse.statusCode == 200) {
                         setState(() {
                           circular = false;
+                          AlertError=false;
                         });
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => AccueilSoc()),
-                            (route) => false);
+
+                        _showDialog(context,"la procédure d'inscription est terminé avec succée.\nBienvenue dans Sattegeny\n ${Nom.text}.",AlertError);
+
                       }
                     } else {
                       setState(() {
                         isComplete = true;
                         circular = false;
+                        AlertError=false;
                       });
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => AccueilSoc()),
-                          (route) => false);
-                          }
+                      _showDialog(context,"la procédure d'inscription est terminé avec succée.\nBienvenue dans Sattegeny\n ${Nom.text}.",AlertError);
                       }
-                      }}
+                      }
+                      }else{
+                       setState(() {
+                            AlertError=true;
+                           });
+                        _showDialog(context,'Veuillez ajouter une image de profil et remplir tous les données',AlertError);
+                      }
+                      }
                     },
                     onStepCancel: (){
 
@@ -241,6 +248,32 @@ class _formSocieteState extends State<formSociete> {
       ),
     );}
 
+
+ _showDialog(BuildContext context,String text,bool Error){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+         return CupertinoAlertDialog(
+        title: Column(
+          children: <Widget>[
+            Text(text),
+            
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () {
+              if(Error==true) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.pushNamed(context,'/AccueilSoc');
+              } 
+            },),
+        ],
+      );
+       });
+}
 
 
 

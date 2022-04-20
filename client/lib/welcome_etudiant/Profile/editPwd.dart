@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../NetworkHandler.dart';
@@ -13,20 +14,40 @@ class EditPwd extends StatefulWidget {
 }
 
 class _EditPwd extends State<EditPwd> {
+  bool AlertError=false;
   GlobalKey<FormState> globalkey = GlobalKey<FormState>();
   TextEditingController pwd =TextEditingController();
   TextEditingController checkPwd =TextEditingController();
+  TextEditingController CurrentPwd =TextEditingController();
+  
   NetworkHandler networkHandler= NetworkHandler();
 
   void updatePassword()async{
-    Map<String, dynamic> data = {
+        Map<String, dynamic> data1 = {
+      "password": CurrentPwd.text
+    };
+    var responseEdit1 = await networkHandler.post("/etudiant/checkEtdPassword",data1);
+    if (responseEdit1.statusCode == 200 ||responseEdit1.statusCode == 201) {
+      print('current pwd succes');
+      Map<String, dynamic> data2 = {
       "password": pwd.text
     };
-    var responseEdit = await networkHandler.patch("/etudiant/updatePwd",data);
-      if (responseEdit.statusCode == 200 ||responseEdit.statusCode == 201) {
-        print('updated succes');
+    var responseEdit2 = await networkHandler.patch("/etudiant/updatePwd",data2);
+      if (responseEdit2.statusCode == 200 ||responseEdit2.statusCode == 201) {
+        print('updated pwd succes');
+        setState(() {AlertError=false;});
+        _showDialog(context,"la procédure de modifcation mot de passe est terminé avec succée.",AlertError);                 
       }
+      }
+      else{
+        setState(() {AlertError=true;});
+        _showDialog(context,"Votre mot de passe actuelle est incorrecte.",AlertError);                 
+      }
+  
+      
   }
+
+    
 
  
   bool showPassword = false;
@@ -62,6 +83,42 @@ class _EditPwd extends State<EditPwd> {
                       Padding(
                           padding: const EdgeInsets.only(bottom: 35.0),
                           child: TextFormField(
+                            controller: CurrentPwd,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                              return 'Veuillez saisir votre mot de passe actuelle';
+                              }
+                              return null;
+                              },
+                            obscureText: true ? showPassword : false,
+                            decoration: InputDecoration(
+                            suffixIcon: true
+                      ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword = !showPassword;
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.remove_red_eye,
+                            color: Colors.grey,
+                          ),
+                        )
+                      : null,
+                    contentPadding: const EdgeInsets.only(bottom: 3),
+                    labelText: "Mot de passe actuelle",
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: "",
+                    hintStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    )),
+                          ),
+                    ),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 35.0),
+                          child: TextFormField(
                             controller: pwd,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -85,7 +142,7 @@ class _EditPwd extends State<EditPwd> {
                         )
                       : null,
                     contentPadding: const EdgeInsets.only(bottom: 3),
-                    labelText: "Password",
+                    labelText: "Nouvelle Mot de passe",
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     hintText: "",
                     hintStyle: const TextStyle(
@@ -124,7 +181,7 @@ class _EditPwd extends State<EditPwd> {
                         )
                       : null,
                       contentPadding: const EdgeInsets.only(bottom: 3),
-                      labelText: "Confirmer password",
+                      labelText: "Confirmer Mot de passe",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       hintText: "",
                       hintStyle: const TextStyle(
@@ -155,9 +212,6 @@ class _EditPwd extends State<EditPwd> {
                             onPressed: () {
                               if(globalkey.currentState!.validate()){
                               updatePassword();
-                               Navigator.of(context).push(MaterialPageRoute(
-                               builder: (context) => ProfileScreen(),
-                              )); 
                               }
                               else{
                                 print("password update failed");
@@ -188,5 +242,31 @@ class _EditPwd extends State<EditPwd> {
       ),
     );
   }
+  _showDialog(BuildContext context,String text,bool Error){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+         return CupertinoAlertDialog(
+        title: Column(
+          children: <Widget>[
+            Text(text),
+            
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () {
+              if(Error==true) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.pushNamed(context,'/ProfileScreen');
+              } 
+            },),
+        ],
+      );
+       });
+}
+
 
 }

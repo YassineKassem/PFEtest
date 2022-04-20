@@ -1,0 +1,23 @@
+Refonte de l’outil de gestion d’obsolescence des
+pièces électroniques et mécaniques
+Le stagiaire sera amené à :
+•Etudier la spécification de l’existant
+•Définir les cahiers des charges techniques et fonctionnels de la
+refonte de l’outil de gestion d’obsolescence
+•Définir la charte graphique et maquetter les interfaces
+•Modéliser la nouvelle application
+•Créer des plans de test pour l’intégration et la recette applicative
+•Développer les différents modules de l’application avec
+documentation technique, fonctionnelle et utilisateur
+•Réaliser des tests unitaires et d’intégrations
+•Livrer, configurer l’application et réaliser des tests de recette
+applicative
+Description
+
+Profil/Compétences requises
+Matériel(s) : PC
+Système(s) : Windows 10 ansible 
+Méthodologie(s) : Angular Kendo UI, Spring, Maven
+Langage(s) de programmation : JJava8/11 kubernetes
+Atelier/Outils de développement : Apache Tomcat, Postgress,
+Eclipse IDE
