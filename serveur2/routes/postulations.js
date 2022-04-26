@@ -5,6 +5,7 @@ const postuler = require("../models/postulations.model")
 let middleware = require("../middleware");
 const router = express.Router();
 const {spawn} = require('child_process')
+var request = require('request-promise');
 
 router.route("/AddPostulation/:idOffre").post(middleware.checkToken, (req, res) => {
   const dataOffre=[]
@@ -49,12 +50,48 @@ router.route("/listPostulation").get( (req, res) => {
   });
 });
 
+//used for the recommendation cote société
 router.route("/PostulationByOffre/:idOffre").get( (req, res) => {
-
-  postuler.find({ offreId: req.params.idOffre}, (err, result) => {
+  etudiantList=[]
+  postuler.find({ offreId: req.params.idOffre},async (err, result) => {
     if (err) return res.status(500).json({ msg: err });
+    for(const doc of result){
+      var id =doc.etudiantId
+      etudiantList.push(id)
+    }
+    const offre = await offreStage.findById(req.params.idOffre)
+    
+    var data = {
+      array: etudiantList,
+      offreDetail:offre
+  }
+
+  var options = {
+      method: 'POST',
+
+      // http:flaskserverurl:port/route
+      uri: 'http://0.0.0.0:8080/getStudentId',
+      body: data,
+
+      // Automatically stringifies
+      // the body to JSON 
+      json: true
+  };
+      var sendrequest = await request(options)
+    
+          // The parsedBody contains the data
+          // sent back from the Flask server 
+          .then(function (parsedBody) {
+              console.log(parsedBody);
+
+          })
+          .catch(function (err) {
+              console.log(err);
+          });
+          
     return res.json({
       data: result,
+      offreid: req.params.idOffre
     });
   });
 });
@@ -72,25 +109,6 @@ router.route("/getEtudiantOffre/:idOffre").get( (req, res) => {
       etudiantList.push(etd)
     
     }
-     //start
-        data={}
-const childPython = spawn('python',['./routes/test.py',JSON.stringify({data:etudiantList })])
-
-childPython.stdout.on('data',(data)=>{
-    console.log(`stdout: ${data}`)
-
-})
-
-childPython.stderr.on('data',(data)=>{
-    console.error(`stdout: ${data}`)
-    
-})
-
-childPython.on('close',(code)=>{
-    console.log(`child process exited with code: ${code}`)
-    
-})
-//end
     return res.json({data:etudiantList });
     }
   });
