@@ -14,7 +14,7 @@ import '../../model/centreInteretModel.dart';
 import '../../model/formationModel.dart';
 import '../../model/langueModel.dart';
 import '../../model/stageModel.dart';
-import '../../suite_detail_etudiant/Cree_CV/display.dart';
+
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../NetworkHandler.dart';

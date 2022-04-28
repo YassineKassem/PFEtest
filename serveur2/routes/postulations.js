@@ -2,10 +2,11 @@ const express = require("express");
 const Etudiant = require("../models/etudiants.model");
 const offreStage = require("../models/offreStage.model")
 const postuler = require("../models/postulations.model")
+const recommend = require("../models/recommendation.model")
 let middleware = require("../middleware");
 const router = express.Router();
-const {spawn} = require('child_process')
 var request = require('request-promise');
+var ObjectId = require('mongodb').ObjectID;
 
 router.route("/AddPostulation/:idOffre").post(middleware.checkToken, (req, res) => {
   const dataOffre=[]
@@ -52,12 +53,26 @@ router.route("/listPostulation").get( (req, res) => {
 
 //used for the recommendation cote société
 router.route("/PostulationByOffre/:idOffre").get( (req, res) => {
+  postuler.find({ offreId: req.params.idOffre},async (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result
+      //offreid: req.params.idOffre
+    });
+  });
+});
+
+//used for the recommendation cote société
+router.route("/PredictBestCondidates/:idOffre").get( (req, res) => {
   etudiantList=[]
+  postulationList=[]
   postuler.find({ offreId: req.params.idOffre},async (err, result) => {
     if (err) return res.status(500).json({ msg: err });
     for(const doc of result){
       var id =doc.etudiantId
       etudiantList.push(id)
+      var post =doc._id
+      postulationList.push(post)
     }
     const offre = await offreStage.findById(req.params.idOffre)
     
@@ -82,14 +97,41 @@ router.route("/PostulationByOffre/:idOffre").get( (req, res) => {
           // The parsedBody contains the data
           // sent back from the Flask server 
           .then(function (parsedBody) {
-              console.log(parsedBody);
+              for(let i=0;i<etudiantList.length;i++){
+                 console.log(
+                  parsedBody[i]['Match Percentage']
+                 )
+                 recommend.findOne({ postulationId: postulationList[i]}, (err, result) => {
+                  if (err) return res.status(500).json({ msg: err });
+                  if(result==null)
+                    {
+                        const rec = recommend({
+                          societeId:offre._id,
+                          postulationId:postulationList[i],
+                          score:parsedBody[i]['Match Percentage'],  
+                      });
+                      rec
+                        .save()
+                        .then((result) => {
+                          console.log(result)
+                        })
+                        .catch((err) => {
+                          console.log(err), res.json({ err: err });
+                        });
+                      }
+                  else
+                  console.log('existe deja')    
+              
+                });  
+              } 
 
+              
           })
           .catch(function (err) {
               console.log(err);
           });
           
-    return res.json({
+    return res.status(200).json({
       data: result,
       offreid: req.params.idOffre
     });
@@ -184,5 +226,19 @@ router.route("/PostulationByEtdAndOffre/:idEtd/:idOffre").get( (req, res) => {
     });
   });
 });
+
+router.route("/PostulationByid/:idPost").get( (req, res) => {
+  
+  postuler.findOne({ _id:ObjectId(req.params.idPost)},async (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result
+    });
+  });
+});
+
+
+
+
 
   module.exports = router;

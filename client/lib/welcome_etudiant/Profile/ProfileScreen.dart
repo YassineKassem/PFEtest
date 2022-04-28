@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:pfe/model/Etudiant.dart';
 import 'package:pfe/search/widgets/search_app_bar.dart';
 import 'package:pfe/welcome_etudiant/Profile/editProfile.dart';
 
 import '../../NetworkHandler.dart';
 import '../../model/CVmodel.dart';
+import 'ViewPDF.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -16,7 +21,7 @@ class _ProfileScreen extends State<ProfileScreen> {
   NetworkHandler networkHandler = NetworkHandler();
   CVmodel profileModel = CVmodel();
   Etudiant etd=Etudiant();
-  
+  late File filePdf;
   @override
   void initState() {
     fetchData();
@@ -25,16 +30,21 @@ class _ProfileScreen extends State<ProfileScreen> {
 
   void fetchData() async {
     var response = await networkHandler.get("/cv/getData");
+     if (!mounted) return;
     setState(() {
       profileModel = CVmodel.fromJson(response["data"]);
       
     });
     
     var response2 = await networkHandler.get("/etudiant/");
+     if (!mounted) return;
      setState(() {
       etd = Etudiant.fromJson(response2["data"]);
       circular = false;
-    }); 
+    });
+
+   
+
   }
 
   
@@ -101,7 +111,13 @@ class _ProfileScreen extends State<ProfileScreen> {
                         height: 10,
                       ),
                       RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                         
+                         Navigator.push(context, MaterialPageRoute(builder: (context){
+                             return ViewPDF(pathPDF:NetworkHandler().getCV("${profileModel.etudiantId}"));
+                             //open viewPDF page on click
+                           }));
+                        },
                         color: Colors.grey,
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 15),
@@ -163,5 +179,8 @@ class _ProfileScreen extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+  static Future openFile(String url) async {
+    await OpenFile.open(url);
   }
 }

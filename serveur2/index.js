@@ -49,6 +49,10 @@ app.use("/postulations", postulerRoute);
 const repondreEtudiantRoute = require("./routes/repondreEtudiant");
 app.use("/repondreEtudiant", repondreEtudiantRoute);
 
+//middleware recommendation
+const recommendationRoute = require("./routes/recommendation");
+app.use("/recommendation", recommendationRoute);
+
 data = {
   msg: "Welcome on DevStack Blog App development YouTube video series",
   info: "This is a root endpoint",

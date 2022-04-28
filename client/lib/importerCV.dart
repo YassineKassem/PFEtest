@@ -116,7 +116,9 @@ class _importerCVState extends State<importerCV> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
+          print(filePdf.path);
          openFile(filePdf.path);
+
         }, 
         label: const Text('Aperçu'),
         icon: const Icon(Icons.content_paste_search_rounded),

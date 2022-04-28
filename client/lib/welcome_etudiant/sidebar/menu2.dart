@@ -34,12 +34,14 @@ class _NavigationDrowerState extends State<NavigationDrower> {
   }
   void fetchData() async {
     var response = await networkHandler.get("/cv/getData");
+     if (!mounted) return;
     setState(() {
       profileModel = CVmodel.fromJson(response["data"]);
       circular = false;
     });
     
     var response2 = await networkHandler.get("/etudiant");
+     if (!mounted) return;
      setState(() {
       etd = Etudiant.fromJson(response2["data"]);
     }); 

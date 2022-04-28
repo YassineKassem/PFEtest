@@ -31,12 +31,14 @@ class _MenuState extends State<Menu> {
   }
   void fetchData() async {
     var response = await networkHandler.get("/profileSociete/getData");
+     if (!mounted) return;
     setState(() {
       profileModel = DetailSociete.fromJson(response["data"]);
       circular = false;
     });
     
     var response2 = await networkHandler.get("/societe");
+     if (!mounted) return;
      setState(() {
       soc = Societe.fromJson(response2["data"]);
     }); 

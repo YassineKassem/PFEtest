@@ -1,40 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:pfe/model/recommendation.dart';
 import 'package:pfe/search/widgets/search_app_bar.dart';
-import 'package:pfe/welcome_societe/widgets/listPredictionEtd.dart';
 import '../../NetworkHandler.dart';
 import '../../model/Etudiant.dart';
 import '../../model/SuperModelEtudiant.dart';
+import '../../model/SuperModelPostulation.dart';
 import '../../model/offreStageModel.dart';
+import '../../model/postulation.dart';
 import 'StagiaireDetail.dart';
 import 'itemStagiaire.dart';
+import 'itempredictionEtd.dart';
 
-class listStagiaires extends StatefulWidget {
+class listPredictionEtd extends StatefulWidget {
   final Stage stage;
-  listStagiaires(this.stage);
+  listPredictionEtd(this.stage);
 
   @override
-  State<listStagiaires> createState() => _listStagiairesState();
+  State<listPredictionEtd> createState() => _listPredictionEtdState();
 }
 
-class _listStagiairesState extends State<listStagiaires> {
+class _listPredictionEtdState extends State<listPredictionEtd> {
 
     NetworkHandler networkHandler=NetworkHandler();
-    SuperModelEtudiant superModelEtudiant =SuperModelEtudiant();
+    SuperModelPostulation superModelpostulation =SuperModelPostulation();
     bool circular = true;
+    List<postulation> postulationList=[]; 
+    List<double> ScoreList=[]; 
+    recommendation recomd =new recommendation();
+    SuperModelEtudiant superModelEtudiant =SuperModelEtudiant();
     List<Etudiant> etudiantList=[]; 
     @override
     void initState() {
-      fetchData();
+      predict();
     }
 
-    void fetchData() async {
-    var response = await networkHandler.get("/postulations/getEtudiantOffre/${widget.stage.id}");
-    superModelEtudiant= SuperModelEtudiant.fromJson(response);
+    void predict() async {
+    var response = await networkHandler.get("/postulations/PredictBestCondidates/${widget.stage.id}");
+     if (!mounted) return;
     setState(() {
-     etudiantList = superModelEtudiant.data!;
-      circular = false;
+     fetchDataPostulation();
+
+    });
+     
+    
+  }  
+    void fetchDataPostulation() async {
+    var response = await networkHandler.get("/postulations/PostulationByOffre/${widget.stage.id}");
+    superModelpostulation= SuperModelPostulation.fromJson(response);
+    if (!mounted) return;
+    setState(() {
+     postulationList = superModelpostulation.data!;
+     fetchDataRecommendationScore(postulationList);
+     
     });
     
+  }
+
+  void fetchDataEtd() async {
+    var response = await networkHandler.get("/postulations/getEtudiantOffre/${widget.stage.id}");
+    superModelEtudiant= SuperModelEtudiant.fromJson(response);
+     if (!mounted) return;
+    setState(() {
+     etudiantList = superModelEtudiant.data!;
+     
+     circular = false;
+ 
+    });
+    
+  }
+
+
+    void fetchDataRecommendationScore( List<postulation> List) async {
+  for(int i=0; i<postulationList.length;i++)
+  { 
+    print(" id ${i} ${List[i].id}");
+    var response = await networkHandler.get("/recommendation/listRecommendationByPostulation/${List[i].id}");
+      
+     setState(() {
+      recomd = recommendation.fromJson(response["data"]);
+      ScoreList.add(recomd.score as double);
+    });
+    }
+     setState(() {
+         fetchDataEtd();
+    });
+    
+
   }
     @override
   Widget build(BuildContext context) {
@@ -64,7 +115,7 @@ class _listStagiairesState extends State<listStagiaires> {
                     context: context,
                     builder: (context) => StagiaireDetail(etudiantList[index],widget.stage));
               },
-              child: itemStagiaire(etudiantList[index])),
+              child:itempredictionEtd(etudiantList[index],ScoreList[index])),
           
           separatorBuilder: (_, index) => const SizedBox(
                 height:20,
@@ -72,17 +123,6 @@ class _listStagiairesState extends State<listStagiaires> {
           itemCount: etudiantList.length),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){
-         
-         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => listPredictionEtd(widget.stage),
-        ));
-        }, 
-        label: const Text('Predire condidat souhaité'),
-        icon: const Icon(Icons.content_paste_search_rounded),
-        backgroundColor: Color.fromARGB(255, 67, 164, 186),
       ),
     );
   }
