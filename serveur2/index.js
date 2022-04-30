@@ -21,6 +21,10 @@ connection.once("open", () => {
 //middleware etudiant
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
+app.use("/resume", express.static("resume"));
+app.use(express.json());
+
+
 const userRoute = require("./routes/etudiant");
 app.use("/etudiant", userRoute);
 const profileRoute = require("./routes/cv");
@@ -49,9 +53,15 @@ app.use("/postulations", postulerRoute);
 const repondreEtudiantRoute = require("./routes/repondreEtudiant");
 app.use("/repondreEtudiant", repondreEtudiantRoute);
 
-//middleware recommendation
+//middleware recommendation offre
+const predictOffreRoute = require("./routes/predictOffre");
+app.use("/predictOffre", predictOffreRoute);
+
+//middleware recommendation etudiant
 const recommendationRoute = require("./routes/recommendation");
 app.use("/recommendation", recommendationRoute);
+
+
 
 data = {
   msg: "Welcome on DevStack Blog App development YouTube video series",

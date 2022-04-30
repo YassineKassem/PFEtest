@@ -8,7 +8,10 @@ const recommendation = Schema(
         type: Schema.Types.ObjectId,
         ref: 'Societe'
     },  
-    postulationId :{type: Schema.Types.ObjectId,ref: 'postulations'} ,
+    postulationId :{
+      type: Schema.Types.ObjectId,
+      ref: 'postulations'
+    } ,
     score: { type: Number, default: null } 
         
   }

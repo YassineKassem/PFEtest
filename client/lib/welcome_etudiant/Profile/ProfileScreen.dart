@@ -112,11 +112,9 @@ class _ProfileScreen extends State<ProfileScreen> {
                       ),
                       RaisedButton(
                         onPressed: () {
-                         
-                         Navigator.push(context, MaterialPageRoute(builder: (context){
-                             return ViewPDF(pathPDF:NetworkHandler().getCV("${profileModel.etudiantId}"));
-                             //open viewPDF page on click
-                           }));
+                          Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ViewPDF(),
+                          ));
                         },
                         color: Colors.grey,
                         padding:

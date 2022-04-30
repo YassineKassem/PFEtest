@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pfe/search/search.dart';
 
+import 'ListPredictOffre.dart';
+
 class SearchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -71,7 +71,7 @@ class _listPredictionEtdState extends State<listPredictionEtd> {
 
 
     void fetchDataRecommendationScore( List<postulation> List) async {
-  for(int i=0; i<postulationList.length;i++)
+  for(int i=0; i<List.length;i++)
   { 
     print(" id ${i} ${List[i].id}");
     var response = await networkHandler.get("/recommendation/listRecommendationByPostulation/${List[i].id}");

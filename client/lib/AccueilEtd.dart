@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pfe/welcome_etudiant/ListPredictOffre.dart';
 import 'package:pfe/welcome_etudiant/home_app_bar.dart';
 import 'package:pfe/welcome_etudiant/search_card.dart';
 import 'package:pfe/welcome_etudiant/stage_list.dart';
@@ -43,6 +44,9 @@ class _AccueilEtdState extends State<AccueilEtd> {
                 SearchCard(),
                 Taglist(),
                 JobList(),
+                /////////////
+                ListPredictOffre(),
+                ////////////////
                 ],
             ),         
           ],

@@ -4,7 +4,8 @@ const offreStage = require("../models/offreStage.model")
 const postuler = require("../models/postulations.model")
 const middleware = require("../middleware");
 const multer = require("multer");
-
+var request = require('request-promise');
+const recommendOffre = require("../models/predictOffre.model")
 
 router.route("/Add").post(middleware.checkToken, (req, res) => {
   const offre = offreStage({
@@ -41,6 +42,71 @@ router.route("/getAllOffre").get((req, res) => {
     return res.json({ data: result });
   });
 });
+
+router.route("/PredictBestOffre").get(middleware.checkToken, (req, res) => {
+  
+  offreStage.find(async(err, result) => {
+    if (err) return res.json(err);
+    offreList=result
+    etdId=req.decoded.etudiantId
+    var data = {
+      array: offreList,
+      etdIdCV:etdId
+  }
+  var options = {
+    method: 'POST',
+
+    // http:flaskserverurl:port/route
+    uri: 'http://0.0.0.0:8080/getOffreByCV',
+    body: data,
+
+    // Automatically stringifies
+    // the body to JSON 
+    json: true
+};
+var sendrequest = await request(options)
+    
+// The parsedBody contains the data
+// sent back from the Flask server 
+.then(function (parsedBody) {
+
+   for(let key=0;key<offreList.length;key++){
+     
+    recommendOffre.findOne({ offreId: parsedBody[key]['OffreId'],etudiantId:req.decoded.etudiantId}, (err, result) => {
+      if (err) return res.status(500).json({ msg: err });
+      if(result==null)
+        {
+          const rec = recommendOffre({
+              etudiantId:req.decoded.etudiantId,
+              offreId:parsedBody[key]['OffreId'],
+              score:parsedBody[key]['Match Percentage'],  
+          });
+          rec
+            .save()
+            .then((result) => {
+              console.log(result)
+            })
+            .catch((err) => {
+              console.log(err), res.json({ err: err });
+            });
+          }
+      else
+        console.log('existe deja')    
+  
+    }); 
+   
+  }  
+  
+})
+.catch(function (err) {
+    console.log(err);
+});
+    return res.status(200).json({ data: result });
+  });
+});
+
+
+
 
 router.route('/api/query').get((req, res) => {
   offreStage.find((err, result) => {

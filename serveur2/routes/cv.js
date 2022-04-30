@@ -4,6 +4,7 @@ const Cv = require("../models/cv.model");
 const middleware = require("../middleware");
 const multer = require("multer");
 const path = require("path");
+var app = express();
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./uploads");
@@ -85,6 +86,7 @@ router
       return res.status(400).json({ err: err });
     });
 });
+
 
 router.route("/add").post(middleware.checkToken, (req, res) => {
 
@@ -206,6 +208,7 @@ router.route('/deleteCompetance/:index').delete(middleware.checkToken, async (re
       );
   });
 })
+
 
 
 module.exports = router;

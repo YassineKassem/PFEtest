@@ -36,8 +36,8 @@ router.route("/AddRecommendation/:idPostulation").post(middleware.checkToken,(re
 
 
     
-router.route("/listRecommendation").get( (req, res) => {
-    recommend.find({ }, (err, result) => {
+router.route("/listRecommendation").get( middleware.checkToken,(req, res) => {
+    recommend.find({ societeId:req.decoded.societeId}, (err, result) => {
       if (err) return res.status(500).json({ msg: err });
       return res.json({
         data: result,

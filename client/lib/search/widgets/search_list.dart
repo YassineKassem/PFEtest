@@ -29,6 +29,7 @@ import '../../welcome_etudiant/stage_detail.dart';
     List<Stage> dataSearch=[]; 
     String Search="";
     String Nodata="";
+    late List<String> _dynamicChips = [];
     @override
     void initState() {
       fetchData();
@@ -64,77 +65,87 @@ import '../../welcome_etudiant/stage_detail.dart';
       children:[
         Container(
       margin: EdgeInsets.all(25),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: TextField(
-              controller : controlSearch,
-              onChanged: (value)async{
-                if(!value.isEmpty)
-                {
-                  if (!mounted) return;
-                  setState(() {
-                  Nodata="";
-                  Search=value;
-                                   
-                });
-                await fetchDataSearch(Search);
-                if(dataSearch.length==0)
-                {
-                if (!mounted) return;
-                setState(() {
-                  Nodata="Aucun resultat trouver";
-                });
-                }else{
-                  if (!mounted) return;
-                  setState(() {
-                  Nodata="";
-                });
-                }
-                }
-                else{
-                  fetchData();
-                if (!mounted) return;
-                setState(() {
-                  Search="";
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
                   
-                });
-                  
-                }
-              },
-              cursorColor: Colors.grey,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: 'Search',
-                hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 18,
-                ),
-                contentPadding: EdgeInsets.zero,
-                prefixIcon: Container(
-                  padding: EdgeInsets.all(15),
-                  child: Image.asset('assets/icons/search.png',width: 20,),
-                )
-              ),
-            )
-            ),
-            SizedBox(width: 10,),
-            Container(
-              height: 50,
-              width: 50,
-              padding: EdgeInsets.all(13),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-                borderRadius: BorderRadius.circular(20),
+                  controller : controlSearch,
+                  onEditingComplete:(){
+                    _dynamicChips.add(controlSearch.text);
+                  },
+                  onChanged: (value)async{
+                    if(!value.isEmpty)
+                    {
+                      if (!mounted) return;
+                      setState(() {
+                      Nodata="";
+                      Search=value;
+                                 
+                    });
 
-              ),
-              child: Image.asset('assets/icons/filter.png'),
-            )
+                    await fetchDataSearch(Search);
+                    if(dataSearch.length==0)
+                    {
+                    if (!mounted) return;
+                    setState(() {
+                      Nodata="Aucun resultat trouver";
+                    });
+                    }else{
+                      if (!mounted) return;
+                      setState(() {
+                      Nodata="";
+                    });
+                    }
+                    }
+                    else{
+                      fetchData();
+                    if (!mounted) return;
+                    setState(() {
+                      Search="";
+                      
+                    });
+                      
+                    }
+                  },
+                  cursorColor: Colors.grey,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: 'Search',
+                    hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18,
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                    prefixIcon: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Image.asset('assets/icons/search.png',width: 20,),
+                    )
+                  ),
+                )
+                ),
+                SizedBox(width: 10,),
+                Container(
+                  height: 50,
+                  width: 50,
+                  padding: EdgeInsets.all(13),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(20),
+
+                  ),
+                  child: Image.asset('assets/icons/filter.png'),
+                )
+            ],
+          ),
+          dynamicChips(),
         ],
       ),
       
@@ -185,4 +196,31 @@ import '../../welcome_etudiant/stage_detail.dart';
     )),
     ]);
   }
+
+  changevalue(String v){
+    
+    for(int i=0;i<_dynamicChips.length;i++)
+    {
+    v+=_dynamicChips[i]+" ";
+    }
+    return  v;
+  }
+
+  dynamicChips() {
+    return Wrap(
+      spacing: 6.0,
+      runSpacing: 6.0,
+      children: List<Widget>.generate(_dynamicChips.length, (int index) {
+        return Chip(
+          label: Text(_dynamicChips[index]),
+          onDeleted: () {
+            setState(() {
+              _dynamicChips.removeAt(index);
+            });
+          },
+        );
+      }),
+    );
+  }
+
   }
