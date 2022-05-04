@@ -27,6 +27,11 @@ class _importerCVState extends State<importerCV> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/images/register.png'), fit: BoxFit.cover),
+            
+      ),
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -38,9 +43,9 @@ class _importerCVState extends State<importerCV> {
             const SizedBox(
               height: 60,
             ),
-            Container(
+            Container( 
               height: 230,
-              color: Color.fromARGB(255, 73, 130, 183),
+              color: Color.fromARGB(255,104,202,240),
               child: GestureDetector(
                 child: Center(
                   child: Column(
@@ -48,9 +53,9 @@ class _importerCVState extends State<importerCV> {
                     // ignore: prefer_const_literals_to_create_immutables
                     children:[
                       const Icon(Icons.cloud_upload,size: 80,color: Colors.white,),
-                      const Text('choisir un CV pdf',
+                      const Text('Importer votre CV pdf',
                       style: TextStyle(
-                        color: Colors.white, fontSize: 24
+                        color: Color.fromRGBO(100, 80,85,97), fontSize: 24
                       )),
                   const SizedBox(
                   height: 10,
@@ -58,10 +63,10 @@ class _importerCVState extends State<importerCV> {
                   ElevatedButton (
                  style: ElevatedButton.styleFrom(
                  padding: EdgeInsets.symmetric(horizontal: 60,vertical: 20),
-                 primary: Colors.blue.shade300,
-                 shape: RoundedRectangleBorder(),
+                 primary: Color.fromARGB(255, 255, 255, 255),
+                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                   ),
-                  child: const Text("Valider",style: TextStyle( color: Colors.white,fontSize: 20)),
+                  child: const Text("Valider",style: TextStyle( color: Color.fromRGBO(100, 80,85,97),fontSize: 20)),
                   onPressed: ()async {
                         if(_imageFile?.path != null && filePdf.path!=null) {
                           var CVResponse = await networkHandler.postCV(
@@ -88,7 +93,7 @@ class _importerCVState extends State<importerCV> {
                             setState(() {
                             AlertError=true;
                            });
-                             _showDialog(context,"Vueillez ajouter une photo de profile et imporer votre CV",AlertError);
+                             _showDialog(context,"Vueillez ajouter une photo de profil et imporer votre CV",AlertError);
                           }
                           }
             ),
@@ -122,7 +127,7 @@ class _importerCVState extends State<importerCV> {
         }, 
         label: const Text('Aperçu'),
         icon: const Icon(Icons.content_paste_search_rounded),
-        backgroundColor: Colors.blue.shade300,
+        backgroundColor: Color.fromRGBO(100, 80,85,97),
       ),
     );
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -88,7 +90,7 @@ class _MyLoginState extends State<MyLogin> {
                                       errorText: validate || validate2 ? null : errorText,
                                       fillColor: Colors.grey.shade100,
                                       filled: true,
-                                      hintText: "Username",
+                                      hintText: "Nom d'utilisateur",
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       )),
@@ -113,7 +115,7 @@ class _MyLoginState extends State<MyLogin> {
                                       errorText: validate || validate2 ? null : errorText,
                                       fillColor: Colors.grey.shade100,
                                       filled: true,
-                                      hintText: "Password",
+                                      hintText: "Mot de passe",
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       )),
@@ -125,7 +127,7 @@ class _MyLoginState extends State<MyLogin> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Sign in',
+                                      'Se connecter',
                                       style: TextStyle(
                                           fontSize: 27,
                                           fontWeight: FontWeight.w700),
@@ -251,7 +253,7 @@ class _MyLoginState extends State<MyLogin> {
                                             context, '/register/${getUser()}');
                                       },
                                       child: Text(
-                                        'Sign Up',
+                                        'S’inscrire',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                             decoration: TextDecoration.underline,
@@ -263,7 +265,7 @@ class _MyLoginState extends State<MyLogin> {
                                     TextButton(
                                         onPressed: () {},
                                         child: Text(
-                                          'Forgot Password',
+                                          'Mot de passe oublié ?',
                                           style: TextStyle(
                                             decoration: TextDecoration.underline,
                                             color: Color(0xff4c505b),

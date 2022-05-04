@@ -1,4 +1,6 @@
 // @dart=2.9
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
@@ -14,6 +16,8 @@ import 'welcome_etudiant/Profile/editCV.dart';
 import 'suite_detail_etudiant/Cree_CV/createCVPart1.dart';
 import 'suite_detail_societe/formSociete.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'welcome_etudiant/Prédiction/prédire.dart';
 
 
 void main() async{
@@ -47,7 +51,8 @@ class MyApp extends StatelessWidget {
         '/formSociete': (context) => formSociete(),
         '/importerCV': (context) => importerCV(),
         '/importerVScreeCv': (context) => importerVScreeCv(),
-        '/ProfileScreen': (context) => ProfileScreen()
+        '/ProfileScreen': (context) => ProfileScreen(),
+        '/prédire': (context) => Prediction()
       },
       debugShowCheckedModeBanner: false,
     );

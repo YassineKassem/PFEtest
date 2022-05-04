@@ -1,15 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:pfe/search/widgets/search_app_bar.dart';
 import 'package:pfe/search/widgets/search_input.dart';
 import 'package:pfe/search/widgets/search_list.dart';
 import 'package:pfe/search/widgets/search_option.dart';
-import 'package:pfe/welcome_societe/widgets/offre_list.dart';
+import 'package:pfe/welcome_etudiant/ListPredictOffre.dart';
 
-
-
-class  ConsulterOffre extends StatelessWidget {
+class Prediction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,12 +29,10 @@ class  ConsulterOffre extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
+              //HomeAppBar(),
               SearchAppBar(),
+              ListPredictOffre(),
               
-              Expanded(
-                child: Offre_list(),
-              )
             ],
           )
         ],

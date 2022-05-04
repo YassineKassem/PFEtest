@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pfe/model/Etudiant.dart';
@@ -102,7 +104,7 @@ class _MyRegisterState extends State<MyRegister> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Username",
+                                  hintText: "Nom d'utilisateur",
                                   hintStyle: TextStyle(color: Colors.white),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -124,7 +126,7 @@ class _MyRegisterState extends State<MyRegister> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Champ Email ne doit pas etre vide';
+                                  return 'Champ Email ne doit pas être vide';
                                 } else if (RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                     .hasMatch(value)) {
@@ -147,7 +149,7 @@ class _MyRegisterState extends State<MyRegister> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Email",
+                                  hintText: "E-mail",
                                   hintStyle: TextStyle(color: Colors.white),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -188,7 +190,7 @@ class _MyRegisterState extends State<MyRegister> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Password",
+                                  hintText: "Mot de passe",
                                   hintStyle: TextStyle(color: Colors.white),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -201,7 +203,7 @@ class _MyRegisterState extends State<MyRegister> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Sign Up',
+                                  "S’inscrire",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 27,
@@ -309,7 +311,7 @@ class _MyRegisterState extends State<MyRegister> {
                                         context, '/login/${getUser()}');
                                   },
                                   child: Text(
-                                    'Sign In',
+                                    'Se connecter',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         decoration: TextDecoration.underline,

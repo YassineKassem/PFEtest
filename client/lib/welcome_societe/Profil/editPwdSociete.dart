@@ -82,7 +82,7 @@ class _EditPwdSoc extends State<EditPwdSoc> {
                         )
                       : null,
                     contentPadding: const EdgeInsets.only(bottom: 3),
-                    labelText: "Password",
+                    labelText: "Mot de passe",
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     hintText: "",
                     hintStyle: const TextStyle(
@@ -121,7 +121,7 @@ class _EditPwdSoc extends State<EditPwdSoc> {
                         )
                       : null,
                       contentPadding: const EdgeInsets.only(bottom: 3),
-                      labelText: "Confirmer password",
+                      labelText: "Confirmer Mot de passe",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       hintText: "",
                       hintStyle: const TextStyle(

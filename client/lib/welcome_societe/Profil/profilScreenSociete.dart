@@ -15,8 +15,8 @@ class _ProfileScreenSoc extends State<ProfileScreenSoc> {
   bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
   DetailSociete profileModel = DetailSociete();
-  Societe soc=Societe();
-  
+  Societe soc = Societe();
+
   @override
   void initState() {
     fetchData();
@@ -29,102 +29,112 @@ class _ProfileScreenSoc extends State<ProfileScreenSoc> {
       profileModel = DetailSociete.fromJson(response["data"]);
       circular = false;
     });
-    
+
     var response2 = await networkHandler.get("/societe");
-     setState(() {
+    setState(() {
       soc = Societe.fromJson(response2["data"]);
-    }); 
+    });
   }
 
-  
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: circular
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        child: Stack(
-          children: [
-            
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SearchAppBar(),
-                SizedBox(
-                  height: 50,
-                ),
-                Center(
-                  child: CircleAvatar(
-                    radius: 80,
-                    backgroundImage:NetworkHandler().getImage("${profileModel.societeId}"),
-                  ),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Center(child: Text("${profileModel.username}")),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(child: Text("${soc.email}")),
-                SizedBox(
-                  height: 50,
-                ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      RaisedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EditProfileSoc(),
-                                  ));
-                        },
-                        color: Colors.grey,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text(
-                          "  Modifier profil ",
-                          style: TextStyle(
-                              fontSize: 14,
-                              letterSpacing: 2.2,
-                              color: Colors.white),
+                      SearchAppBar(),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Center(
+                        child: CircleAvatar(
+                          radius: 80,
+                          backgroundImage: NetworkHandler()
+                              .getImage("${profileModel.societeId}"),
                         ),
                       ),
                       SizedBox(
+                        height: 25,
+                      ),
+                      Center(
+                          child: Text("${profileModel.username}",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(233, 0, 0, 0)))),
+                      SizedBox(
                         height: 10,
                       ),
-                      RaisedButton(
-                        onPressed: () {Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EditPwdSoc(),
-                                  )); },
-                        color: Colors.grey,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text(
-                          "Modifier Mot de passe",
-                          style: TextStyle(
-                              fontSize: 14,
-                              letterSpacing: 2.2,
-                              color: Colors.white),
-                        ),
+                      Center(
+                          child: Text("${soc.email}",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(233, 220, 191, 72)))),
+                      SizedBox(
+                        height: 50,
                       ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditProfileSoc(),
+                                ));
+                              },
+                              color: Colors.grey,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 15),
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                "  Modifier profil ",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    letterSpacing: 2.2,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            RaisedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditPwdSoc(),
+                                ));
+                              },
+                              color: Colors.grey,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 15),
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                "Modifier Mot de passe",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    letterSpacing: 2.2,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+                  )
+                ],
+              ),
+            ),
     );
   }
 }

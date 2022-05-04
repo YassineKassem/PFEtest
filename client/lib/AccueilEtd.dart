@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -45,7 +47,7 @@ class _AccueilEtdState extends State<AccueilEtd> {
                 Taglist(),
                 JobList(),
                 /////////////
-                ListPredictOffre(),
+                //ListPredictOffre(),
                 ////////////////
                 ],
             ),         

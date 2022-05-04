@@ -2,6 +2,7 @@ const express = require("express");
 const postuler = require("../models/postulations.model")
 const repondre = require("../models/repondreEtudiant.model")
 let middleware = require("../middleware");
+const pushNotificationController = require("../controllers/push-notification.controllers");
 const router = express.Router();
 
 
@@ -82,5 +83,9 @@ router.route("/ReponseByEtudiant/:idEtd").get( (req, res) => {
 
     });
   });
+
+  router.get("/sendNotification", pushNotificationController.SendNotification);
+
+  router.post("/sendNotificationToDevice", pushNotificationController.SendNotificationToDevice);
 
   module.exports = router;

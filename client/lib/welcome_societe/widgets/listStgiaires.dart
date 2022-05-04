@@ -80,7 +80,7 @@ class _listStagiairesState extends State<listStagiaires> {
           builder: (context) => listPredictionEtd(widget.stage),
         ));
         }, 
-        label: const Text('Predire condidat souhaité'),
+        label: const Text('Prédire les condidats souhaités'),
         icon: const Icon(Icons.content_paste_search_rounded),
         backgroundColor: Color.fromARGB(255, 67, 164, 186),
       ),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class SearchInput extends StatelessWidget {
@@ -18,7 +20,7 @@ class SearchInput extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide.none,
                 ),
-                hintText: 'Search',
+                //hintText: 'Search',
                 hintStyle: TextStyle(
                     color: Colors.grey,
                     fontSize: 18,

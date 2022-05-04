@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'welcome_societe/appBar.dart';
 import 'package:pfe/welcome_societe/Dashboard.dart';

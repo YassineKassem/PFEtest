@@ -22,27 +22,29 @@ class _MenuState extends State<Menu> {
   bool circular = true;
   NetworkHandler networkHandler = NetworkHandler();
   DetailSociete profileModel = DetailSociete();
-  Societe soc=Societe();
+  Societe soc = Societe();
   @override
   void initState() {
     super.initState();
 
     fetchData();
   }
+
   void fetchData() async {
     var response = await networkHandler.get("/profileSociete/getData");
-     if (!mounted) return;
+    if (!mounted) return;
     setState(() {
       profileModel = DetailSociete.fromJson(response["data"]);
       circular = false;
     });
-    
+
     var response2 = await networkHandler.get("/societe");
-     if (!mounted) return;
-     setState(() {
+    if (!mounted) return;
+    setState(() {
       soc = Societe.fromJson(response2["data"]);
-    }); 
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -65,11 +67,11 @@ class _MenuState extends State<Menu> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     navigatorTitle(
-                        name: "Home",
+                        name: "Acceuil",
                         key: 0,
                         onClick: () => selectedItem(context, 0)),
                     navigatorTitle(
-                        name: "Profile",
+                        name: "Profil",
                         key: 1,
                         onClick: () => selectedItem(context, 1)),
                     navigatorTitle(
@@ -81,7 +83,8 @@ class _MenuState extends State<Menu> {
                         key: 1,
                         onClick: () => selectedItem(context, 1)),
                     navigatorTitle(
-                        name: "Consulter les stagiaires\n pour mes stages",
+                        name:
+                            "Consulter les stagiaires\n postulés à mes offres ",
                         key: 1,
                         onClick: () => selectedItem(context, 1)),
                   ],
@@ -152,7 +155,6 @@ class _MenuState extends State<Menu> {
           builder: (context) => CreeOffre(),
         ));
         break;
-      
     }
   }
 
@@ -171,10 +173,11 @@ class _MenuState extends State<Menu> {
             width: 50,
             height: 50,
             child: circular
-          ? Center(child: CircularProgressIndicator())
-          :CircleAvatar(
+                ? Center(child: CircularProgressIndicator())
+                : CircleAvatar(
                     radius: 20,
-                    backgroundImage: NetworkHandler().getImage("${profileModel.societeId}"),
+                    backgroundImage:
+                        NetworkHandler().getImage("${profileModel.societeId}"),
                   ),
           ),
           Padding(
@@ -192,7 +195,7 @@ class _MenuState extends State<Menu> {
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Colors.grey),
+                      color: Color.fromARGB(233, 220,191,72)),
                 )
               ],
             ),
@@ -216,11 +219,12 @@ class _MenuState extends State<Menu> {
           Container(
             width: 50,
             height: 50,
-            child:circular
-          ? Center(child: CircularProgressIndicator())
-          :CircleAvatar(
+            child: circular
+                ? Center(child: CircularProgressIndicator())
+                : CircleAvatar(
                     radius: 20,
-                    backgroundImage: NetworkHandler().getImage("${profileModel.username}"),
+                    backgroundImage:
+                        NetworkHandler().getImage("${profileModel.username}"),
                   ),
           ),
           Padding(
@@ -258,10 +262,11 @@ class _MenuState extends State<Menu> {
             Icon(
               Icons.power_settings_new,
               size: 30,
+              color: Colors.red,
             ),
             Text(
-              "Logout",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              "Se déconnecter",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700,color: Colors.red,),
             ),
           ],
         ),
@@ -279,16 +284,19 @@ class _MenuState extends State<Menu> {
             Icon(
               Icons.power_settings_new,
               size: 30,
+              
             ),
             Text(
-              "Logout",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              "Se déconnecter",
+              style: TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.w700, color: Colors.red),
             )
           ],
         ),
       ),
     );
   }
+
   void logout() async {
     await storage.delete(key: "token");
     Navigator.pushAndRemoveUntil(
@@ -296,5 +304,4 @@ class _MenuState extends State<Menu> {
         MaterialPageRoute(builder: (context) => ColorLoader3()),
         (route) => false);
   }
-
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class Taglist extends StatefulWidget {
@@ -6,7 +8,7 @@ class Taglist extends StatefulWidget {
 }
 
 class _TaglistState extends State<Taglist> {
-  final tagsList = <String>['All', '⚡Popular', '⭐featured'];
+  final tagsList = <String>['Tous', '⚡Populaire', '⭐featured'];
   var selected = 0;
   @override
   Widget build(BuildContext context) {

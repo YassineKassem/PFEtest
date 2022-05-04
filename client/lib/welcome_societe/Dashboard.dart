@@ -45,7 +45,7 @@ class _DashboardState extends State<Dashboard> {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: "Espace,\n",
+                                    text: "Espace\n",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline5
@@ -54,7 +54,7 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                   ),
                                   TextSpan(
-                                    text: "Société !",
+                                    text: "Société ",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline5
@@ -190,36 +190,45 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  top: 30, right: 30, left: 30, bottom: 10),
-                              height: 120,
-                              width: 300,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(28),
-                                  color: const Color.fromRGBO(71, 59, 117, 1)),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                      bottom: 0,
-                                      right: 0,
-                                      child: SvgPicture.asset(
-                                        "assets/images/hiring.svg",
-                                        width: 70,
-                                        height: 90,
-                                      )),
-                                  const Positioned(
-                                    top: 15,
-                                    left: 10,
-                                    child: Text(
-                                      "Consulter les stagiaires\n pour mes stages",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 20),
-                                    ),
-                                  )
-                                ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ConsulterOffre()),
+                                );
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    top: 30, right: 30, left: 30, bottom: 10),
+                                height: 120,
+                                width: 300,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(28),
+                                    color: const Color.fromRGBO(71, 59, 117, 1)),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        bottom: 0,
+                                        right: 0,
+                                        child: SvgPicture.asset(
+                                          "assets/images/hiring.svg",
+                                          width: 70,
+                                          height: 90,
+                                        )),
+                                    const Positioned(
+                                      top: 15,
+                                      left: 10,
+                                      child: Text(
+                                        "Consulter les stagiaires\n postulés à mes offres",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 20),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ]),

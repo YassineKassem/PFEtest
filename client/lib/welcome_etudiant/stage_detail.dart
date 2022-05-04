@@ -217,6 +217,7 @@ class _JobDetailState extends State<JobDetail> {
                         }),
                       );
                     },
+                    // ignore: prefer_const_constructors
                     child: Hero(
                       tag: _heroAddTodo,
                       child: Text('Postuler'),

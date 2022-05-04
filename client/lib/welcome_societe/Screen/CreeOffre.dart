@@ -323,7 +323,7 @@ class _CreeOffreState extends State<CreeOffre> {
                         CreateOffre();
                       }
                     },
-                    child: const Text('Ajouter un offre', style: button),
+                    child: const Text('Ajouter une offre', style: button),
                   ),
                 ),
                 const SizedBox(height: 40),

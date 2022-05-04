@@ -5,20 +5,28 @@ class importerVScreeCv extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
+      
       body: Container(
+        decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/images/register.png'), fit: BoxFit.cover),
+            
+      ),
+      
       alignment: Alignment.center,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           SizedBox(
-              height: 250,
+              height: 300,
             ),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 40,vertical: 20),
-              primary: Colors.blue.shade300,
-              shape: RoundedRectangleBorder(),
+              primary:Color.fromRGBO(100, 80,85,97)  ,
+              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
             ),
             icon: const Icon(Icons.border_color_outlined,size:32),
             label: const Text(
@@ -35,7 +43,7 @@ class importerVScreeCv extends StatelessWidget {
             ),
             const Text(
               'Ou',
-              style: TextStyle( color: Colors.black,fontSize: 20)
+              style: TextStyle( color: Color.fromARGB(255, 255, 255, 255),fontSize: 20)
             ),
             const SizedBox(
               height: 20,
@@ -43,12 +51,12 @@ class importerVScreeCv extends StatelessWidget {
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 60,vertical: 20),
-              primary: Colors.blue.shade300,
-              shape: RoundedRectangleBorder(),
+              primary: Color.fromRGBO(100, 80,85,97),
+              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
             ),
             icon: const Icon(Icons.check,size:32),
             label: const Text(
-              'J''ai un CV',
+              "J'ai un CV",
               style: TextStyle( color: Colors.white,fontSize: 20)
             ),
             onPressed: (){

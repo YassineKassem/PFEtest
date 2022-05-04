@@ -65,7 +65,7 @@ class _EditProfileSoc extends State<EditProfileSoc> {
                       shrinkWrap: true,
                       children: [
                         Text(
-                          "Modifier Profile",
+                          "Modifier Profil",
                           style:
                               TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                         ),

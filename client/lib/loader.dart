@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import "package:flutter/material.dart";
 import 'dart:math';
@@ -95,7 +97,7 @@ class _ColorLoader3State extends State<ColorLoader3>
             width: animatorState.value,
 
             child: Image.asset(
-              'assets/firstScreens/logo sattagny.png',
+              'assets/firstScreens/sattageny.png',
               width: 800,
               height: 800,
               fit: BoxFit.contain,

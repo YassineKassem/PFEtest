@@ -61,6 +61,9 @@ app.use("/predictOffre", predictOffreRoute);
 const recommendationRoute = require("./routes/recommendation");
 app.use("/recommendation", recommendationRoute);
 
+//notification
+//app.use("/api",require("./routes/app.routes"));
+
 
 
 data = {

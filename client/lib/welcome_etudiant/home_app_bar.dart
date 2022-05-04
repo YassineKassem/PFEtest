@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,6 +35,7 @@ class HomeAppBarState extends State<HomeAppBar> {
    @override
   Widget build(BuildContext context) {
     return circular
+          // ignore: prefer_const_constructors
           ? Center(child: CircularProgressIndicator())
           :Container(
       padding: EdgeInsets.only(

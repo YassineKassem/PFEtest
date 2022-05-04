@@ -255,7 +255,7 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
                             Repondre(objetControl.text,messageControl.text,dateControl.text);
                              
                         },
-                        child: const Text('Postuler '),
+                        child: const Text('Envoyer'),
                       ),
                     ],
                   ),
@@ -270,7 +270,7 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
                       );
                     
                     },
-                    child: const Text('Repondre étudiant'),
+                    child: const Text('Répondre étudiant'),
                     
                   ),
                 )

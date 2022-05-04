@@ -68,19 +68,19 @@ class _NavigationDrowerState extends State<NavigationDrower> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     navigatorTitle(
-                        name: "Home",
+                        name: "Acceuil",
                         key: 0,
                         onClick: () => selectedItem(context, 0)),
                     navigatorTitle(
-                        name: "Profile",
+                        name: "Profil",
                         key: 1,
                         onClick: () => selectedItem(context, 1)),
                     navigatorTitle(
-                        name: "Favoris",
+                        name: "Ma liste Favoris",
                         key: 2,
                         onClick: () => selectedItem(context, 2)),
                     navigatorTitle(
-                        name: "Postulation",
+                        name: "Mes postulation",
                         key: 3,
                         onClick: () => selectedItem(context, 3)),
                   ],
@@ -184,14 +184,14 @@ class _NavigationDrowerState extends State<NavigationDrower> {
               children: [
                 Text(
                   "${profileModel.username}",
-                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700,),
                 ),
                 Text(
                   "${etd.email}",
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
-                      color: Colors.grey),
+                      color: Color.fromARGB(233, 220,191,72)),
                 )
               ],
             ),
@@ -257,10 +257,11 @@ class _NavigationDrowerState extends State<NavigationDrower> {
             Icon(
               Icons.power_settings_new,
               size: 30,
+              color:Colors.red ,
             ),
             Text(
-              "Logout",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              "Se déconnecter",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700,color:Colors.red),
             ),
           ],
         ),

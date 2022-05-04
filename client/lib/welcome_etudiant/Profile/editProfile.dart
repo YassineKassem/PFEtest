@@ -69,7 +69,7 @@ class _EditProfile extends State<EditProfile> {
                       shrinkWrap: true,
                       children: [
                         Text(
-                          "Modifier Profile",
+                          "Modifier Profil",
                           style:
                               TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                         ),
