@@ -6,6 +6,7 @@ const middleware = require("../middleware");
 const multer = require("multer");
 var request = require('request-promise');
 const recommendOffre = require("../models/predictOffre.model")
+var ObjectId = require('mongodb').ObjectID;
 
 router.route("/Add").post(middleware.checkToken, (req, res) => {
   const offre = offreStage({
@@ -208,6 +209,46 @@ router.route("/delete/:id").delete(middleware.checkToken, (req, res) => {
       return res.json("offre supprimer");
     }
   );
+});
+
+router.route("/update/:id").patch(middleware.checkToken, async (req, res) => {
+  let offre = {};
+  await offreStage.findOne({ _id: ObjectId( req.params.id),societeId:req.decoded.societeId }, (err, result) => {
+    if (err) {
+      offre = {};
+    }
+    if (result != null) {
+      offre = result;
+    }
+  });
+  offreStage.findOneAndUpdate(
+    { _id: ObjectId(req.params.id) ,societeId:req.decoded.societeId },
+    {
+      $set: {     
+    nomOffre: req.body.nomOffre ? req.body.nomOffre : offre.nom,
+    descriptionOffre: req.body.descriptionOffre ? req.body.descriptionOffre : offre.descriptionOffre ,
+    localisation: req.body.localisation ? req.body.localisation :offre.localisation ,
+    dateExpiration: req.body.dateExpiration ? req.body.dateExpiration :offre.dateExpiration,
+    duree: req.body.duree ? req.body.duree :offre.duree,
+    motClee: req.body.motClee ? req.body.motClee :offre.motClee
+      },
+    },
+    { new: true },
+    (err, result) => {
+      if (err) return res.json({ err: err });
+      if (result == null) return res.json({ data: [] });
+      else return res.json({ data: result });
+    }
+  );
+});
+
+router.route("/offre/:id").get((req, res) => {
+  offreStage.findOne({ _id: ObjectId(req.params.id) }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err });
+    return res.json({
+      data: result,
+    });
+  });
 });
 
 module.exports = router;

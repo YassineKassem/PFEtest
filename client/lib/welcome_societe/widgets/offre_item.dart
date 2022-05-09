@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
 import '../../NetworkHandler.dart';
 import '../../model/offreStageModel.dart';
+import '../Dashboard.dart';
 import '../Screen/CreeOffre.dart';
+import '../Screen/ModifierOffre.dart';
 
 
 class OffreItem extends StatefulWidget {
@@ -14,18 +16,23 @@ class OffreItem extends StatefulWidget {
 
   @override
   State<OffreItem> createState() => _OffreItemState();
+
 }
 
 class _OffreItemState extends State<OffreItem> {
    NetworkHandler networkHandler=NetworkHandler();
    
-  void SupprimerOffre()async{
+  void SupprimerOffre() async{
    var response = await networkHandler.delete("/offreStage/delete/${widget.stage.id}");
     if (response.statusCode ==200 ||response.statusCode ==201){
       print("offre supprimer");
     }
+    else{
+       print("error dans lors du suppression offre");
+    }
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -71,8 +78,25 @@ class _OffreItemState extends State<OffreItem> {
                   ],
                 ),
               ),
-              const PopUpMen(
-                menuList: [
+PopupMenuButton(
+      onSelected: (result) {
+        if (result == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MofifierOffre(widget.stage)),
+          );
+        } else if (result == 1) {
+          
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Dashboard()),
+          );
+        }
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25),
+      ),
+      itemBuilder: ((context) => [
                   PopupMenuItem(
                       child: ListTile(
                         title: Text("Modifier"),
@@ -81,7 +105,6 @@ class _OffreItemState extends State<OffreItem> {
                         ),
                       ),
                       value: 0),
-                  PopupMenuDivider(),
                   PopupMenuItem(
                       child: ListTile(
                         title: Text(
@@ -93,10 +116,14 @@ class _OffreItemState extends State<OffreItem> {
                           color: Colors.red,
                         ),
                       ),
+                      onTap: () { setState(() {
+                         SupprimerOffre();
+                      });
+                       },
                       value: 1,
                       ),
-                ],
-              ),
+                ]),
+    )
 
             ],
           ),
@@ -123,34 +150,3 @@ class _OffreItemState extends State<OffreItem> {
   }
 }
 
-
-class PopUpMen extends StatelessWidget {
-  final List<PopupMenuEntry> menuList;
-  final Widget? icon;
-  const PopUpMen({Key? key, required this.menuList, this.icon})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-      onSelected: (result) {
-        if (result == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreeOffre()),
-          );
-        } else if (result == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreeOffre()),
-          );
-        }
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
-      ),
-      itemBuilder: ((context) => menuList),
-      icon: icon,
-    );
-  }
-}

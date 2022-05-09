@@ -10,6 +10,8 @@ import '../../model/offreStageModel.dart';
 import '../../model/postulation.dart';
 import 'package:intl/intl.dart';
 
+import '../../welcome_etudiant/Profile/ViewPDF.dart';
+
 class StagiaireDetail extends StatefulWidget {
     final Etudiant etd;
     final Stage stage;
@@ -29,6 +31,7 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
    TextEditingController objetControl=TextEditingController();
    TextEditingController messageControl=TextEditingController();
    TextEditingController dateControl=TextEditingController();
+   late String url;
   @override
   void initState() {
     super.initState();
@@ -42,6 +45,7 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
       if (!mounted) return;
       setState(() {
       postule = postulation.fromJson(response["data"]);
+      url =networkHandler.getCV('${widget.etd.id}');
       circular = false;
        }); 
    }
@@ -142,6 +146,23 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+            ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              primary:Color.fromRGBO(100, 80,85,97)  ,
+              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
+            ),
+            icon: const Icon(Icons.search,size:32),
+            label: const Text(
+              'Consulter CV',
+              style: TextStyle( color: Colors.white,fontSize: 20)
+            ),
+            onPressed: (){
+             Navigator.of(context).push(MaterialPageRoute(
+             builder: (context) => ViewPdf(url),
+            ));
+            },
+            ),
                 //SizedBox(
                //   height: 30,
                // ),
@@ -244,7 +265,6 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
                         print("Date is not selected");
                       }
                     },
-                
                       ),
                      const Divider(
                         color: Colors.white,

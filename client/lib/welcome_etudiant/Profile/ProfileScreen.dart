@@ -21,6 +21,7 @@ class _ProfileScreen extends State<ProfileScreen> {
   CVmodel profileModel = CVmodel();
   Etudiant etd = Etudiant();
   late File filePdf;
+  late String url;
   @override
   void initState() {
     fetchData();
@@ -38,6 +39,7 @@ class _ProfileScreen extends State<ProfileScreen> {
     if (!mounted) return;
     setState(() {
       etd = Etudiant.fromJson(response2["data"]);
+      url =networkHandler.getCV('${etd.id}');
       circular = false;
     });
   }
@@ -115,8 +117,9 @@ class _ProfileScreen extends State<ProfileScreen> {
                             ),
                             RaisedButton(
                               onPressed: () {
+                                
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ViewPDF(),
+                                  builder: (context) => ViewPdf( url),
                                 ));
                               },
                               color: Colors.grey,

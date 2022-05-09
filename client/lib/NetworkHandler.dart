@@ -68,11 +68,10 @@ class NetworkHandler {
   
   String getCV(String CVName) {
     
-    String url = formater("/resume//$CVName.pdf");
-  
+  String url = formater("/resume//$CVName.pdf");
+
   return url;
 
-    
   }
 
   Future<http.Response> patch(String url, Map<String, dynamic> body) async {

@@ -9,6 +9,7 @@ import '../NetworkHandler.dart';
 import '../model/Etudiant.dart';
 import '../model/offreStageModel.dart';
 import '../model/postulation.dart';
+import 'Profile/ViewPDF.dart';
 
 
 
@@ -28,6 +29,26 @@ class _JobDetailState extends State<JobDetail> {
    TextEditingController messageControl=TextEditingController();
    final _formKey = GlobalKey<FormState>();
    Etudiant etd =Etudiant();
+   late String url;
+   bool circular=true;
+    @override
+    void initState() {
+      fetchData();
+      super.initState();
+      
+    }
+
+  void fetchData() async {
+    var response2 = await networkHandler.get("/etudiant/");
+    if (!mounted) return;
+    setState(() {
+      etd = Etudiant.fromJson(response2["data"]);
+      url =networkHandler.getCV('${etd.id}');
+      circular = false;
+    });
+  }
+
+
 
   void PostPostulation( String message,String objet) async {
     Map<String, dynamic> data = {
@@ -199,6 +220,25 @@ class _JobDetailState extends State<JobDetail> {
                         color: Colors.white,
                         thickness: 0.5,
                       ),
+                      //button cv
+            ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              primary:Color.fromRGBO(100, 80,85,97)  ,
+              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
+            ),
+            icon: const Icon(Icons.search,size:32),
+            label: const Text(
+              'Consulter CV',
+              style: TextStyle( color: Colors.white,fontSize: 20)
+            ),
+            onPressed: (){
+             Navigator.of(context).push(MaterialPageRoute(
+             builder: (context) => ViewPdf(url),
+            ));
+            },
+            ),
+
                       FlatButton(
                         onPressed: () {
                         PostPostulation(messageControl.text,objetControl.text);  

@@ -75,11 +75,11 @@ class _MyLoginState extends State<MyLogin> {
                             child: Column(
                               children: [
                                 TextFormField(
-                                  controller: getUser() == 'etudiant'
+                                  controller: getUser() == 'étudiant'
                                       ? TextEditingController(text: etd.username)
                                       : TextEditingController(text: soc.username),
                                   onChanged: (value) {
-                                    if (getUser() == 'etudiant')
+                                    if (getUser() == 'étudiant')
                                       etd.username = value;
                                     else
                                       soc.username = value;
@@ -99,11 +99,11 @@ class _MyLoginState extends State<MyLogin> {
                                   height: 30,
                                 ),
                                 TextFormField(
-                                  controller: getUser() == 'etudiant'
+                                  controller: getUser() == 'étudiant'
                                       ? TextEditingController(text: etd.password)
                                       : TextEditingController(text: soc.password),
                                   onChanged: (value) {
-                                    if (getUser() == 'etudiant')
+                                    if (getUser() == 'étudiant')
                                       etd.password = value;
                                     else
                                       soc.password = value;
@@ -144,7 +144,7 @@ class _MyLoginState extends State<MyLogin> {
                                                     circular = true; 
                                                   });
                                                   
-                                                  if (getUser() == 'etudiant') {
+                                                  if (getUser() == 'étudiant') {
                                                     
                                                     //Login Logic start here
                                                     Map<String, String> data = {

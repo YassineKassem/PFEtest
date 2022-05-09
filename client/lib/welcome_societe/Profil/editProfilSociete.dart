@@ -20,6 +20,12 @@ class _EditProfileSoc extends State<EditProfileSoc> {
   bool showPassword = false;
   NetworkHandler networkHandler = NetworkHandler();
   TextEditingController emailEdit = TextEditingController();
+  TextEditingController nom = TextEditingController();
+  TextEditingController SecteurActivite = TextEditingController();
+  TextEditingController CodeFiscal = TextEditingController();
+  TextEditingController EmailR = TextEditingController();
+  TextEditingController CodePostal = TextEditingController();
+  TextEditingController tel = TextEditingController();
   DetailSociete profileModel = DetailSociete();
   Societe soc=Societe();
   
@@ -47,114 +53,140 @@ class _EditProfileSoc extends State<EditProfileSoc> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : false,
-      body: circular
+      body: SingleChildScrollView(
+            child:
+            circular
           ? Center(child: CircularProgressIndicator())
-          : Column(
-            children: [
-          SearchAppBar(),
-          SizedBox(
-          height: 50,
-          ),
-              Container(
-                  padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-                  child: GestureDetector(
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-                    },
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        Text(
-                          "Modifier Profil",
-                          style:
-                              TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Center(
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: Stack(children: [
-                                  imageProfile(),
-                                ]),
-                              ),
-                            ],
+          :  Column(
+              children: [
+            SearchAppBar(),
+            SizedBox(
+            height: 50,
+            ),
+                Container(
+                    padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: Column(
+                        
+                        children: [
+                          Text(
+                            "Modifier Profil",
+                            style:
+                                TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                           ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                        ),
-                        buildTextField("E-mail", "${soc.email}", false, emailEdit),
-                        SizedBox(
-                          height: 35,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OutlineButton(
-                              padding: EdgeInsets.symmetric(horizontal: 35),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Annuler",
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Center(
+                            child: Stack(
+                              children: [
+                                Center(
+                                  child: Stack(children: [
+                                    imageProfile(),
+                                  ]),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 35,
+                          ),
+                          buildTextField("Nom", "${profileModel.nom}", false, nom),
+                          buildTextField("Secteur d activite", "${profileModel.SecteurActivite}", false, SecteurActivite),
+                          buildTextField("Code fiscal", "${profileModel.CodeFiscal}", false, CodeFiscal),
+                          buildTextField("E-mail", "${soc.email}", false, emailEdit),
+                          buildTextField("E-mail responsable", "${profileModel.EmailR}", false, EmailR),
+                          buildTextField("E-mail", "${profileModel.CodePostal}", false, CodePostal),
+                          buildTextField("E-mail", "${profileModel.tel}", false, tel),
+                          SizedBox(
+                            height: 35,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              OutlineButton(
+                                padding: EdgeInsets.symmetric(horizontal: 35),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Annuler",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        letterSpacing: 2.2,
+                                        color: Colors.black)),
+                              ),
+                              RaisedButton(
+                                onPressed: () async {
+                                  if (_imageFile?.path != null) {
+                                    var imageResponse =
+                                        await networkHandler.patchImage(
+                                            "/profileSociete/add/image", _imageFile!.path);
+                                    if (imageResponse.statusCode == 200) {
+                                      print('true');
+                                      setState(() {
+                                        circular = false;
+                                      });
+                                    }
+                                  }
+                                  Map<String, dynamic> data = {
+                                    'email': emailEdit.text,
+                                  };
+                                  var responseEdit = await networkHandler.patch(
+                                    "/societe/updateSociete",data);
+                                  if (responseEdit.statusCode == 200 ||
+                                      responseEdit.statusCode == 201) {
+                                    print("ok");
+                                  }
+                                  //update profil soc
+                                  Map<String, dynamic> dataprofile = {
+                                    'nom': nom.text,
+                                    'SecteurActivite': SecteurActivite.text,
+                                    'CodeFiscal': CodeFiscal.text,
+                                    'Email': emailEdit.text,
+                                    'EmailR': EmailR.text,
+                                    'CodePostal': CodePostal.text,
+                                    'tel': tel.text,
+                                  };
+                                  var responseEditprofile = await networkHandler.patch(
+                                    "/profileSociete/update",dataprofile);
+                                  if (responseEdit.statusCode == 200 ||
+                                      responseEdit.statusCode == 201) {
+                                    print("ok");
+                                    //refreshpage
+                                    Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => AccueilSoc()),
+                                    (Route<dynamic> route) => false,
+                                    );
+                                  }
+
+                                },
+                                color: Colors.grey,
+                                padding: EdgeInsets.symmetric(horizontal: 35),
+                                elevation: 2,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Text(
+                                  "Enregistrer",
                                   style: TextStyle(
                                       fontSize: 14,
                                       letterSpacing: 2.2,
-                                      color: Colors.black)),
-                            ),
-                            RaisedButton(
-                              onPressed: () async {
-                                if (_imageFile?.path != null) {
-                                  var imageResponse =
-                                      await networkHandler.patchImage(
-                                          "/profileSociete/add/image", _imageFile!.path);
-                                  if (imageResponse.statusCode == 200) {
-                                    print('true');
-                                    setState(() {
-                                      circular = false;
-                                    });
-                                  }
-                                }
-                                Map<String, dynamic> data = {
-                                  'email': emailEdit.text,
-                                };
-                                var responseEdit = await networkHandler.patch(
-                                  "/societe/updateSociete",data);
-                                if (responseEdit.statusCode == 200 ||
-                                    responseEdit.statusCode == 201) {
-                                  print("ok");
-                                  //refreshpage
-                                  Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AccueilSoc()),
-                                  (Route<dynamic> route) => false,
-                                  );
-                                }
-                              },
-                              color: Colors.grey,
-                              padding: EdgeInsets.symmetric(horizontal: 35),
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Text(
-                                "Enregistrer",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    letterSpacing: 2.2,
-                                    color: Colors.white),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
+                                      color: Colors.white),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
     );
   }

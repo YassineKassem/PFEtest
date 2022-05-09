@@ -68,28 +68,30 @@ class _ListPredictOffreState extends State<ListPredictOffre> {
   Widget build(BuildContext context) {
     return circular
           ? Center(child: CircularProgressIndicator())
-          : Container(
-      margin: EdgeInsets.symmetric(vertical: 25),
-      height: 160,
-      child: ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 25),
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) => GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (context) => JobDetail(data[index]));
-              },
-              child: itemPredictOffre(                
-                data[index],ScoreList[index]
-            )),
-          separatorBuilder: (_, index) => SizedBox(
-                width: 15,
+          : Expanded(
+            child: Container(
+                margin: EdgeInsets.symmetric(vertical: 25),
+                height: 160,
+                child: ListView.separated(
+            padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                   
+            itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => JobDetail(data[index]));
+                },
+                child: itemPredictOffre(                
+                  data[index],ScoreList[index]
+              )),
+            separatorBuilder: (_, index) => SizedBox(
+                  height: 20,
+                ),
+            itemCount: data.length),
               ),
-          itemCount: data.length),
-    );
+          );
   
   }
 }

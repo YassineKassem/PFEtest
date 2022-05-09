@@ -210,7 +210,7 @@ class _DashboardState extends State<Dashboard> {
                                   children: [
                                     Positioned(
                                         bottom: 0,
-                                        right: 0,
+                                        right: -7,
                                         child: SvgPicture.asset(
                                           "assets/images/hiring.svg",
                                           width: 70,

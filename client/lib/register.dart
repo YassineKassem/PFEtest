@@ -78,12 +78,12 @@ class _MyRegisterState extends State<MyRegister> {
                         child: Column(
                           children: [
                             TextFormField(
-                              controller: getUser() == 'etudiant'
+                              controller: getUser() == 'étudiant'
                                   ? TextEditingController(text: etd.username)
                                   : TextEditingController(text: soc.username),
                                 
                               onChanged: (value) {
-                                if (getUser() == 'etudiant')
+                                if (getUser() == 'étudiant')
                                   etd.username = value;
                                 else
                                   soc.username = value;
@@ -114,12 +114,12 @@ class _MyRegisterState extends State<MyRegister> {
                               height: 30,
                             ),
                             TextFormField(
-                              controller: getUser() == 'etudiant'
+                              controller: getUser() == 'étudiant'
                                   ? TextEditingController(text: etd.email)
                                   : TextEditingController(text: soc.email),
                               onChanged: (value) {
                                 print(value);
-                                if (getUser() == 'etudiant')
+                                if (getUser() == 'étudiant')
                                   etd.email = value;
                                 else
                                   soc.email = value;
@@ -159,12 +159,12 @@ class _MyRegisterState extends State<MyRegister> {
                               height: 30,
                             ),
                             TextFormField(
-                              controller: getUser() == 'etudiant'
+                              controller: getUser() == 'étudiant'
                                   ? TextEditingController(text: etd.password)
                                   : TextEditingController(text: soc.password),
                               onChanged: (value) {
                                 print(value);
-                                if (getUser() == 'etudiant')
+                                if (getUser() == 'étudiant')
                                   etd.password = value;
                                 else
                                   soc.password = value;
@@ -221,7 +221,7 @@ class _MyRegisterState extends State<MyRegister> {
                                                 circular = true;
                                               });
 
-                                              if (getUser() == 'etudiant') {
+                                              if (getUser() == 'étudiant') {
                                                 await checkUserEtd();
                                                 
                                                 if (_formKey.currentState!

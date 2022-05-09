@@ -82,7 +82,7 @@ class CardPlanet extends StatelessWidget {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, '/login/societe');
+                          Navigator.pushNamed(context, '/login/société');
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +102,7 @@ class CardPlanet extends StatelessWidget {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, '/login/etudiant');
+                          Navigator.pushNamed(context, '/login/étudiant');
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

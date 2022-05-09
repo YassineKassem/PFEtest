@@ -155,8 +155,8 @@ import '../../welcome_etudiant/stage_detail.dart';
             ):Container(),
         Expanded(
           child: Search==""? Container(
-      margin: EdgeInsets.only(top: 25),
-      child: ListView.separated(
+          margin: EdgeInsets.only(top: 25),
+          child: ListView.separated(
           padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
                     itemBuilder: (context, index) => GestureDetector(
               onTap: () {
@@ -173,10 +173,10 @@ import '../../welcome_etudiant/stage_detail.dart';
                 height: 20,
               ),
           itemCount: data.length),
-    ):
-    Container(
-      margin: EdgeInsets.only(top: 25),
-      child: ListView.separated(
+          ):
+          Container(
+          margin: EdgeInsets.only(top: 25),
+          child: ListView.separated(
           padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
                     itemBuilder: (context, index) => GestureDetector(
               onTap: () {

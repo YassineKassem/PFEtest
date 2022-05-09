@@ -40,9 +40,10 @@ class _JobListState extends State<JobList> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 25),
-      height: 160,
+      height: 190,
+      
       child: ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: EdgeInsets.only(left: 25, right: 25),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => GestureDetector(
               onTap: () {
@@ -56,7 +57,8 @@ class _JobListState extends State<JobList> {
                 data[index],
             )),
           separatorBuilder: (_, index) => SizedBox(
-                width: 15,
+                 height: 20,
+                 
               ),
           itemCount: data.length),
     );

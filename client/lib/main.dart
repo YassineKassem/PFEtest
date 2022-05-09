@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pfe/register.dart';
 import 'package:pfe/signin.dart';
 import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
+import 'package:pfe/welcome_etudiant/Profile/ViewPDF.dart';
 import 'package:pfe/welcome_etudiant/Profile/editPwd.dart';
 import 'importerCV.dart';
 import 'importerVScreeCv.dart';
@@ -28,6 +29,7 @@ void main() async{
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   CVmodel userData;
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,17 +44,18 @@ class MyApp extends StatelessWidget {
         '/createCV': (context) => createCV(),
         '/createCVPart1': (context) => createCVPart1(),
         '/EditPwd': (context) => EditPwd(),
-        '/login/societe': (context) => MyLogin(),
-        '/login/etudiant': (context) => MyLogin(),
-        '/register/etudiant': (context) => MyRegister(),
-        '/register/societe': (context) => MyRegister(),
+        '/login/société': (context) => MyLogin(),
+        '/login/étudiant': (context) => MyLogin(),
+        '/register/étudiant': (context) => MyRegister(),
+        '/register/société': (context) => MyRegister(),
         '/AccueilEtd': (context) => AccueilEtd(),
         '/AccueilSoc': (context) => AccueilSoc(),
         '/formSociete': (context) => formSociete(),
         '/importerCV': (context) => importerCV(),
         '/importerVScreeCv': (context) => importerVScreeCv(),
         '/ProfileScreen': (context) => ProfileScreen(),
-        '/prédire': (context) => Prediction()
+        '/prédire': (context) => Prediction(),
+        
       },
       debugShowCheckedModeBanner: false,
     );
