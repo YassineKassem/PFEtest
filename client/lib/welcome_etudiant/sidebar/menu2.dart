@@ -9,6 +9,8 @@ import 'package:pfe/welcome_etudiant/postulation/postulation.dart';
 
 import '../../NetworkHandler.dart';
 import '../../model/CVmodel.dart';
+import '../Notification/notification.dart';
+
 
 class NavigationDrower extends StatefulWidget {
   const NavigationDrower({Key? key}) : super(key: key);
@@ -83,6 +85,7 @@ class _NavigationDrowerState extends State<NavigationDrower> {
                         name: "Mes postulation",
                         key: 3,
                         onClick: () => selectedItem(context, 3)),
+
                   ],
                 ),
                 MediaQuery.of(context).orientation == Orientation.portrait
@@ -151,6 +154,8 @@ class _NavigationDrowerState extends State<NavigationDrower> {
           builder: (context) => Postulation(),
         ));
         break;
+
+  
       
     }
   }

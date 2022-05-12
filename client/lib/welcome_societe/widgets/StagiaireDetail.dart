@@ -146,23 +146,6 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-            ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-              primary:Color.fromRGBO(100, 80,85,97)  ,
-              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
-            ),
-            icon: const Icon(Icons.search,size:32),
-            label: const Text(
-              'Consulter CV',
-              style: TextStyle( color: Colors.white,fontSize: 20)
-            ),
-            onPressed: (){
-             Navigator.of(context).push(MaterialPageRoute(
-             builder: (context) => ViewPdf(url),
-            ));
-            },
-            ),
                 //SizedBox(
                //   height: 30,
                // ),
@@ -179,18 +162,39 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
                   margin: const EdgeInsets.symmetric(vertical: 25),
                   height: 45,
                   width: double.maxFinite,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        primary: Theme.of(context).primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        )),
-                    onPressed: () {
-                       
-                      Navigator.of(context).push(
-                        HeroDialogRoute(builder: (context) {
-                          return Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            
+                            elevation: 0,
+                            primary: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )),
+                            icon: const Icon(Icons.remove_red_eye,size:12),
+                            label: const Text(
+                            '  Consulter CV  ',
+                            style: TextStyle( color: Colors.white)
+                            ),
+                        onPressed: () {
+                           Navigator.of(context).push(MaterialPageRoute(
+                             builder: (context) => ViewPdf(url),
+                           ));
+                        }),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )),
+                        onPressed: () {
+                           
+                          Navigator.of(context).push(
+                            HeroDialogRoute(builder: (context) {
+                              return Center(
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Hero(
@@ -204,81 +208,81 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: objetControl,
-                        decoration: InputDecoration(
-                          hintText: 'Objet',
-                          border: InputBorder.none,
-                        ),
-                        cursorColor: Colors.white,
-                      ),
-                      const Divider(
-                        color: Colors.white,
-                        thickness: 0.5,
-                      ),
-                      TextFormField(
-                        controller: messageControl,
-                        decoration: InputDecoration(
-                          hintText: 'Saisir votre Message',
-                          border: InputBorder.none,
-                        ),
-                        cursorColor: Colors.white,
-                        maxLines: 10,
-                      ),
-                      const Divider(
-                        color: Colors.white,
-                        thickness: 0.5,
-                      ),
-                      TextFormField(
-                        controller: dateControl,
-                        decoration: InputDecoration(
-                          hintText: 'Saisir date entretien',
-                          border: InputBorder.none,
-                        ),
-                        cursorColor: Colors.white,
-                      onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(
-                              2000), //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101));
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: objetControl,
+                            decoration: InputDecoration(
+                              hintText: 'Objet',
+                              border: InputBorder.none,
+                            ),
+                            cursorColor: Colors.white,
+                          ),
+                          const Divider(
+                            color: Colors.white,
+                            thickness: 0.5,
+                          ),
+                          TextFormField(
+                            controller: messageControl,
+                            decoration: InputDecoration(
+                              hintText: 'Saisir votre Message',
+                              border: InputBorder.none,
+                            ),
+                            cursorColor: Colors.white,
+                            maxLines: 10,
+                          ),
+                          const Divider(
+                            color: Colors.white,
+                            thickness: 0.5,
+                          ),
+                          TextFormField(
+                            controller: dateControl,
+                            decoration: InputDecoration(
+                              hintText: 'Saisir date entretien',
+                              border: InputBorder.none,
+                            ),
+                            cursorColor: Colors.white,
+                          onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(
+                                  2000), //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2101));
 
-                      if (pickedDate != null) {
-                        print(
-                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(
-                            formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
+                          if (pickedDate != null) {
+                            print(
+                                pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                            String formattedDate =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            print(
+                                formattedDate); //formatted date output using intl package =>  2021-03-16
+                            //you can implement different kind of Date Format here according to your requirement
 
-                        setState(() {
-                          dateControl.text =
-                              formattedDate; //set output date to TextField value.
-                        });
-                      } else {
-                        print("Date is not selected");
-                      }
-                    },
-                      ),
-                     const Divider(
-                        color: Colors.white,
-                        thickness: 0.5,
-                      ),
-                      FlatButton(
-                        onPressed: () {
-                            Repondre(objetControl.text,messageControl.text,dateControl.text);
-                             
+                            setState(() {
+                              dateControl.text =
+                                  formattedDate; //set output date to TextField value.
+                            });
+                          } else {
+                            print("Date is not selected");
+                          }
                         },
-                        child: const Text('Envoyer'),
+                          ),
+                         const Divider(
+                            color: Colors.white,
+                            thickness: 0.5,
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                                Repondre(objetControl.text,messageControl.text,dateControl.text);
+                                 
+                            },
+                            child: const Text('Envoyer'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
                 ),
               ),
             ),
@@ -286,12 +290,14 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
         ),
       ),
     );
-                        }),
-                      );
-                    
-                    },
-                    child: const Text('Répondre étudiant'),
-                    
+                            }),
+                          );
+                        
+                        },
+                        child: const Text('Répondre étudiant'),
+                        
+                      ),
+                    ],
                   ),
                 )
               ],

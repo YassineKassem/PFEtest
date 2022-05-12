@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../NetworkHandler.dart';
-import '../../search/widgets/search_app_bar.dart';
+import '../../search/widgets/searchBarSoc.dart';
 import 'profilScreenSociete.dart';
 
 
@@ -34,7 +34,7 @@ class _EditPwdSoc extends State<EditPwdSoc> {
       resizeToAvoidBottomInset : false,
       body: Column(
         children: [
-          SearchAppBar(),
+          SearchAppBarSoc(),
           SizedBox(
           height: 50,
           ),

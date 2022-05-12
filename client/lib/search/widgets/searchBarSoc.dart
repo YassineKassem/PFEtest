@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pfe/welcome_etudiant/Notification/notification.dart';
 
-class SearchAppBar extends StatelessWidget {
+class SearchAppBarSoc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,9 +38,7 @@ class SearchAppBar extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: (){
-                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => notification(),
-                           ));
+                           
                         },
                         child: Icon(
                           Icons.notifications_none_outlined,

@@ -80,7 +80,7 @@ class _importerCVState extends State<importerCV> {
                               AlertError=false;
                             });
                         
-                            _showDialog(context,"la procédure d'inscription est terminé avec succée.\nBienvenue dans Sattegeny",AlertError);
+                            _showDialog(context,"la procédure d'inscription est terminée avec succés.\nBienvenue dans Sattageny",AlertError);
                             
                           }
                           else{

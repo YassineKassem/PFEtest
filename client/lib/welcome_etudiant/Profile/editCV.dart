@@ -242,14 +242,14 @@ class _createCVState extends State<createCV> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Créer votre CV',
-          style: TextStyle(color: Colors.red),
+          'Modifier CV',
+          style: TextStyle(color: Color.fromARGB(255, 54, 206, 244)),
         ),
         backgroundColor: Colors.white,
                 leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.red,
+            color: Color.fromARGB(255, 54, 209, 244),
           ),
           onPressed: () { Navigator.pop(context);},
         ),
@@ -259,7 +259,7 @@ class _createCVState extends State<createCV> {
           : Center(
         child: Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(primary: Colors.red),
+            colorScheme: ColorScheme.light(primary: Color.fromARGB(255, 54, 225, 244)),
           ),
           child: Form(
             key: globalkey,
@@ -312,7 +312,7 @@ class _createCVState extends State<createCV> {
         }, 
         label: const Text('Aperçu'),
         icon: const Icon(Icons.content_paste_search_rounded),
-        backgroundColor: Colors.red,
+        backgroundColor: Color.fromARGB(255, 54, 203, 244),
       ),
     );
   }
@@ -755,7 +755,7 @@ class _createCVState extends State<createCV> {
               child: IconButton(
                 icon: Icon(
                   Icons.remove_circle,
-                  color: Colors.red,
+                  color: Color.fromARGB(255, 54, 212, 244),
                 ),
                 onPressed: () {
                   if(index<=profileModel.Competence!.length)

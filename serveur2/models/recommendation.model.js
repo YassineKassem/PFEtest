@@ -11,7 +11,7 @@ const recommendation = Schema(
     postulationId :{
       type: Schema.Types.ObjectId,
       ref: 'postulations'
-    } ,
+    },
     score: { type: Number, default: null } 
         
   }

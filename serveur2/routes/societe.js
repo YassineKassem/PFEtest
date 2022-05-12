@@ -42,7 +42,7 @@ router.route("/checkusername/:username").get((req, res) => {
 router.route("/login").post(async(req, res) => {
 
   if (!(req.body.username && req.body.password)) {
-    return res.status(400).json("All input is required");
+    return res.status(400).json("Tous les champs sont obligatoires");
   }
   const soc = await Societe.findOne({ username: req.body.username });
   if (soc && (await bcrypt.compare(req.body.password, soc.password))) {
@@ -52,7 +52,7 @@ router.route("/login").post(async(req, res) => {
       msg: "success",
     });
   }else {
-    res.status(403).json("Invalid Username/Password");
+    res.status(403).json("Nom utilisateur/mot de passe est invalide");
   }
 
 });

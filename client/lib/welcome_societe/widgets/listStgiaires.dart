@@ -30,6 +30,7 @@ class _listStagiairesState extends State<listStagiaires> {
     void fetchData() async {
     var response = await networkHandler.get("/postulations/getEtudiantOffre/${widget.stage.id}");
     superModelEtudiant= SuperModelEtudiant.fromJson(response);
+    if (!mounted) return;
     setState(() {
      etudiantList = superModelEtudiant.data!;
       circular = false;
@@ -80,7 +81,7 @@ class _listStagiairesState extends State<listStagiaires> {
           builder: (context) => listPredictionEtd(widget.stage),
         ));
         }, 
-        label: const Text('Prédire les condidats souhaités'),
+        label: const Text('Recommandation condidats'),
         icon: const Icon(Icons.content_paste_search_rounded),
         backgroundColor: Color.fromARGB(255, 67, 164, 186),
       ),

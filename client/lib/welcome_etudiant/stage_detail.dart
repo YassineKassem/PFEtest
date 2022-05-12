@@ -221,30 +221,45 @@ class _JobDetailState extends State<JobDetail> {
                         thickness: 0.5,
                       ),
                       //button cv
-            ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-              primary:Color.fromRGBO(100, 80,85,97)  ,
-              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
-            ),
-            icon: const Icon(Icons.search,size:32),
-            label: const Text(
-              'Consulter CV',
-              style: TextStyle( color: Colors.white,fontSize: 20)
-            ),
-            onPressed: (){
-             Navigator.of(context).push(MaterialPageRoute(
-             builder: (context) => ViewPdf(url),
-            ));
-            },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:[
+              ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                primary:Color.fromARGB(255, 49, 133, 137),
+                shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
+              ),
+              icon: const Icon(Icons.remove_red_eye,size:12),
+              label: const Text(
+                'Consulter CV',
+                style: TextStyle( color: Colors.black)
+              ),
+              onPressed: (){
+               Navigator.of(context).push(MaterialPageRoute(
+               builder: (context) => ViewPdf(url),
+              ));
+              },
+              ),
+                            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                primary:Color.fromARGB(255, 49, 133, 137),
+                shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(25) ),
+              ),
+              icon: const Icon(Icons.check,size:12),
+              label: const Text(
+                '     Postuler     ',
+                style: TextStyle( color: Colors.black)
+              ),
+              onPressed: (){
+               PostPostulation(messageControl.text,objetControl.text); 
+              },
+              ),
+              ],
             ),
 
-                      FlatButton(
-                        onPressed: () {
-                        PostPostulation(messageControl.text,objetControl.text);  
-                        },
-                        child: const Text('Postuler '),
-                      ),
+
                     ],
                   ),
                 ),

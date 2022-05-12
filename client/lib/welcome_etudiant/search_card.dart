@@ -16,7 +16,7 @@ class SearchCard extends StatelessWidget {
           horizontal: 25,
           vertical: 40,
         ),
-        height: 300,
+        height: 200,
         width: double.maxFinite,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
@@ -27,22 +27,13 @@ class SearchCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Recherche Rapide ',
+              '',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 26,
               ),
             ),
-            SizedBox(height: 10),
-            Text(
-              'Trouvez votre stage rapidement \n On y va',
-              style: TextStyle(
-                  height: 1.8,
-                  color: Color.fromARGB(255, 0, 1, 3),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15),
-            ),
-            SizedBox(height: 40),
+            SizedBox(height: 50),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
@@ -58,10 +49,10 @@ class SearchCard extends StatelessWidget {
                   Image.asset('assets/icons/search.png', width: 40),
                   SizedBox(width: 20),
                   Text(
-                    'Rechercher',
+                    'Recherche Rapide',
                     style: TextStyle(
                       color: Colors.grey,
-                      fontSize: 18,
+                      fontSize: 20,fontWeight: FontWeight.w500,
                     ),
                   )
                 ]),
@@ -86,13 +77,7 @@ class SearchCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Prédire une offre de stage',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 26,
-              ),
-            ),
+            SizedBox(height: 70),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
@@ -100,19 +85,18 @@ class SearchCard extends StatelessWidget {
                 );
               },
               child: Container(
-                
                 child: Row(children: [
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       padding:
                           EdgeInsets.symmetric(horizontal: 25),
-                      primary: Color.fromRGBO(100, 80, 85, 97),
+                      primary: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25)),
                     ),
-                    icon: const Icon(Icons.border_color_outlined, size: 32),
-                    label: const Text('Prédire',
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    icon: const Icon(Icons.thumb_up_outlined, size: 32,color:Colors.grey),
+                    label: const Text('Recommandation',
+                        style: TextStyle(color: Colors.grey, fontSize: 20)),
                     onPressed: () {
                       Navigator.pushNamed(context, '/prédire');
                     },

@@ -6,7 +6,7 @@ import 'package:pfe/AccueilSoc.dart';
 import '../../NetworkHandler.dart';
 import '../../model/Societe.dart';
 import '../../model/detailSociete.dart';
-import '../../search/widgets/search_app_bar.dart';
+import '../../search/widgets/searchBarSoc.dart';
 
 class EditProfileSoc extends StatefulWidget {
   @override
@@ -59,7 +59,7 @@ class _EditProfileSoc extends State<EditProfileSoc> {
           ? Center(child: CircularProgressIndicator())
           :  Column(
               children: [
-            SearchAppBar(),
+            SearchAppBarSoc(),
             SizedBox(
             height: 50,
             ),

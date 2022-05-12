@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pfe/search/widgets/search_app_bar.dart';
+import '../../search/widgets/searchBarSoc.dart';
 import '../../NetworkHandler.dart';
 import '../../model/Societe.dart';
 import '../../model/detailSociete.dart';
@@ -48,7 +48,7 @@ class _ProfileScreenSoc extends State<ProfileScreenSoc> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SearchAppBar(),
+                      SearchAppBarSoc(),
                       SizedBox(
                         height: 50,
                       ),

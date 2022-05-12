@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
         '/importerVScreeCv': (context) => importerVScreeCv(),
         '/ProfileScreen': (context) => ProfileScreen(),
         '/prédire': (context) => Prediction(),
-        
       },
       debugShowCheckedModeBanner: false,
     );
