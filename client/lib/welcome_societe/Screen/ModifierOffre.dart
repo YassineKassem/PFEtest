@@ -202,7 +202,7 @@ class _MofifierOffreState extends State<MofifierOffre> {
                     color: const Color(0xFF4A4A54),
                   ),
                   child: TextFormField(
-                    controller: ExpirationOffre..text=widget.stage.dateExpiration as String,
+                    controller: ExpirationOffre..text= widget.stage.dateExpiration.toString(),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Vueillez saisir la date d'

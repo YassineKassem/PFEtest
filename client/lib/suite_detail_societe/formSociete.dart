@@ -35,7 +35,7 @@ class _formSocieteState extends State<formSociete> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Saisir details societe',
+        title: Text('Saisir détails société',
           style: TextStyle(color:Colors.blue.shade300,) ,),
         backgroundColor: Colors.white,
 
@@ -136,7 +136,7 @@ class _formSocieteState extends State<formSociete> {
               SizedBox(height: 20,),
               BuildTextField('Nom',Nom),
               BuildTextField('Secteur d activite', SecteurActivite),
-              BuildTextField('Code Fiscal',CodeFiscal),
+              BuildTextField('Matricule Fiscal',CodeFiscal),
    
             ],
           ) ,

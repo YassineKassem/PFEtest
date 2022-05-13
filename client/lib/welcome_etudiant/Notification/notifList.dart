@@ -23,7 +23,7 @@ import 'NotifItem.dart';class notifList extends StatefulWidget {
     
   List<Notif> data = [
     Notif(id: 1,dateEnvoi: '11/05/2022',objet: 'Demande postulation accepter',message: 'Bonjour Ahmed, vous êtes le bienvenu dans notre société médianet pour passer un entretien technique A 12h le mercredi 20/05/2022.',nomSociete: 'medianet' ),
-    Notif(id: 2,dateEnvoi: '02/05/2022',objet: 'Stage Cloud Keryus',message: 'Bonjour Sami, Nous Sommes désolé mais votre demande de postulation n est pas acceptée.',nomSociete: 'Keryus' )
+    Notif(id: 2,dateEnvoi: '02/05/2022',objet: 'Stage Cloud Keryus',message: 'Nous Sommes désolé mais votre demande de postulation n est pas acceptée.',nomSociete: 'Keryus' )
   ];
 
 

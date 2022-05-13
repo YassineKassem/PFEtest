@@ -41,13 +41,15 @@ class SearchCard extends StatelessWidget {
                 );
               },
               child: Container(
+                height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Row(children: [
-                  Image.asset('assets/icons/search.png', width: 40),
-                  SizedBox(width: 20),
+                  SizedBox(width: 25),
+                  Image.asset('assets/icons/search.png', width: 30),
+                  SizedBox(width: 15),
                   Text(
                     'Recherche Rapide',
                     style: TextStyle(
