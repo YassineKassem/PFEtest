@@ -40,8 +40,8 @@ router.route("/AddRecommendationOffre/:offreId").post(middleware.checkToken,(req
         });
       });
     
-      router.route("/listRecommendationByOffre/:offreId").get( (req, res) => {
-        recommendOffre.findOne({offreId:req.params.offreId, }, (err, result) => {
+      router.route("/listRecommendationByOffre/:offreId").get( middleware.checkToken,(req, res) => {
+        recommendOffre.findOne({etudiantId:req.decoded.etudiantId,offreId:req.params.offreId, }, (err, result) => {
           if (err) return res.status(500).json({ msg: err });
           return res.json({
             data: result
