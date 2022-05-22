@@ -72,7 +72,8 @@ var sendrequest = await request(options)
 .then(function (parsedBody) {
 
    for(let key=0;key<offreList.length;key++){
-     
+    console.log(parsedBody[key]['Match Percentage']);
+    console.log('****');
     recommendOffre.findOne({ offreId: parsedBody[key]['OffreId'],etudiantId:req.decoded.etudiantId}, (err, result) => {
       if (err) return res.status(500).json({ msg: err });
       if(result==null)

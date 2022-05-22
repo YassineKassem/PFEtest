@@ -71,6 +71,15 @@ import 'package:pfe/model/Etudiant.dart';
     )
     ),
     ]
-    ): Column();
+    ): Column(
+      children: [
+                Center(
+        child: Text(
+          "Liste des favoris est vide",
+          textAlign: TextAlign.center,
+        ),
+      ),
+      ],
+    );
   }
   }

@@ -86,6 +86,15 @@ import 'package:pfe/model/Etudiant.dart';
     )
     ),
     ]
-    ): Column();
+    ): Column(
+      children: [
+                Center(
+        child: Text(
+          "Liste des postulations est vide",
+          textAlign: TextAlign.center,
+        ),
+      ),
+      ],
+    );
   }
   }

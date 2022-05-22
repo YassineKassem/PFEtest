@@ -82,7 +82,7 @@ class _NavigationDrowerState extends State<NavigationDrower> {
                         key: 2,
                         onClick: () => selectedItem(context, 2)),
                     navigatorTitle(
-                        name: "Mes postulation",
+                        name: "Ma liste de candidatures",
                         key: 3,
                         onClick: () => selectedItem(context, 3)),
 

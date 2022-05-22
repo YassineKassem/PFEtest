@@ -1,4 +1,6 @@
 const express = require("express");
+const offreStage = require("../models/offreStage.model")
+const Etudiant = require("../models/etudiants.model");
 const postuler = require("../models/postulations.model")
 const repondre = require("../models/repondreEtudiant.model")
 let middleware = require("../middleware");
@@ -83,6 +85,76 @@ router.route("/ReponseByEtudiant/:idEtd").get( (req, res) => {
 
     });
   });
+
+  router.route("/listReponseEtd").get(middleware.checkToken,(req, res) => {
+
+      postuler.find({ etudiantId:req.decoded.etudiantId }, async  (err, result) => {
+        if (err) return res.status(500).json({ msg: err });
+        else{
+          var dataPostulation=[]
+          var dataOffre=[]
+          for (const doc of result) {
+          var id= doc._id    
+          dataPostulation.push(id);
+          var idoffre= doc.offreId   
+          dataOffre.push(idoffre);
+          }
+          var datareponse=[]
+          var dataoffreReponse=[]
+          for (const i of dataPostulation) {
+            const reponse = await repondre.findOne({ postulationId: i})
+            console.log(reponse) 
+            if(reponse!=null)
+             datareponse.push(reponse);
+          }
+          return res.json({data:datareponse });
+        }
+      });
+  });
+
+
+  router.route("/listReponseEtdOffre").get(middleware.checkToken,(req, res) => {
+
+    postuler.find({ etudiantId:req.decoded.etudiantId }, async  (err, result) => {
+      if (err) return res.status(500).json({ msg: err });
+      else{
+        var dataPostulation=[]
+        var dataOffre=[]
+        for (const doc of result) {
+        var id= doc._id    
+        dataPostulation.push(id);
+        var idoffre= doc.offreId   
+        dataOffre.push(idoffre);
+        }
+        var datareponse=[]
+        var dataoffreReponse=[]
+        for (const i of dataPostulation) {
+          const reponse = await repondre.findOne({ postulationId: i})
+          console.log(reponse) 
+          if(reponse!=null)
+           {datareponse.push(reponse);
+            const offre = await postuler.findOne({ _id: i})
+            const detailoffre = await offreStage.findOne({ _id: offre.offreId})
+            dataoffreReponse.push(detailoffre);
+          }
+        }
+        return res.json({
+          data:dataoffreReponse });
+      }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
   router.get("/sendNotification", pushNotificationController.SendNotification);
 

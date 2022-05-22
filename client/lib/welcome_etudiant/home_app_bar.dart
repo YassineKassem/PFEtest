@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../NetworkHandler.dart';
 import '../model/CVmodel.dart';
+import 'Notification/notification.dart';
 
 class HomeAppBar extends StatefulWidget {
   const HomeAppBar({ Key? key }) : super(key: key);
@@ -72,11 +73,18 @@ class HomeAppBarState extends State<HomeAppBar> {
                 transform: Matrix4.rotationZ(100),
                 child: Stack(
                   children: [
-                    Icon(
-                      Icons.notification_add_outlined,
-                      size: 30,
-                      color: Colors.grey,
-                    ),
+                      GestureDetector(
+                        onTap: (){
+                           Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => notification(),
+                           ));
+                        },
+                        child: Icon(
+                          Icons.notifications_none_outlined,
+                          size: 30,
+                          color: Colors.grey,
+                        ),
+                      ),
                     Positioned(
                       top: 0,
                       right: 0,

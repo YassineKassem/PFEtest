@@ -5,11 +5,15 @@ import 'package:pfe/model/Etudiant.dart';
 import 'package:pfe/welcome_etudiant/Notification/Notif.dart';
 import 'package:pfe/welcome_etudiant/icon_text.dart';
 
+import '../../model/offreStageModel.dart';
+import '../../model/repondreEtudiant.dart';
+
 
 
 class NotifItem extends StatefulWidget {
-  final Notif notif;
-  NotifItem(this.notif);
+  final repondreEtudiant notif;
+  final Stage offre;
+  NotifItem(this.notif,this.offre);
 
   @override
   State<NotifItem> createState() => _NotifItemState();
@@ -34,7 +38,7 @@ class _NotifItemState extends State<NotifItem> {
             Row(
               children: [
                 Text(
-                  widget.notif.nomSociete as String,
+                  widget.offre.nomOffre as String,
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16,
@@ -49,14 +53,14 @@ class _NotifItemState extends State<NotifItem> {
           height: 15,
         ),
         Text(
-          widget.notif.objet as String,
+          widget.notif.message as String,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 15,
         ),
         Text(
-          widget.notif.message as String,
+          widget.notif.objet as String,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         SizedBox(
@@ -65,8 +69,8 @@ class _NotifItemState extends State<NotifItem> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconText(Icons.watch_later,
-                widget.notif.dateEnvoi as String),
+            IconText(widget.notif.date !=null ? Icons.watch_later : Icons.cancel_presentation_sharp,
+                widget.notif.date !=null ?  '${widget.notif.date}' : '' , ),
             //IconText(Icons.access_time_outlined, offre.dateExpiration as String),
           ],
         )

@@ -35,7 +35,7 @@ class _formSocieteState extends State<formSociete> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Saisir détails société',
+        title: Text('Créer ma société',
           style: TextStyle(color:Colors.blue.shade300,) ,),
         backgroundColor: Colors.white,
 
