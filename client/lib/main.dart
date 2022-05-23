@@ -7,6 +7,7 @@ import 'package:pfe/signin.dart';
 import 'package:pfe/welcome_etudiant/Profile/ProfileScreen.dart';
 import 'package:pfe/welcome_etudiant/Profile/ViewPDF.dart';
 import 'package:pfe/welcome_etudiant/Profile/editPwd.dart';
+import 'package:pfe/welcome_societe/widgets/StagiaireDetail.dart';
 import 'importerCV.dart';
 import 'importerVScreeCv.dart';
 import 'loader.dart';
@@ -54,7 +55,9 @@ class MyApp extends StatelessWidget {
         '/importerCV': (context) => importerCV(),
         '/importerVScreeCv': (context) => importerVScreeCv(),
         '/ProfileScreen': (context) => ProfileScreen(),
-        '/prédire': (context) => Prediction(),
+        '/prédire': (context) => Prediction()
+        
+        
       },
       debugShowCheckedModeBanner: false,
     );

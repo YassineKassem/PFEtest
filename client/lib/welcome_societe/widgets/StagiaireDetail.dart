@@ -23,7 +23,7 @@ class StagiaireDetail extends StatefulWidget {
 }
 
 class _StagiaireDetailState extends State<StagiaireDetail> {
-  
+   bool AlertError=false;
    NetworkHandler networkHandler=NetworkHandler();
    final _formKey = GlobalKey<FormState>();
    postulation postule=postulation();
@@ -57,6 +57,15 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
     "date":date 
     };
     var response = await networkHandler.post("/repondreEtudiant/AddReponse/${postule.id}",data);
+        if(response.statusCode==200){
+     print('reponse succes');
+        setState(() {AlertError=false;});
+        _showDialog(context,"Votre message est envoyé avec succée.",AlertError);                 
+    }else{
+      print('reponse failed');
+        setState(() {AlertError=true;});
+        _showDialog(context,"L envoie du message a échoué.",AlertError);                 
+      }  
    }
 
   @override
@@ -307,6 +316,30 @@ class _StagiaireDetailState extends State<StagiaireDetail> {
       ),
     );
   }
+  _showDialog(BuildContext context,String text,bool Error){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+         return CupertinoAlertDialog(
+        title: Column(
+          children: <Widget>[
+            Text(text),
+            
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text("OK"),
+            onPressed: () {
+              
+                Navigator.of(context).pop();
+                
+            },),
+        ],
+      );
+       });
+}
+
 
 }
 
