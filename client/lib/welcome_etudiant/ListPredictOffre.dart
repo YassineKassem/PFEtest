@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pfe/welcome_etudiant/itempredictionnull.dart';
 import 'package:pfe/welcome_etudiant/stage_detail.dart';
 import 'package:pfe/welcome_etudiant/stage_item.dart';
 
@@ -83,9 +84,9 @@ class _ListPredictOffreState extends State<ListPredictOffre> {
                       context: context,
                       builder: (context) => JobDetail(data[index]));
                 },
-                child: itemPredictOffre(                
+                child: ScoreList[index]!=null ? itemPredictOffre(                
                   data[index],ScoreList[index]
-              )),
+              ):itempredictnull()),
             separatorBuilder: (_, index) => SizedBox(
                   height: 20,
                 ),

@@ -7,6 +7,7 @@ import '../../model/SuperModelPostulation.dart';
 import '../../model/offreStageModel.dart';
 import '../../model/postulation.dart';
 import '../../search/widgets/searchBarSoc.dart';
+import '../../welcome_etudiant/itempredictionnull.dart';
 import 'StagiaireDetail.dart';
 import 'itemStagiaire.dart';
 import 'itempredictionEtd.dart';
@@ -76,9 +77,8 @@ class _listPredictionEtdState extends State<listPredictionEtd> {
   { 
     print(" id ${i} ${List[i].id}");
     var response = await networkHandler.get("/recommendation/listRecommendationByPostulation/${List[i].id}");
-      
+     recomd = recommendation.fromJson(response["data"]);
      setState(() {
-      recomd = recommendation.fromJson(response["data"]);
       ScoreList.add(recomd.score as double);
     });
     }
@@ -226,7 +226,7 @@ class _listPredictionEtdState extends State<listPredictionEtd> {
                     context: context,
                     builder: (context) => StagiaireDetail(etudiantList[index],widget.stage));
               },
-              child:itempredictionEtd(etudiantList[index],ScoreList[index])),
+              child:ScoreList[index]!=null ? itempredictionEtd(etudiantList[index],ScoreList[index]):itempredictnull()) ,
           
           separatorBuilder: (_, index) => const SizedBox(
                 height:20,
